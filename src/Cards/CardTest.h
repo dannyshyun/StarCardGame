@@ -34,14 +34,14 @@ public:
     virtual void                    Exit() override;
     [[nodiscard]] virtual CardParam GetCardParam() const;
 
-    bool is_player = true;
-    bool is_select = false;
-    bool is_touch  = false;
+    bool  is_player = true;
+    bool  is_select = false;
+    bool  is_touch  = false;
+    Image frontImg;
+    Image backImg;
 
 protected:
     // 2D image data
-    Image frontImg;
-    Image backImg;
     // materials
     struct Material
     {

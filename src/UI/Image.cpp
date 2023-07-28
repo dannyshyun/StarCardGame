@@ -1,6 +1,6 @@
 #include "Image.h"
-Image::Image(){
-
+Image::Image()
+{
 }
 Image::Image( float2 pos, int handle )
 {

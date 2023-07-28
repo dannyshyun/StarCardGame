@@ -17,5 +17,4 @@ x64
 
 *.vcxproj.user
 imgui.ini
-data/Game.ini
 tools/Setting.ini

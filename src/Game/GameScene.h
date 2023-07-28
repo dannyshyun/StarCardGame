@@ -15,6 +15,7 @@ namespace MainScene
             bool Init() override;
             void Update() override;
             void Draw() override;
+            void LateDraw() override;
             void Exit() override;
 
             void GUI() override;

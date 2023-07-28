@@ -5,7 +5,8 @@
 #include "CardTest.h"
 
 BP_OBJECT_IMPL( CardTest, "CardTest" );
-CardTestPtr CardTest::Create( CardParam param, float3 model_pos, float2 img_pos )
+CardTestPtr
+    CardTest::Create( CardParam param, float3 model_pos, float2 img_pos )
 {
     // 3d
     auto card = Scene::CreateObjectDelayInitialize<CardTest>();
@@ -18,8 +19,9 @@ CardTestPtr CardTest::Create( CardParam param, float3 model_pos, float2 img_pos 
     card->SetTranslate( model_pos );
     card->SetScaleAxisXYZ( f32( 0.1f ) );
     // 2d
-    card->frontImg = Image(img_pos,IMGctrl.GetCardIMGdata( param.suit, param.value ));
-    card->backImg = Image( img_pos, IMGctrl.GetCardIMGdata( "Back" ) );
+    card->frontImg = Image( img_pos,
+                            IMGctrl.GetCardIMGdata( param.suit, param.value ) );
+    card->backImg  = Image( img_pos, IMGctrl.GetCardIMGdata( "Back" ) );
     return card;
 }
 

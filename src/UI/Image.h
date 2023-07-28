@@ -14,5 +14,5 @@ public:
 
 private:
     float2 pos;
-    int handle;
+    int    handle;
 };

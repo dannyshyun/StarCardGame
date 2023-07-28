@@ -35,9 +35,10 @@ namespace MainScene
 
             // card
             {
-                auto card = CardTest::Create( CardParam( "Sword", 2 ),
-                                              float3( 0.f, 1.3f, 0.f ),
-                                              float2( WINDOW_W / 2, WINDOW_H / 2 ) );
+                auto card =
+                    CardTest::Create( CardParam( "Sword", 2 ),
+                                      float3( 0.f, 1.3f, 0.f ),
+                                      float2( WINDOW_W / 2, WINDOW_H / 2 ) );
             }
             // dice
             {
@@ -72,6 +73,7 @@ namespace MainScene
 
             if( IsKeyOn( KEY_INPUT_2 ) )
                 Scene::SetCurrentCamera( "PlayCamera" );
+
             counter++;
             // npc->Update();
             // player->Update();
@@ -80,8 +82,25 @@ namespace MainScene
         void TestScene::Draw()
         {
             auto card = Scene::GetObjectPtr<Object>( "CardSword2" );
+            if( auto obj = Scene::PickObject( GetMouseX(), GetMouseY() ) )
+            {
+                DrawString( 16,
+                            16,
+                            TC( convertTo( obj->GetName() ).c_str() ),
+                            WHITE );
+            }
             // todo
-            if( Scene::GetObjectPtr<Object>("PlayCamera"))
+        }
+
+        void TestScene::LateDraw()
+        {
+            if( GetObjectPtr<Object>( "TopCamera" )
+                    ->GetComponent<ComponentCamera>() ==
+                std::shared_ptr<ComponentCamera>( Scene::GetCurrentCamera() ) )
+            {
+                auto card = GetObjectPtr<CardTest>( "CardSword2" );
+                card->frontImg.Render();
+            }
         }
 
         void TestScene::Exit()
