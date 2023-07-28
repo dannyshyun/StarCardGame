@@ -1,0 +1,162 @@
+[
+	{
+		"suit": "sword",
+		"value": 1,
+		"num": 3
+	},
+	{
+		"suit": "sword",
+		"value": 2,
+		"num": 3
+	},
+	{
+		"suit": "sword",
+		"value": 3,
+		"num": 3
+	},
+	{
+		"suit": "sword",
+		"value": 4,
+		"num": 1
+	},
+	{
+		"suit": "sword",
+		"value": 5,
+		"num": 1
+	},
+	{
+		"suit": "gun",
+		"value": 1,
+		"num": 3
+	},
+	{
+		"suit": "gun",
+		"value": 2,
+		"num": 3
+	},
+	{
+		"suit": "gun",
+		"value": 3,
+		"num": 3
+	},
+	{
+		"suit": "gun",
+		"value": 4,
+		"num": 1
+	},
+	{
+		"suit": "gun",
+		"value": 5,
+		"num": 1
+	},
+	{
+		"suit": "shield",
+		"value": 1,
+		"num": 3
+	},
+	{
+		"suit": "shield",
+		"value": 2,
+		"num": 3
+	},
+	{
+		"suit": "shield",
+		"value": 3,
+		"num": 3
+	},
+	{
+		"suit": "shield",
+		"value": 4,
+		"num": 1
+	},
+	{
+		"suit": "shield",
+		"value": 5,
+		"num": 1
+	},
+	{
+		"suit": "move",
+		"value": 1,
+		"num": 2
+	},
+	{
+		"suit": "move",
+		"value": 2,
+		"num": 2
+	},
+	{
+		"suit": "move",
+		"value": 3,
+		"num": 1
+	},
+	{
+		"suit": "star",
+		"value": 1,
+		"num": 2
+	},
+	{
+		"suit": "star",
+		"value": 2,
+		"num": 2
+	},
+	{
+		"suit": "star",
+		"value": 3,
+		"num": 1
+	},
+	{
+		"suit": "star",
+		"value": 4,
+		"num": 1
+	},
+	{
+		"suit": "star",
+		"value": 5,
+		"num": 1
+	},
+	{
+		"suit": "chance",
+		"value": 1,
+		"num": 1
+	},
+	{
+		"suit": "chance",
+		"value": 2,
+		"num": 1
+	},
+	{
+		"suit": "chance",
+		"value": 3,
+		"num": 1
+	},
+	{
+		"suit": "curse",
+		"value": 1,
+		"num": 1
+	},
+	{
+		"suit": "curse",
+		"value": 2,
+		"num": 1
+	},
+	{
+		"suit": "curse",
+		"value": 3,
+		"num": 1
+	},
+	{
+		"suit": "hpPlus",
+		"value": 1,
+		"num": 1
+	},
+	{
+		"suit": "hpPlus",
+		"value": 2,
+		"num": 1
+	},
+	{
+		"suit": "hpPlus",
+		"value": 3,
+		"num": 1
+	}
+]

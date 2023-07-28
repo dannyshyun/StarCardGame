@@ -1,0 +1,9 @@
+file name : PG09_SaiKoushun
+
+dir : prj : all project files
+    : exe : release PG09_SaiKoushun.exe file
+          : data folder
+
+gigafile -> 30 days
+
+PG09_SaiKoushun.txt -> url

@@ -1,0 +1,99 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": [
+                "compile",
+                "link"
+            ],
+            "dependsOrder": "sequence"
+        },
+        {
+            "label": "compile",
+            "type": "shell",
+            "command": "g++.exe",
+            "args": [
+                "-g",
+                "-c",
+                "ProgramFiles/GameMain.cpp",
+                "ProgramFiles/WinMain.cpp",
+                "ProgramFiles/Background.cpp",
+                "ProgramFiles/Bar.cpp",
+                "ProgramFiles/Enemy.cpp",
+                "ProgramFiles/GameObject.cpp",
+                "ProgramFiles/InputKey.cpp",
+                "ProgramFiles/InputMouse.cpp",
+                "ProgramFiles/InputPad.cpp",
+                "ProgramFiles/Manager.cpp",
+                "ProgramFiles/Player.cpp",
+                "ProgramFiles/VECTOR2.cpp",
+                "ProgramFiles/ObjecctManager.cpp",
+                "ProgramFiles/SceenManager.cpp",
+                // "TextWriter.cpp",
+                // "TextWindow.cpp",
+                "-IC:/mingw64/include",
+                "-IC:/DxLib",
+                "-I",
+                ".",
+                "-DDX_GCC_COMPILE",
+                "-DDX_NON_INLINE_ASM",
+         ],
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "link",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "GameMain.o",
+                "WinMain.o",
+                "Background.o",
+                "Bar.o",
+                "Enemy.o",
+                "GameObject.o",
+                "InputKey.o",
+                "InputMouse.o",
+                "InputPad.o",
+                "Player.o",
+                "VECTOR2.o",
+                "ObjecctManager.o",
+                "SceenManager.o",
+                // "TextWriter.o",
+                // "TextWindow.o",
+                "-mwindows",
+                "-LC:/mingw64/lib",
+                "-LC:/DxLib",
+                "-lDxLib",
+                "-lDxUseCLib",
+                "-lDxDrawFunc",
+                "-ljpeg",
+                "-lpng",
+                "-lzlib",
+                "-ltiff",
+                "-ltheora_static",
+                "-lvorbis_static",
+                "-lvorbisfile_static",
+                "-logg_static",
+                "-lbulletdynamics",
+                "-lbulletcollision",
+                "-lbulletmath",
+                "-lopusfile",
+                "-lopus",
+                "-lsilk_common",
+                "-lcelt",
+                "-o",
+                "test.exe"
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ]
+        }
+    ]
+}

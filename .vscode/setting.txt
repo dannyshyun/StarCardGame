@@ -1,0 +1,103 @@
+{
+   "window.zoomLevel": 1,
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "files.autoGuessEncoding": true,
+    "workbench.colorTheme": "Zenburn Dark Matter - Deep Sea - Morion",
+    "workbench.iconTheme": "vscode-icons",
+    "glassit.alpha": 240,
+    "editor.tokenColorCustomizations": {
+        "textMateRules": [
+            {
+                "scope": "entity.name.type",
+                "settings": {
+                    "foreground": "#f5ae77"
+                }
+            },
+            {
+                "scope": "entity.name.function.preprocessor",
+                "settings": {
+                    "foreground": "#4bbaaa"
+                }
+            },
+            {
+                "scope": "keyword.operator",
+                "settings": {
+                    "foreground": "#c2e6ff"
+                }
+            },
+            {
+                "scope": "keyword.operator.new",
+                "settings": {
+                    "foreground": "#7560e1"
+                }
+            },
+            {
+                "scope": "keyword.operator.delete",
+                "settings": {
+                    "foreground": "#7560e1"
+                }
+            },
+            {
+                "scope": "variable.other.global",
+                "settings": {
+                    "foreground": "#f1f1f1"
+                }
+            },
+            {
+                "scope": "variable.other.property",
+                "settings": {
+                    "foreground": "#afcf93"
+                }
+            },
+            {
+                "scope": ["comment.line", "punctuation.definition.comment"],
+                "settings": {
+                    "foreground": "#058650"
+                }
+            },
+            {
+                "scope": "comment",
+                "settings": {
+                    "foreground": "#146745"
+                }
+            },
+            {
+                "scope": "variable.parameter",
+                "settings": {
+                    "foreground": "#459776"
+                }
+            },
+            {
+                "scope": "variable.other.enummember",
+                "settings": {
+                    "foreground": "#6f72ff"
+                }
+            },
+            {
+                "scope": "entity.name.function",
+                "settings": {
+                    "foreground": "#5cd9ffce"
+                }
+            },
+            {
+                "scope": "entity.name.function.member",
+                "settings": {
+                    "foreground": "#f48ed5d0"
+                }
+            },
+            {
+                "scope": "entity.name.function.operator",
+                "settings": {
+                    "foreground": "#ffb2e1"
+                }
+            }
+        ],
+    },
+    "[cpp]": {
+        "editor.defaultFormatter": "ms-vscode.cpptools"
+    }
+}
