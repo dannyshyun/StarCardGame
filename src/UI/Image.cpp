@@ -2,7 +2,7 @@
 Image::Image()
 {
 }
-Image::Image(int handle )
+Image::Image( int handle )
 {
     this->handle = handle;
 }

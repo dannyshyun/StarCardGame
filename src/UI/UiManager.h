@@ -3,11 +3,12 @@
 #include "Cards/CardTest.h"
 
 USING_PTR( UiManager );
-class UiManager :public Object
+class UiManager : public Object
 {
 public:
     BP_OBJECT_TYPE( UiManager, Object );
-    static UiManagerPtr Create(CardTestPtr cardTest,ComponentCameraPtr currentCam);
+    static UiManagerPtr Create( CardTestPtr        cardTest,
+                                ComponentCameraPtr currentCam );
     UiManager();
     ~UiManager();
 
@@ -17,8 +18,7 @@ public:
 
     void LateDraw() override;
 
-
 private:
-    CardTestPtr cardTest;
+    CardTestPtr        cardTest;
     ComponentCameraPtr currentCamera;
 };

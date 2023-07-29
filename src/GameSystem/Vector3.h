@@ -23,10 +23,8 @@ public:
 
     Vector3 &operator=( const Vector3 &v );  //	= 演算子のオーバーロード
 
-    Vector3 &
-        operator+=( const Vector3 &v );  //	+= 演算子のオーバーロード
-    Vector3      &
-        operator-=( const Vector3 &v );  //	-= 演算子のオーバーロード
+    Vector3 &operator+=( const Vector3 &v );  //	+= 演算子のオーバーロード
+    Vector3 &operator-=( const Vector3 &v );  //	-= 演算子のオーバーロード
     Vector3 &operator*=( const float f );     //	*= 演算子のオーバーロード
     Vector3 &operator/=( const float f );     //	/= 演算子のオーバーロード
 };

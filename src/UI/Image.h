@@ -6,5 +6,5 @@ public:
     Image( int handle );
     ~Image();
 
-    int    handle;
+    int handle;
 };

@@ -3,8 +3,8 @@ BP_OBJECT_IMPL( UiManager, "UiManager" );
 UiManagerPtr UiManager::Create( CardTestPtr        cardTest,
                                 ComponentCameraPtr currentCam )
 {
-    auto obj = Scene::CreateObjectPtr<UiManager>();
-    obj->cardTest = cardTest;
+    auto obj           = Scene::CreateObjectPtr<UiManager>();
+    obj->cardTest      = cardTest;
     obj->currentCamera = currentCam;
     return obj;
 }
@@ -27,9 +27,8 @@ void UiManager::Update()
 
 void UiManager::LateDraw()
 {
-    if (currentCamera->GetOwner()->GetName() == "TopCamera") {
+    if( currentCamera->GetOwner()->GetName() == "TopCamera" )
+    {
         cardTest->RenderImg();
     }
 }
-
-

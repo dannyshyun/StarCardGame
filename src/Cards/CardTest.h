@@ -38,9 +38,9 @@ public:
 
 protected:
     // 2D image data
-    Image frontImg;
-    Image backImg;
-    bool  is_show{ true };
+    Image  frontImg;
+    Image  backImg;
+    bool   is_show{ true };
     float2 img_pos{};
     // materials
     struct Material
