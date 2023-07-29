@@ -19,9 +19,9 @@ CardTestPtr
     card->SetTranslate( model_pos );
     card->SetScaleAxisXYZ( f32( 0.1f ) );
     // 2d
-    card->frontImg = Image( img_pos,
-                            IMGctrl.GetCardIMGdata( param.suit, param.value ) );
-    card->backImg  = Image( img_pos, IMGctrl.GetCardIMGdata( "Back" ) );
+    card->frontImg = Image( IMGctrl.GetCardIMGdata( param.suit, param.value ) );
+    card->backImg  = Image( IMGctrl.GetCardIMGdata( "Back" ) );
+    card->img_pos  = img_pos;
     return card;
 }
 
@@ -79,18 +79,26 @@ bool CardTest::Init()
 
 void CardTest::Update()
 {
-    if( IsKeyOn( KEY_INPUT_Z ) )
+    if( IsKeyRepeat( KEY_INPUT_Z ) )
     {
         const auto mat_body = GetMatrix();
         auto       mat      = matrix::identity();
-        mat                 = mul( mat, matrix::rotateY( D2R( 180.f ) ) );
-        mat                 = mul( mat, mat_body );
+        static f32 degree_y( 0.f );
+        degree_y += 1.f;
+        mat = mul( mat, matrix::rotateY( D2R( degree_y ) ) );
+        mat = mul( mat, mat_body );
         SetMatrix( mat );
     }
 }
 
-void CardTest::Render( bool is_show )
+void CardTest::RenderImg()
 {
+    DrawRotaGraphF( img_pos.x,
+                    img_pos.y,
+                    1,
+                    0,
+                    is_show ? frontImg.handle : backImg.handle,
+                    true );
 }
 
 void CardTest::LateDraw()
@@ -114,4 +122,15 @@ void CardTest::Exit()
 CardParam CardTest::GetCardParam() const
 {
     return this->param;
+}
+
+bool CardTest::Flip()
+{
+    is_show = ! is_show;
+    return is_show;
+}
+
+bool CardTest::IsShow() const
+{
+    return is_show;
 }

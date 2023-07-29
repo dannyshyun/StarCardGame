@@ -2,6 +2,7 @@
 #include "GameMain.h"
 #include "GameScene.h"
 #include "Cards/CardTest.h"
+#include "UI/UiManager.h"
 #include "GameObjects/Table.h"
 #include "GameObjects/Dice.h"
 #include "Cameras/CameraBase.h"
@@ -44,7 +45,8 @@ namespace MainScene
             {
                 // auto dice0 = Dice::Create( "Red" );
                 // auto dice1 = Dice::Create( "Blue", float3( 0, 1.3f, 0 ) );
-            }  // camera
+            }  
+            // camera
             {
                 float3 pos( 0, 37.5f, 40.3f );
                 float3 target( 0, 0.8f, -0.5f );
@@ -60,6 +62,12 @@ namespace MainScene
                 auto   cam =
                     CameraBase::Create( pos, target )->SetName( "TopCamera" );
                 cam->SetRotationAxisXYZ( float3( 0, 180, 0 ) );
+            }
+            // UI
+            {
+                auto card = Scene::GetObjectPtr<CardTest>( "CardSword2" );
+                auto cam  = Scene::GetCurrentCamera().lock();
+                auto UI   = UiManager::Create( card, cam );
             }
             //Turn = LOAD_TURN;
             // npc->Init();
@@ -81,12 +89,13 @@ namespace MainScene
 
         void TestScene::Draw()
         {
+
             auto card = Scene::GetObjectPtr<Object>( "CardSword2" );
             if( auto obj = Scene::PickObject( GetMouseX(), GetMouseY() ) )
             {
                 DrawString( 16,
                             16,
-                            TC( convertTo( obj->GetName() ).c_str() ),
+                            TC( std::string( obj->GetName() ).c_str() ),
                             WHITE );
             }
             // todo
@@ -94,13 +103,14 @@ namespace MainScene
 
         void TestScene::LateDraw()
         {
-            if( GetObjectPtr<Object>( "TopCamera" )
-                    ->GetComponent<ComponentCamera>() ==
-                std::shared_ptr<ComponentCamera>( Scene::GetCurrentCamera() ) )
+           /* if( auto cam = Scene::GetCurrentCamera().lock() )
             {
-                auto card = GetObjectPtr<CardTest>( "CardSword2" );
-                card->frontImg.Render();
-            }
+                if( cam->GetOwner()->GetName() == "TopCamera" )
+                {
+                    auto card = GetObjectPtr<CardTest>( "CardSword2" );
+                    card->frontImg.Render();
+                }
+            }*/
         }
 
         void TestScene::Exit()

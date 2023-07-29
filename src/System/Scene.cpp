@@ -1750,13 +1750,13 @@ ObjectPtr Scene::PickObject( int x, int y )
 
     auto vec = normalize( ray.end - ray.start ) * 5.0f;
 
-    DrawCapsule3D( cast( ray.start + vec ),
-                   cast( ray.end ),
-                   0.05f,
-                   30,
-                   GetColor( 255, 0, 0 ),
-                   GetColor( 255, 0, 0 ),
-                   TRUE );
+    // DrawCapsule3D( cast( ray.start + vec ),
+    //                cast( ray.end ),
+    //                0.05f,
+    //                30,
+    //                GetColor( 255, 0, 0 ),
+    //                GetColor( 255, 0, 0 ),
+    //                TRUE );
 
     float     min     = FLT_MAX;
     ObjectPtr min_obj = nullptr;

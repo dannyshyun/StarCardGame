@@ -23,25 +23,25 @@ class CardTest : public Object
 {
 public:
     BP_OBJECT_TYPE( CardTest, Object );
-    static CardTestPtr              Create( CardParam param,
-                                            float3    model_pos = { 0.f, 0.f, 0.f },
-                                            float2    img_pos = { 0.f, 0.f } );
-    virtual bool                    Init() override;
-    virtual void                    Update() override;
-    virtual void                    Render( bool is_show );
-    void                            LateDraw() override;
-    virtual void                    GUI() override;
-    virtual void                    Exit() override;
-    [[nodiscard]] virtual CardParam GetCardParam() const;
-
-    bool  is_player = true;
-    bool  is_select = false;
-    bool  is_touch  = false;
-    Image frontImg;
-    Image backImg;
+    static CardTestPtr Create( CardParam param,
+                               float3    model_pos = { 0.f, 0.f, 0.f },
+                               float2    img_pos   = { 0.f, 0.f } );
+    virtual bool       Init() override;
+    virtual void       Update() override;
+    virtual void       RenderImg();
+    void               LateDraw() override;
+    virtual void       GUI() override;
+    virtual void       Exit() override;
+    virtual CardParam  GetCardParam() const;
+    virtual bool       Flip();
+    virtual bool       IsShow() const;
 
 protected:
     // 2D image data
+    Image frontImg;
+    Image backImg;
+    bool  is_show{ true };
+    float2 img_pos{};
     // materials
     struct Material
     {
