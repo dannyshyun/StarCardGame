@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <System/Scene.h>
-#include <Characters/Player.h>
-#include <Characters/Npc.h>
+#include <Players/Player.h>
+#include <Players/Npc.h>
 #include <UI/UI.h>
 namespace MainScene
 {
@@ -22,10 +22,6 @@ namespace MainScene
 
         private:
             int counter = 0;
-
-            std::unique_ptr<Player> player = std::make_unique<Player>( 0 );
-            std::unique_ptr<Npc>    npc    = std::make_unique<Npc>( 0 );
-            std::unique_ptr<UI>     ui     = std::make_unique<UI>( 0 );
         };
     }
     namespace Scene2D

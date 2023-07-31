@@ -1,9 +1,8 @@
 ﻿#include "WinMain.h"
 #include "Game/GameMain.h"
-#include "BaseClass/Base.h"
 #include "UI.h"
 
-UI::UI( int image ) : Base( image )
+UI::UI()
 {
 }
 void UI::Init()

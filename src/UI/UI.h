@@ -1,13 +1,13 @@
 ﻿#pragma once
 
-class UI : public Base
+class UI
 {
 public:
-    UI( int image );
-    void Init() override;
-    void Update() override;
-    void Render() override;
-    void Release() override;
+    UI();
+    void Init();
+    void Update();
+    void Render();
+    void Release();
 
 private:
     void DrawMove();

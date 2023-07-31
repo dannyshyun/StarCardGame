@@ -7,10 +7,11 @@ class IMGcontroller
 {
 public:
     IMGcontroller();
-    void Init();
-    void Release();
-    int  GetCardIMGdata( std::string suit, u32 value = 1 );
-    int  GetUIIMGdata( std::string name );
+    void   Init();
+    void   Release();
+    int    GetCardIMGdata( std::string suit, u32 value = 1 );
+    int    GetUIIMGdata( std::string name );
+    float2 GetCardSize();
 
 private:
     //   suit         datas vector (value = index + 1)

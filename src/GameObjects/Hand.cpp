@@ -1,9 +1,21 @@
 ﻿#include "WinMain.h"
-#include "BaseClass/Base.h"
 #include "Hand.h"
-Hand::Hand( int image ) : Base( image )
+Hand::Hand()
 {
-    hand = std::make_unique<Cards>();
+    this->hand.clear();
+}
+
+Hand::Hand( bool is_player )
+{
+    Hand();
+    img_pos.x = f32( WINDOW_W * 0.5f );
+    img_pos.y = f32( is_player       //!< the position of deck
+                         ? WINDOW_H  //!< player
+                         : 0 );      //!< npc
+}
+
+Hand::~Hand()
+{
 }
 
 void Hand::Init()
@@ -12,15 +24,29 @@ void Hand::Init()
 
 void Hand::Update()
 {
-    for( auto& card: *hand )
-        card->Update();
+    u32 index = 0;
+    for( auto& card: this->hand )
+    {
+        // model
+        {
+            auto mat = matrix::identity();
+        }
+        // image
+        {
+            f32 offset( 80.f );
+            f32 x( img_pos.x + ( index - hand.size() / 2 ) * offset );
+            f32 y( img_pos.y );
+            card->SetImgPos( float2( x, y ) );
+        }
+        index++;
+    }
 }
 
-void Hand::Render( bool is_player )
+void Hand::RenderImg()
 {
-    for( auto& card: *hand )
+    for( auto& card: hand )
     {
-        card->Render( is_player );
+        card->RenderImg();
     }
 }
 
@@ -30,30 +56,28 @@ void Hand::Release()
 
 Cards Hand::Fold( Cards cards )
 {
+    for( auto& card: cards )
+    {
+        Cards::iterator it = std::find( hand.begin(), hand.end(), card );
+        hand.erase( it );
+    }
     return cards;
 }
 
-void Hand::Draw( Cards cards, bool is_player )
+void Hand::Draw( Cards cards )
 {
-    u32 i        = 0;
-    u32 card_num = (u32)( cards.size() );
     for( auto& card: cards )
     {
-        u32 offset = 80;
-        u32 x      = WINDOW_W / 2 + ( i - card_num / 2 ) * offset;
-        u32 y      = is_player ? WINDOW_H : 0;
-        card->pos  = Vector2( x, y );
-        hand->push_back( card );
-        i++;
+        hand.push_back( card );
     }
 }
 
 u32 Hand::GetHandNum() const
 {
-    return (u32)( hand->size() );
+    return (u32)( hand.size() );
 }
 
 Cards Hand::GetHandCards() const
 {
-    return *hand;
+    return hand;
 }

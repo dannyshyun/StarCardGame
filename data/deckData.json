@@ -1,162 +1,167 @@
 [
 	{
-		"suit": "sword",
+		"suit": "Sword",
 		"value": 1,
 		"num": 3
 	},
 	{
-		"suit": "sword",
+		"suit": "Sword",
 		"value": 2,
 		"num": 3
 	},
 	{
-		"suit": "sword",
+		"suit": "Sword",
 		"value": 3,
 		"num": 3
 	},
 	{
-		"suit": "sword",
+		"suit": "Sword",
 		"value": 4,
 		"num": 1
 	},
 	{
-		"suit": "sword",
+		"suit": "Sword",
 		"value": 5,
 		"num": 1
 	},
 	{
-		"suit": "gun",
+		"suit": "Gun",
 		"value": 1,
 		"num": 3
 	},
 	{
-		"suit": "gun",
+		"suit": "Gun",
 		"value": 2,
 		"num": 3
 	},
 	{
-		"suit": "gun",
+		"suit": "Gun",
 		"value": 3,
 		"num": 3
 	},
 	{
-		"suit": "gun",
+		"suit": "Gun",
 		"value": 4,
 		"num": 1
 	},
 	{
-		"suit": "gun",
+		"suit": "Gun",
 		"value": 5,
 		"num": 1
 	},
 	{
-		"suit": "shield",
+		"suit": "Shield",
 		"value": 1,
 		"num": 3
 	},
 	{
-		"suit": "shield",
+		"suit": "Shield",
 		"value": 2,
 		"num": 3
 	},
 	{
-		"suit": "shield",
+		"suit": "Shield",
 		"value": 3,
 		"num": 3
 	},
 	{
-		"suit": "shield",
+		"suit": "Shield",
 		"value": 4,
 		"num": 1
 	},
 	{
-		"suit": "shield",
+		"suit": "Shield",
 		"value": 5,
 		"num": 1
 	},
 	{
-		"suit": "move",
+		"suit": "Move",
 		"value": 1,
 		"num": 2
 	},
 	{
-		"suit": "move",
+		"suit": "Move",
 		"value": 2,
 		"num": 2
 	},
 	{
-		"suit": "move",
+		"suit": "Move",
 		"value": 3,
 		"num": 1
 	},
 	{
-		"suit": "star",
+		"suit": "Star",
 		"value": 1,
 		"num": 2
 	},
 	{
-		"suit": "star",
+		"suit": "Star",
 		"value": 2,
 		"num": 2
 	},
 	{
-		"suit": "star",
+		"suit": "Star",
 		"value": 3,
 		"num": 1
 	},
 	{
-		"suit": "star",
+		"suit": "Star",
 		"value": 4,
 		"num": 1
 	},
 	{
-		"suit": "star",
+		"suit": "Star",
 		"value": 5,
 		"num": 1
 	},
 	{
-		"suit": "chance",
+		"suit": "Chance",
 		"value": 1,
 		"num": 1
 	},
 	{
-		"suit": "chance",
+		"suit": "Chance",
 		"value": 2,
 		"num": 1
 	},
 	{
-		"suit": "chance",
+		"suit": "Chance",
 		"value": 3,
 		"num": 1
 	},
 	{
-		"suit": "curse",
+		"suit": "Curse",
 		"value": 1,
 		"num": 1
 	},
 	{
-		"suit": "curse",
+		"suit": "Curse",
 		"value": 2,
 		"num": 1
 	},
 	{
-		"suit": "curse",
+		"suit": "Curse",
 		"value": 3,
 		"num": 1
 	},
 	{
-		"suit": "hpPlus",
+		"suit": "HpPlus",
 		"value": 1,
 		"num": 1
 	},
 	{
-		"suit": "hpPlus",
+		"suit": "HpPlus",
 		"value": 2,
 		"num": 1
 	},
 	{
-		"suit": "hpPlus",
+		"suit": "HpPlus",
 		"value": 3,
+		"num": 1
+	},
+	{
+		"suit": "Back",
+		"value": 1,
 		"num": 1
 	}
 ]

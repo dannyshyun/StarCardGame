@@ -7,11 +7,11 @@ for data in path_data:
     for i in range(data["max_value"]):
         suit = data["suit"]
         match suit:
-            case "sword" | "gun" | "shield":
+            case "Sword" | "Gun" | "Shield":
                 num = 1 if i > 2 else 3
-            case "move" | "star":
+            case "Move" | "Star":
                 num = 1 if i > 1 else 2
-            case "chance" | "curse" | "hpPluse":
+            case "Chance" | "Curse" | "HpPluse":
                 num = 1
         deck_data = {
             "suit" : data["suit"],

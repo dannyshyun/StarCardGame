@@ -2,7 +2,6 @@
 #include <System/Component/ComponentCollisionModel.h>
 #include "WinMain.h"
 #include "Game/GameMain.h"
-#include "BaseClass/Base.h"
 #include "Table.h"
 
 BP_OBJECT_IMPL( Table, "Table" );

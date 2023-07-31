@@ -3,7 +3,6 @@
 //! @brief	ゲームメイン
 //---------------------------------------------------------------------------
 #include "GameMain.h"
-#include "BaseClass/Base.h"
 
 IMGcontroller IMGctrl;
 int           Turn;

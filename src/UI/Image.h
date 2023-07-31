@@ -1,10 +1,15 @@
-﻿#pragma once
-struct Image final
+#pragma once
+
+class Image
 {
 public:
     Image();
     Image( int handle );
     ~Image();
 
-    int handle;
+    int    GetImgHandle() const;
+    float2 GetImgSize() const;
+
+private:
+    int handle = -1;
 };

@@ -1,7 +1,7 @@
-﻿#include "BaseClass/Base.h"
+﻿
 #include "OkButton.h"
 
-OkBtn::OkBtn( int image ) : Base( image )
+OkBtn::OkBtn()
 {
 }
 

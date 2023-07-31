@@ -1,17 +1,15 @@
 ﻿#include <System/Scene.h>
 #include "GameMain.h"
 #include "GameScene.h"
-#include "Cards/CardTest.h"
-#include "UI/UiManager.h"
 #include "GameObjects/Table.h"
 #include "GameObjects/Dice.h"
 #include "Cameras/CameraBase.h"
 
 #include <System/Component/ComponentModel.h>
 #include <System/Component/ComponentCamera.h>
-
 #include "System/Component/ComponentCollisionModel.h"
-
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
 namespace MainScene
 {
     namespace Scene3D
@@ -24,19 +22,30 @@ namespace MainScene
             {
                 auto table = Table::Create()->SetName( "Table" );
             }
-
-            // card
+            // player
             {
-                auto card =
-                    CardTest::Create( CardParam( "Sword", 2 ),
-                                      float3( 0.f, 1.3f, 0.f ),
-                                      float2( WINDOW_W / 2, WINDOW_H / 2 ) );
+                // auto player = Player::Create()->SetName( "Player" );
+            }  
+            // test
+            {
+                std::ifstream file( "data/deckData.json" );
+                json          jfile = json::parse( file );
+                // parse json object
+                for( auto& obj: jfile )
+                {
+                    std::string suit  = obj["suit"];
+                    u32         value = obj["value"];
+                    u32         num   = obj["num"];
+                    CardParam   param( suit, value );
+                    // insert the card * num times
+                    for( u32 i = 0; i < num; i++ )
+                    {
+                        auto card     = Card::Create( param, float3(0,1.3f,0), float2(200,600) );
+                        card->is_show = false;
+                    }
+                }
             }
-            // dice
-            {
-                // auto dice0 = Dice::Create( "Red" );
-                // auto dice1 = Dice::Create( "Blue", float3( 0, 1.3f, 0 ) );
-            }  // camera
+            // camera
             {
                 float3 pos( 0, 37.5f, 40.3f );
                 float3 target( 0, 0.8f, -0.5f );
@@ -53,7 +62,7 @@ namespace MainScene
                     CameraBase::Create( pos, target )->SetName( "TopCamera" );
                 cam->SetRotationAxisXYZ( float3( 0, 180, 0 ) );
             }
-            //Turn = LOAD_TURN;
+            Turn = LOAD_TURN;
             // npc->Init();
             // player->Init();
             return true;
@@ -91,8 +100,8 @@ namespace MainScene
             {
                 if( cam->GetOwner()->GetName() == "TopCamera" )
                 {
-                    auto card = GetObjectPtr<CardTest>( "CardSword2" );
-                    card->RenderImg();
+                    // auto player = GetObjectPtr<Player>( "Player" );
+                    // player->RenderImg();
                 }
             }
         }

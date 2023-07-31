@@ -1,21 +1,27 @@
 ﻿#pragma once
 #include <stdint.h>
-#include "Cards/CardBase.h"
-#define HAND_MAX 7
-class Hand : Base
+#include "GameObjects/Card.h"
+
+const u32 HAND_MAX( 7 );
+
+class Hand
 {
 public:
-    Hand( int image );
-    void Init() override;
-    void Update() override;
-    void Render( bool is_player );
-    void Release() override;
+    Hand();
+    Hand( bool is_player );
+    ~Hand();
+    void Init();
+    void Update();
+    void RenderImg();
+    void Release();
 
     Cards Fold( Cards cards );
-    void  Draw( Cards cards, bool is_player );
+    void  Draw( Cards cards );
     u32   GetHandNum() const;
     Cards GetHandCards() const;
 
 private:
-    ptr_cards hand;
+    float3 mdl_pos{};
+    float2 img_pos{};
+    Cards  hand;
 };

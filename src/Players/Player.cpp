@@ -1,19 +1,24 @@
 ﻿#include <WinMain.h>
 #include <Game/GameMain.h>
-#include <BaseClass/Base.h>
 #include "Player.h"
 
-Player::Player( int image ) : Base( image )
+BP_OBJECT_IMPL( Player, "Player" );
+PlayerPtr Player::Create()
 {
-    deck = std::make_unique<Deck>( 0 );
-    hand = std::make_unique<Hand>( 0 );
+    auto obj  = Scene::CreateObjectPtr<Player>();
+    obj->mdl_pos = float3( -0.6f, 1.3f, 0 );
+    obj->img_pos = float2( 0, WINDOW_H - 40 );
+    obj->deck    = makeSptr<Deck>( true );
+    obj->hand = makeSptr<Hand>( true );
+    return obj;
 }
-//---------------------------------------------------------------------------------
-//	初期化処理
-//---------------------------------------------------------------------------------
-void Player::Init()
+
+bool Player::Init()
 {
-    deck->Init();
+    if( ! Super::Init() )
+        return false;
+
+    return true;
 }
 //---------------------------------------------------------------------------------
 //	更新処理
@@ -38,7 +43,7 @@ void Player::Update()
             if( hand->GetHandNum() < HAND_MAX )
             {
                 hand->Init();
-                hand->Draw( deck->Deal( HAND_MAX - hand->GetHandNum() ), true );
+                hand->Draw( deck->Deal( HAND_MAX - hand->GetHandNum() ) );
             }
             Turn = MOVE_TURN;
             break;
@@ -79,37 +84,38 @@ void Player::Update()
     deck->Update();
     hand->Update();
 }
-//---------------------------------------------------------------------------------
-//	描画処理
-//---------------------------------------------------------------------------------
-void Player::Render()
-{
-    deck->Render( true );
-    hand->Render( true );
-}
-//---------------------------------------------------------------------------------
-//	終了処理
-//---------------------------------------------------------------------------------
-void Player::Release()
+
+void Player::Exit()
 {
 }
 
-void Player::SelectCard( std::shared_ptr<CardBase> card )
+void Player::RenderImg()
+{
+    deck->RenderImg();
+    hand->RenderImg();
+}
+
+void Player::SelectCard( CardPtr card )
 {
     if( card->is_touch )
         card->is_select = ! card->is_select;
 }
 
-void Player::CheckTouch( std::shared_ptr<CardBase> card )
+void Player::CheckTouch( CardPtr card )
 {
-    Vector2 mouse_pos( GetMouseX(), GetMouseY() );
+    float2 mouse_pos( GetMouseX(), GetMouseY() );
     // check mouse in screen
     if( mouse_pos.x < 0 || mouse_pos.x > WINDOW_W || mouse_pos.y < 0 ||
         mouse_pos.y > WINDOW_H )
         return;
     // check mouse in touchable card area
-    card->is_touch = ( mouse_pos.x <= ( card->pos.x + card->size.x * 0.5 ) &&
-                       mouse_pos.x >= ( card->pos.x - card->size.x * 0.5 ) &&
-                       mouse_pos.y <= ( card->pos.y + card->size.y * 0.5 ) &&
-                       mouse_pos.y >= ( card->pos.y - card->size.y * 0.5 ) );
+    card->is_touch =
+        ( mouse_pos.x <=
+              ( card->GetImgPos().x + IMGctrl.GetCardSize().x * 0.5f ) &&
+          mouse_pos.x >=
+              ( card->GetImgPos().x - IMGctrl.GetCardSize().x * 0.5f ) &&
+          mouse_pos.y <=
+              ( card->GetImgPos().y + IMGctrl.GetCardSize().y * 0.5f ) &&
+          mouse_pos.y >=
+              ( card->GetImgPos().y - IMGctrl.GetCardSize().y * 0.5f ) );
 }

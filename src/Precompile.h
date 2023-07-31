@@ -81,7 +81,7 @@ using namespace hlslpp;
 #include "System/Graphics/Shader.h"
 #include "System/Graphics/Texture.h"
 #include "System/Graphics/Model.h"
-
+#include "UI/Image.h"
 //--------------------------------------------------------------
 // 数学定数
 //--------------------------------------------------------------
@@ -115,13 +115,14 @@ inline f32 D2R( f32 degree )
 #define PINK     GetColor( 255, 0, 255 )
 #define SKYBLUE  GetColor( 0, 255, 255 )
 
-#define makeSptr std::make_shared
-
+#define toString std::to_string
 // std::stringをstd::wstringへ変換する
 std::wstring convertTo( std::string_view string );
 
 // std::wstringをstd::stringへ変換する
 std::string convertTo( std::wstring_view wstring );
+
+using string = std::string;
 
 // vscode に警告出ないため用
 typedef const TCHAR* TC;

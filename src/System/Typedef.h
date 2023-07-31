@@ -43,3 +43,4 @@ using f64 = double;    //!< 倍精度浮動小数点数
     using obj##PtrMap       = std::unordered_map<std::string, obj##Ptr>
 
 //@}
+#define makeSptr std::make_shared

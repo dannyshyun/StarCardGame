@@ -70,3 +70,10 @@ int IMGcontroller::GetUIIMGdata( std::string name )
 {
     return ( *UI_IMG_list )[name];
 }
+
+float2 IMGcontroller::GetCardSize()
+{
+    f32 w, h;
+    GetGraphSizeF( ( *card_IMG_list )["Sword"][1], &w, &h );
+    return float2( w, h );
+}

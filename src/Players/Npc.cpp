@@ -1,21 +1,24 @@
 ﻿#include <WinMain.h>
 #include <Game/GameMain.h>
-#include <GameSystem/Random.h>
-#include <BaseClass/Base.h>
-#include "Player.h"
 #include "Npc.h"
 
-Npc::Npc( int image ) : Player( image )
+BP_OBJECT_IMPL( Npc, "Npc" );
+NpcPtr Npc::Create()
 {
-    deck = std::make_unique<Deck>( 0 );
-    hand = std::make_unique<Hand>( 0 );
+    auto obj  = Scene::CreateObjectPtr<Npc>();
+    obj->deck = makeSptr<Deck>( false );
+    obj->hand = makeSptr<Hand>( false );
+    return obj;
 }
 //---------------------------------------------------------------------------------
 //	初期化処理
 //---------------------------------------------------------------------------------
-void Npc::Init()
+bool Npc::Init()
 {
-    deck->Init();
+    if( ! Super::Init() )
+        return false;
+
+    return true;
 }
 //---------------------------------------------------------------------------------
 //	更新処理
@@ -33,8 +36,7 @@ void Npc::Update()
             if( hand->GetHandNum() < HAND_MAX )
             {
                 hand->Init();
-                hand->Draw( deck->Deal( HAND_MAX - hand->GetHandNum() ),
-                            false );
+                hand->Draw( deck->Deal( HAND_MAX - hand->GetHandNum() ) );
             }
             break;
     }
@@ -43,18 +45,18 @@ void Npc::Update()
 //---------------------------------------------------------------------------------
 //	描画処理
 //---------------------------------------------------------------------------------
-void Npc::Render()
+void Npc::RenderImg()
 {
-    deck->Render( false );
-    hand->Render( false );
+    deck->RenderImg();
+    hand->RenderImg();
 }
 //---------------------------------------------------------------------------------
 //	終了処理
 //---------------------------------------------------------------------------------
-void Npc::Release()
+void Npc::Exit()
 {
 }
 
-void Npc::SelectCard( CardBase card )
+void Npc::SelectCard( CardPtr card )
 {
 }

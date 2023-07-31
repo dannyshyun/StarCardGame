@@ -1,20 +1,16 @@
 ﻿#pragma once
-#include "Cards/CardBase.h"
-#include "Cards/Action/ActionCard.h"
-#include "Cards/Item/ItemCard.h"
-#include "Cards/Item/ChanceCard.h"
-#include "Cards/Item/CurseCard.h"
-#include "Cards/Item/HpPlusCard.h"
+#include "GameObjects/Card.h"
 
-class Deck : public Base
+class Deck
 {
 public:
-    Deck( int image );
+    Deck();
+    Deck( bool is_player );
     ~Deck();
-    void Init() override;
-    void Update() override;
-    void Render( bool is_player );
-    void Release() override;
+    void Init();
+    void Update();
+    void RenderImg();
+    void Release();
 
     // revoke cards which are folded
     void Revoke( Cards cards );
@@ -26,16 +22,17 @@ public:
     // deal cards from deck
     Cards Deal( u32 num );
     // get card num from deck
-    u32 GetCardNum() const;
+    u32 GetNum() const;
 
 private:
-    Card<ActionCard> NewActionCard( std::string suit, u32 value );
-    Card<ChanceCard> NewChanceCard( std::string suit, u32 value );
-    Card<HpPlusCard> NewHpPlusCard( std::string suit, u32 value );
-    Card<CurseCard>  NewCurseCard( std::string suit, u32 value );
-    void             LoadCardsIMG();
+
+    // model data
+    float3 mdl_pos{};
+    // image data
+    float2 img_pos{};
+    Image  img{};
     // card container
-    ptr_cards deck;
+    Cards deck{};
     // the number of card to render
-    u32 card_num;
+    u32 num = 0;
 };

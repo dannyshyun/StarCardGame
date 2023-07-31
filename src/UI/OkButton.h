@@ -1,12 +1,11 @@
 ﻿#pragma once
-#include <stdint.h>
 
-class OkBtn : public Base
+class OkBtn
 {
 public:
-    OkBtn( int image );
-    void Init() override;
-    void Update() override;
-    void Render() override;
-    void Release() override;
+    OkBtn();
+    void Init();
+    void Update();
+    void Render();
+    void Release();
 };
