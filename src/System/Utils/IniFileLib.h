@@ -41,7 +41,9 @@ public:
     //! @param def デフォルト数値(ないとき選ばれる)
     //! @return 数値
     //----------------------------------------------------------------------------
-    int GetInt( const std::string& section, const std::string& key, int def = 0 )
+    int GetInt( const std::string& section,
+                const std::string& key,
+                int                def = 0 )
     {
         ReadBuffer( section.c_str(), key.c_str(), "None" );
         auto str = std::string( buffer_.data() );
@@ -59,7 +61,9 @@ public:
     //! @param def デフォルト数値(ないとき選ばれる)
     //! @return 数値
     //----------------------------------------------------------------------------
-    float GetFloat( const std::string& section, const std::string& key, float def = 0.0f )
+    float GetFloat( const std::string& section,
+                    const std::string& key,
+                    float              def = 0.0f )
     {
         ReadBuffer( section.c_str(), key.c_str(), "None" );
         auto str = std::string( buffer_.data() );
@@ -77,7 +81,9 @@ public:
     //! @param def デフォルト数値(ないとき選ばれる)
     //! @return 数値
     //----------------------------------------------------------------------------
-    float2 GetFloat2( const std::string& section, const std::string& key, float2 def = { 0.0f, 0.0f } )
+    float2 GetFloat2( const std::string& section,
+                      const std::string& key,
+                      float2             def = { 0.0f, 0.0f } )
     {
         ReadBuffer( section.c_str(), key.c_str(), "None" );
         auto str = std::string( buffer_.data() );
@@ -96,7 +102,9 @@ public:
     //! @param def デフォルト数値(ないとき選ばれる)
     //! @return 数値
     //----------------------------------------------------------------------------
-    float3 GetFloat3( const std::string& section, const std::string& key, float3 def = { 0, 0, 0 } )
+    float3 GetFloat3( const std::string& section,
+                      const std::string& key,
+                      float3             def = { 0, 0, 0 } )
     {
         ReadBuffer( section.c_str(), key.c_str(), "None" );
         auto str = std::string( buffer_.data() );
@@ -115,7 +123,9 @@ public:
     //! @param def デフォルト数値(ないとき選ばれる)
     //! @return 数値
     //----------------------------------------------------------------------------
-    float4 GetFloat4( const std::string& section, const std::string& key, float4 def = { 0, 0, 0, 0 } )
+    float4 GetFloat4( const std::string& section,
+                      const std::string& key,
+                      float4             def = { 0, 0, 0, 0 } )
     {
         ReadBuffer( section.c_str(), key.c_str(), "None" );
         auto str = std::string( buffer_.data() );
@@ -124,7 +134,10 @@ public:
 
         str     = HelperLib::String::Trim( str, "{};" );
         auto v2 = HelperLib::String::Split( str, ',' );
-        return float4( stof( v2[0] ), stof( v2[1] ), stof( v2[2] ), stof( v2[3] ) );
+        return float4( stof( v2[0] ),
+                       stof( v2[1] ),
+                       stof( v2[2] ),
+                       stof( v2[3] ) );
     }
 
     //----------------------------------------------------------------------------
@@ -134,7 +147,9 @@ public:
     //! @param def デフォルト数値(ないとき選ばれる)
     //! @return 文字列
     //----------------------------------------------------------------------------
-    std::string GetString( const std::string& section, const std::string& key, std::string def = "" )
+    std::string GetString( const std::string& section,
+                           const std::string& key,
+                           std::string        def = "" )
     {
         ReadBuffer( section.c_str(), key.c_str(), "None" );
         auto str = std::string( buffer_.data() );
@@ -152,7 +167,8 @@ public:
     //! @param def デフォルト数値(ないとき選ばれる)
     //! @return 文字列
     //----------------------------------------------------------------------------
-    std::vector<std::string> GetStrings( const std::string& section, const std::string& key )
+    std::vector<std::string> GetStrings( const std::string& section,
+                                         const std::string& key )
     {
         ReadBuffer( section.c_str(), key.c_str(), "None" );
         const auto str = std::string( buffer_.data() );
@@ -169,7 +185,9 @@ public:
     //! @param def デフォルト数値(ないとき選ばれる)
     //! @return 文字列
     //----------------------------------------------------------------------------
-    bool GetBool( const std::string& section, const std::string& key, bool def = false )
+    bool GetBool( const std::string& section,
+                  const std::string& key,
+                  bool               def = false )
     {
         ReadBuffer( section.c_str(), key.c_str(), "None" );
         auto str = std::string( buffer_.data() );
@@ -199,7 +217,12 @@ private:
     //----------------------------------------------------------------------------
     void ReadBuffer( LPCTSTR section, LPCTSTR key, LPCTSTR def )
     {
-        GetPrivateProfileStringA( section, key, def, buffer_.data(), (DWORD)buffer_.size(), file_.c_str() );
+        GetPrivateProfileStringA( section,
+                                  key,
+                                  def,
+                                  buffer_.data(),
+                                  (DWORD)buffer_.size(),
+                                  file_.c_str() );
     }
 
     std::string           file_{};

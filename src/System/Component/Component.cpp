@@ -138,7 +138,9 @@ void Component::InitSerialize()
 
 void Component::SetPriority( ProcTiming timing, Priority priority )
 {
-    Scene::GetCurrentScene()->SetPriority( shared_from_this(), timing, priority );
+    Scene::GetCurrentScene()->SetPriority( shared_from_this(),
+                                           timing,
+                                           priority );
 }
 
 void Component::RegisterToObject( ComponentPtr cmp, ObjectPtr obj )

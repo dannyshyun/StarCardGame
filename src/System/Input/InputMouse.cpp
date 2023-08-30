@@ -49,7 +49,7 @@ namespace
     {
         return ( mouseID >= MAX_MOUSE_BUTTON );
     }
-}; // namespace
+};  // namespace
 
 //---------------------------------------------------------------------------
 // 初期化

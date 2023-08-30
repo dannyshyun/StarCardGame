@@ -114,8 +114,6 @@ inline f32 D2R( f32 degree )
 #define PINK     GetColor( 255, 0, 255 )
 #define SKYBLUE  GetColor( 0, 255, 255 )
 
-
-
 #define toString std::to_string
 // std::stringをstd::wstringへ変換する
 std::wstring convertTo( std::string_view string );

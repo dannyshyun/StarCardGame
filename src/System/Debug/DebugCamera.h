@@ -29,4 +29,4 @@ namespace DebugCamera
 
     ComponentCameraWeakPtr GetCamera();
 
-} // namespace DebugCamera
+}  // namespace DebugCamera

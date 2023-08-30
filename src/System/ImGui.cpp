@@ -11,7 +11,10 @@
 #include <imgui/misc/cpp/imgui_stdlib.h>
 
 // メッセージハンドラ (imgui_impl_win32.cpp)
-extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler( HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam );
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler( HWND   hwnd,
+                                                              UINT   message,
+                                                              WPARAM wparam,
+                                                              LPARAM lparam );
 
 namespace
 {
@@ -46,7 +49,8 @@ namespace
         //! 初期化
         virtual bool initialize() override
         {
-            auto d3d_device = static_cast<IDirect3DDevice9*>( const_cast<void*>( GetUseDirect3DDevice9() ) );
+            auto d3d_device = static_cast<IDirect3DDevice9*>(
+                const_cast<void*>( GetUseDirect3DDevice9() ) );
             return ImGui_ImplDX9_Init( d3d_device );
         }
 
@@ -54,7 +58,10 @@ namespace
         virtual void newFrame() override { ImGui_ImplDX9_NewFrame(); }
 
         //! 描画
-        virtual void renderDrawData( ImDrawData* draw_data ) override { ImGui_ImplDX9_RenderDrawData( draw_data ); }
+        virtual void renderDrawData( ImDrawData* draw_data ) override
+        {
+            ImGui_ImplDX9_RenderDrawData( draw_data );
+        }
 
         //! 終了
         virtual void shutdown() override { ImGui_ImplDX9_Shutdown(); }
@@ -68,7 +75,8 @@ namespace
         //! 初期化
         virtual bool initialize() override
         {
-            auto d3d_device  = static_cast<ID3D11Device*>( const_cast<void*>( GetUseDirect3D11Device() ) );
+            auto d3d_device = static_cast<ID3D11Device*>(
+                const_cast<void*>( GetUseDirect3D11Device() ) );
             auto d3d_context = static_cast<ID3D11DeviceContext*>(
                 const_cast<void*>( GetUseDirect3D11DeviceContext() ) );
             return ImGui_ImplDX11_Init( d3d_device, d3d_context );
@@ -78,7 +86,10 @@ namespace
         virtual void newFrame() override { ImGui_ImplDX11_NewFrame(); }
 
         //! 描画
-        virtual void renderDrawData( ImDrawData* draw_data ) override { ImGui_ImplDX11_RenderDrawData( draw_data ); }
+        virtual void renderDrawData( ImDrawData* draw_data ) override
+        {
+            ImGui_ImplDX11_RenderDrawData( draw_data );
+        }
 
         //! 終了
         virtual void shutdown() override { ImGui_ImplDX11_Shutdown(); }
@@ -89,7 +100,7 @@ namespace
 
     bool process_end = false;
 
-} // namespace
+}  // namespace
 
 //! @brief DestroyWindowから処理終了フラグ
 //! @return 処理終了している
@@ -109,19 +120,19 @@ void ImGuiInit()
     ImPlot::CreateContext();
 
     ImGuiIO& io = ImGui::GetIO();
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // キーボード操作
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;     // ドッキングウィンドウ
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;   // マルチウィンドウ
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // キーボード操作
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;  // ドッキングウィンドウ
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;  // マルチウィンドウ
 
     ImGuiStyle& style = ImGui::GetStyle();
     if( io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable )
     {
         // マルチウィンドウの場合
-        style.WindowRounding              = 0.0f; // ウィンドウの角を丸くしない
-        style.Colors[ImGuiCol_WindowBg].w = 1.0f; // 半透明にしない
+        style.WindowRounding = 0.0f;  // ウィンドウの角を丸くしない
+        style.Colors[ImGuiCol_WindowBg].w = 1.0f;  // 半透明にしない
     }
-    style.PopupRounding = 4.0f; // ポップアップウィンドウの角を丸くする
-    style.FrameRounding = 4.0f; // 操作UIの縁を丸くする
+    style.PopupRounding = 4.0f;  // ポップアップウィンドウの角を丸くする
+    style.FrameRounding = 4.0f;  // 操作UIの縁を丸くする
 
     // DPI対応
     ImGui_ImplWin32_EnableDpiAwareness();
@@ -142,8 +153,14 @@ void ImGuiInit()
         // 日本語 Japanese
         auto font_path_consolas = std::string( font_path ) + "/consola.ttf";
         auto font_path_meiryo   = std::string( font_path ) + "/meiryo.ttc";
-        io.Fonts->AddFontFromFileTTF( font_path_consolas.c_str(), 12.0f, nullptr, io.Fonts->GetGlyphRangesDefault() );
-        io.Fonts->AddFontFromFileTTF( font_path_meiryo.c_str(), 16.0f, &config, io.Fonts->GetGlyphRangesJapanese() );
+        io.Fonts->AddFontFromFileTTF( font_path_consolas.c_str(),
+                                      12.0f,
+                                      nullptr,
+                                      io.Fonts->GetGlyphRangesDefault() );
+        io.Fonts->AddFontFromFileTTF( font_path_meiryo.c_str(),
+                                      16.0f,
+                                      &config,
+                                      io.Fonts->GetGlyphRangesJapanese() );
 
         // 中国簡体字 Chinese
         //auto font_path_consolas = std::string(font_path) + "/consola.ttf";
@@ -176,21 +193,26 @@ void ImGuiInit()
     //----------------------------------------------------------
     // DxLibカスタムのウィンドウプロシージャ
     //----------------------------------------------------------
-    DxLib::SetHookWinProc( []( HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam ) -> LRESULT /*CALLBACK*/
-                           {
-                               switch( message )
-                               {
-                                   case WM_CLOSE :
-                                       process_end = true;
-                                       DxLib::SetUseHookWinProcReturnValue( TRUE );
-                                       return 0;
+    DxLib::SetHookWinProc(
+        []( HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam )
+            -> LRESULT /*CALLBACK*/
+        {
+            switch( message )
+            {
+                case WM_CLOSE :
+                    process_end = true;
+                    DxLib::SetUseHookWinProcReturnValue( TRUE );
+                    return 0;
 
-                                   default :
-                                       // DxLibとImGuiのウィンドウプロシージャを両立させる
-                                       DxLib::SetUseHookWinProcReturnValue( FALSE );
-                                       return ImGui_ImplWin32_WndProcHandler( hwnd, message, wparam, lparam );
-                               }
-                           } );
+                default :
+                    // DxLibとImGuiのウィンドウプロシージャを両立させる
+                    DxLib::SetUseHookWinProcReturnValue( FALSE );
+                    return ImGui_ImplWin32_WndProcHandler( hwnd,
+                                                           message,
+                                                           wparam,
+                                                           lparam );
+            }
+        } );
 
     //----------------------------------------------------------
     // プラットフォームとレンダラのバックエンドを初期化

@@ -12,12 +12,12 @@ public:
     BP_COMPONENT_TYPE( ComponentTargetTracking, Component );
     ComponentTargetTracking() {}
 
-    virtual void Init() override;       //!< 初期化
-    virtual void PreUpdate() override;  //!< 向きの初期化
-    virtual void PostUpdate() override; //!< 向きの更新
-    virtual void Draw() override;       //!< 向きのマトリクス表示(デバッグ用)
-    virtual void Exit() override;       //!< 終了処理
-    virtual void GUI() override;        //!< GUI処理
+    virtual void Init() override;        //!< 初期化
+    virtual void PreUpdate() override;   //!< 向きの初期化
+    virtual void PostUpdate() override;  //!< 向きの更新
+    virtual void Draw() override;  //!< 向きのマトリクス表示(デバッグ用)
+    virtual void Exit() override;  //!< 終了処理
+    virtual void GUI() override;   //!< GUI処理
 
     //! @brief 追跡オブジェクトの設定
     //! @param obj 追跡したいオブジェクト
@@ -64,22 +64,28 @@ public:
     //---------------------------------------------------------------------------
     enum struct TrackingBit : u32
     {
-        Initialized,    //!< 初期化済み
-        LimitAxisY,     //!< Y軸制限を有効にする
-        LimitAxisX,     //!< X軸制限を有効にする
-        ObjectTracking, //!< オブジェクトをトラッキングする
+        Initialized,     //!< 初期化済み
+        LimitAxisY,      //!< Y軸制限を有効にする
+        LimitAxisX,      //!< X軸制限を有効にする
+        ObjectTracking,  //!< オブジェクトをトラッキングする
     };
 
-    void SetTrackingStatus( TrackingBit bit, bool on ) { tracking_status_.set( bit, on ); }
-    bool GetTrackingStatus( TrackingBit bit ) { return tracking_status_.is( bit ); }
+    void SetTrackingStatus( TrackingBit bit, bool on )
+    {
+        tracking_status_.set( bit, on );
+    }
+    bool GetTrackingStatus( TrackingBit bit )
+    {
+        return tracking_status_.is( bit );
+    }
 
 private:
-    Status<TrackingBit> tracking_status_;         //!< 状態
-    std::string         tracked_node_;            //!< 追跡させるノード名
-    int                 tracked_node_index_ = -1; //!< ノードインデックス
-    float3              front_vector_       = { 0, 0, -1 };
+    Status<TrackingBit> tracking_status_;  //!< 状態
+    std::string         tracked_node_;     //!< 追跡させるノード名
+    int    tracked_node_index_ = -1;       //!< ノードインデックス
+    float3 front_vector_       = { 0, 0, -1 };
 
-    float3 look_at_     = { 0, 0, 0 }; //!< 注視点
+    float3 look_at_     = { 0, 0, 0 };  //!< 注視点
     float2 limit_lr_    = { 70, 70 };
     float2 limit_ud_    = { 50, 50 };
     float  limit_frame_ = 5.0;
@@ -87,7 +93,7 @@ private:
 
     matrix tracking_matrix_ = matrix::identity();
 
-    ObjectWeakPtr         tracking_object_{}; //!< 追跡オブジェクト
+    ObjectWeakPtr         tracking_object_{};  //!< 追跡オブジェクト
     ComponentModelWeakPtr owner_model_{};
 
 private:
@@ -101,14 +107,16 @@ private:
     // @param ver バージョン
     CEREAL_SAVELOAD( arc, ver )
     {
-        arc( cereal::make_nvp( "owner", owner_ ) ); //< オーナー
+        arc( cereal::make_nvp( "owner", owner_ ) );  //< オーナー
         arc( cereal::make_nvp( "tracking_status",
-                               tracking_status_.get() ) ); //< カメラステート
+                               tracking_status_.get() ) );  //< カメラステート
         arc( CEREAL_NVP( tracked_node_ ), CEREAL_NVP( tracked_node_index_ ) );
         arc( CEREAL_NVP( front_vector_ ) );
         arc( CEREAL_NVP( tracking_object_ ),
-             CEREAL_NVP( look_at_ ) ); //< カメラ位置とターゲット
-        arc( CEREAL_NVP( limit_lr_ ), CEREAL_NVP( limit_ud_ ), CEREAL_NVP( limit_frame_ ) );
+             CEREAL_NVP( look_at_ ) );  //< カメラ位置とターゲット
+        arc( CEREAL_NVP( limit_lr_ ),
+             CEREAL_NVP( limit_ud_ ),
+             CEREAL_NVP( limit_frame_ ) );
 
         SetTrackingNode( tracked_node_ );
     }

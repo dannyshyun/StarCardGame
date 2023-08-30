@@ -6,8 +6,8 @@
 #include <VersionHelpers.h>
 
 #include <string>
-#include <sstream> // std::stringstream
-#include <istream> // std::getline
+#include <sstream>  // std::stringstream
+#include <istream>  // std::getline
 #include <filesystem>
 #include <cassert>
 #include <memory>
@@ -56,7 +56,8 @@ namespace HelperLib::File
     //! @param dirname ディレクトリパス
     //! @param ext 列挙する拡張子(ディフォルトは無視) 例:".png" ".jpg/.png/.bmp" など
     //! @return ディレクトリに存在するファイル
-    Files_t GetFilesFromDirectory( std::string_view dirname, std::string_view ext )
+    Files_t GetFilesFromDirectory( std::string_view dirname,
+                                   std::string_view ext )
     {
         Files_t                          vfiles;
         fs::recursive_directory_iterator files( dirname );
@@ -110,7 +111,7 @@ namespace HelperLib::File
             return false;
         }
     }
-} // namespace HelperLib::File
+}  // namespace HelperLib::File
 
 namespace HelperLib::String
 {
@@ -122,7 +123,12 @@ namespace HelperLib::String
     std::wstring ToWString( std::string_view string )
     {
         // 受け側の必要サイズを取得
-        u32 size = MultiByteToWideChar( CP_ACP, 0, string.data(), static_cast<int>( string.length() ), nullptr, 0 );
+        u32 size = MultiByteToWideChar( CP_ACP,
+                                        0,
+                                        string.data(),
+                                        static_cast<int>( string.length() ),
+                                        nullptr,
+                                        0 );
 
         // バッファの取得
         std::wstring wstring;
@@ -181,7 +187,8 @@ namespace HelperLib::String
     std::u16string To16Str( std::wstring_view wstring )
     {
         // 処理系のバイトサイズが一致しているかチェック
-        static_assert( sizeof( std::wstring::value_type ) == sizeof( std::u16string::value_type ),
+        static_assert( sizeof( std::wstring::value_type ) ==
+                           sizeof( std::u16string::value_type ),
                        "size doesnt' match." );
 
         return std::u16string{ wstring.begin(), wstring.end() };
@@ -235,18 +242,25 @@ namespace HelperLib::String
         return false;
     }
 
-} // namespace HelperLib::String
+}  // namespace HelperLib::String
 
 namespace HelperLib::OS
 {
     namespace
     {
-        std::string GetRegString( HKEY hkey, const char* sub_key, const char* value_name )
+        std::string GetRegString( HKEY        hkey,
+                                  const char* sub_key,
+                                  const char* value_name )
         {
             DWORD key_type  = 0;
             DWORD data_size = 0;
-            if( ERROR_SUCCESS ==
-                RegGetValue( hkey, (PCHAR)sub_key, (PCHAR)value_name, RRF_RT_REG_SZ, &key_type, nullptr, &data_size ) )
+            if( ERROR_SUCCESS == RegGetValue( hkey,
+                                              (PCHAR)sub_key,
+                                              (PCHAR)value_name,
+                                              RRF_RT_REG_SZ,
+                                              &key_type,
+                                              nullptr,
+                                              &data_size ) )
             {
                 std::string text;
                 text.resize( data_size );
@@ -264,12 +278,14 @@ namespace HelperLib::OS
             }
             return std::string();
         }
-    } // namespace
+    }  // namespace
 
     bool IsWindows11()
     {
         auto reg =
-            GetRegString( HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "CurrentBuild" );
+            GetRegString( HKEY_LOCAL_MACHINE,
+                          "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion",
+                          "CurrentBuild" );
 
         int value = std::stoi( reg );
         if( value >= 22000 )
@@ -281,14 +297,16 @@ namespace HelperLib::OS
     bool IsWindows10OrGreater()
     {
         std::string reg =
-            GetRegString( HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "ProductName" );
+            GetRegString( HKEY_LOCAL_MACHINE,
+                          "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion",
+                          "ProductName" );
 
         if( String::IsContains( reg, "Windows 10" ) )
             return true;
 
         return false;
     }
-} // namespace HelperLib::OS
+}  // namespace HelperLib::OS
 
 namespace HelperLib::Math
 {
@@ -297,7 +315,8 @@ namespace HelperLib::Math
         if( fabs( f1 - f2 ) <= FLT_EPSILON )
             return true;
 
-        return fabs( f1 - f2 ) <= FLT_EPSILON * std::max( fabs( f1 ), fabs( f2 ) );
+        return fabs( f1 - f2 ) <=
+               FLT_EPSILON * std::max( fabs( f1 ), fabs( f2 ) );
     }
 
     matrix CreateMatrixByFrontVector( float3 front, float3 up, bool upremake )
@@ -321,12 +340,14 @@ namespace HelperLib::Math
         return mat;
     }
 
-    matrix LookAtMatrixForObject( float3 my_object_pos, float3 target_object_pos )
+    matrix LookAtMatrixForObject( float3 my_object_pos,
+                                  float3 target_object_pos )
     {
-        auto mat      = CreateMatrixByFrontVector( target_object_pos - my_object_pos );
+        auto mat      = CreateMatrixByFrontVector( target_object_pos -
+                                              my_object_pos );
         mat._41_42_43 = my_object_pos;
 
         return mat;
     }
 
-} // namespace HelperLib::Math
+}  // namespace HelperLib::Math

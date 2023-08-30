@@ -3,9 +3,9 @@
 #include <System/SystemMain.h>
 #include <System/Utils/IniFileLib.h>
 
-s32 WINDOW_W = 1280;
-s32 WINDOW_H = 720;
-int2 WINDOW_CENTER( WINDOW_W / 2, WINDOW_H / 2);
+s32  WINDOW_W = 1280;
+s32  WINDOW_H = 720;
+int2 WINDOW_CENTER( WINDOW_W / 2, WINDOW_H / 2 );
 //---------------------------------------------------------------------------
 //! アプリケーションエントリーポイント
 //---------------------------------------------------------------------------

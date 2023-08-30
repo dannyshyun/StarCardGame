@@ -14,6 +14,9 @@ public:
 
 private:
     Object* player{};
+    bool    throwing{};
+    bool    prethrowing{};
+    bool    dashing{};
 };
 
 BP_OBJECT_IMPL( Player, "Player" );
@@ -21,8 +24,7 @@ PlayerPtr Player::Create( float3 pos )
 {
     auto obj = Scene::CreateObjectPtr<Player>();
     obj->SetName( "Player" );
-    obj->pos         = pos;
-    obj->is_throwing = false;
+    obj->pos = pos;
     return obj;
 }
 
@@ -64,28 +66,6 @@ bool Player::Init()
 //---------------------------------------------------------------------------------
 void Player::Update()
 {
-    if( auto mdl = GetComponent<ComponentModel>() )
-    {
-        if( IsMouseRepeat( MOUSE_INPUT_RIGHT ) )
-        {
-            mdl->PlayAnimationNoSame( "dash", true );
-        }
-        // check is throwing animation done
-        if( this->is_throwing )
-        {
-            if( ! mdl->IsPlaying() )
-            {
-                // throwing done
-                is_throwing = false;
-            }
-        }
-        // play throwing animation
-        if( IsMouseUp( MOUSE_INPUT_LEFT ) )
-        {
-            is_throwing = true;
-            mdl->PlayAnimationNoSame( "throw", false );
-        }
-    }
 }
 
 void Player::Draw()
@@ -99,13 +79,12 @@ void Player::Exit()
 void PlayerController::Init()
 {
     Super::Init();
-    this->player = GetOwner();
+    this->player   = GetOwner();
+    this->throwing = false;
 }
 
 void PlayerController::Update()
 {
-    const auto prethrowing = IsMouseRepeat( MOUSE_INPUT_LEFT );
-    const auto dashing     = IsMouseRepeat( MOUSE_INPUT_RIGHT );
     // count movement
     float3 dir( 0 );
     if( IsKey( key_up_ ) )
@@ -120,9 +99,10 @@ void PlayerController::Update()
     if( IsKey( key_left_ ) )
         dir.x += +1.f;
 
-    // is moving
-    if( (f32)length( dir ) > 0.00f )
+    if( auto mdl = player->GetComponent<ComponentModel>() )
     {
+        // is moving
+        if( (f32)length( dir ) > 0.00f )
         {
             dir = normalize( dir );
             // set movement
@@ -131,35 +111,31 @@ void PlayerController::Update()
             mat      = mul( mat, player->GetMatrix() );
             player->SetMatrix( mat );
             // set model
-            if( auto mdl = player->GetComponent<ComponentModel>() )
+
+            // is prethrowing ?
+            this->prethrowing = IsMouseRepeat( MOUSE_INPUT_LEFT );
+            if( prethrowing )
             {
-                // is prethrowing ?
-                if( prethrowing )
-                {
-                    // run to throw animation
-                    auto Play = [&]( std::string_view anim_name ) {
-                        mdl->PlayAnimationNoSame( anim_name, true );
-                    };
-                    // play LR first if input at the same time
-                    Play( IsKey( key_right_ )  ? "R2T R"
-                          : IsKey( key_left_ ) ? "R2T L"
-                          : IsKey( key_down_ ) ? "R2T B"
-                                               : "R2T F" );
-                }
-                else
-                {
-                    // set model rotation
-                    mdl->SetRotationToVectorWithLimit( dir, rot_speed_ );
-                    // stander run animation
-                    mdl->PlayAnimationNoSame( "run", true );
-                }
+                // run to throw animation
+                auto Play = [&]( std::string_view anim_name ) {
+                    mdl->PlayAnimationNoSame( anim_name, true );
+                };
+                // play LR first if input at the same time
+                Play( IsKey( key_right_ )  ? "R2T R"
+                      : IsKey( key_left_ ) ? "R2T L"
+                      : IsKey( key_down_ ) ? "R2T B"
+                                           : "R2T F" );
+            }
+            else
+            {
+                // set model rotation
+                mdl->SetRotationToVectorWithLimit( dir, rot_speed_ );
+                // stander run animation
+                mdl->PlayAnimationNoSame( "run", true );
             }
         }
-    }
-    // is not moving
-    else
-    {
-        if( auto mdl = player->GetComponent<ComponentModel>() )
+        // not moving
+        else
         {
             // back to forward diraction smoothly
             mdl->SetRotationToVectorWithLimit( float3( float2( 0 ), -1 ),
@@ -170,19 +146,36 @@ void PlayerController::Update()
                 mdl->PlayAnimationNoSame( prethrowing ? "R2T I" : "idle",
                                           true );
         }
-    }
-    if(dashing)
-    {
-        if(auto mdl = player->GetComponent<ComponentModel>())
+        // throwing
+        {
+            // check is throwing animation done
+            if( throwing )
+            {
+                if( ! mdl->IsPlaying() )
+                {
+                    // throwing done
+                    throwing = false;
+                }
+            }
+            // play throwing animation
+            if( IsMouseUp( MOUSE_INPUT_LEFT ) )
+            {
+                throwing = true;
+                mdl->PlayAnimationNoSame( "throw", false);
+            }
+        }
+        // dashing
+        this->dashing = IsMouseRepeat( MOUSE_INPUT_RIGHT );
+        if( dashing )
         {
             auto dir = normalize( -mdl->GetMatrix().axisZ() ) * 4.f;
             auto mat = matrix::identity();
             mat      = mul( mat, matrix::translate( dir * speed_ ) );
             mat      = mul( mat, player->GetMatrix() );
             player->SetMatrix( mat );
+            mdl->PlayAnimationNoSame( "dash" , false);
         }
     }
-
     // camera
     if( auto arm = Scene::GetObjectPtr<Camera>( "PlayerCam" )
                        ->GetComponent<ComponentSpringArm>() )

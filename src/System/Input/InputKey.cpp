@@ -44,7 +44,7 @@ namespace Input
         {
             return ( keyID >= MAX_KEY_NUM );
         }
-    }; // namespace
+    };  // namespace
 
     //---------------------------------------------------------------------------
     // 初期化
@@ -200,4 +200,4 @@ namespace Input
         return ! keys[key_now()][keyID] && keys[key_old()][keyID];
     }
 
-} // namespace Input
+}  // namespace Input

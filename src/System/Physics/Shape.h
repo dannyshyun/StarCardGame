@@ -12,13 +12,13 @@ namespace shape
     //--------------------------------------------------------------
     enum class Type : s32
     {
-        Unknown,    //!< 未定義
-        Sphere,     //!< 球
-        Box,        //!< ボックス
-        Capsule,    //!< カプセル
-        Cylinder,   //!< 円筒
-        ConvexHull, //!< 凸形状
-        Mesh,       //!< 静的メッシュ
+        Unknown,     //!< 未定義
+        Sphere,      //!< 球
+        Box,         //!< ボックス
+        Capsule,     //!< カプセル
+        Cylinder,    //!< 円筒
+        ConvexHull,  //!< 凸形状
+        Mesh,        //!< 静的メッシュ
     };
 
     //===========================================================================
@@ -43,12 +43,14 @@ namespace shape
     class Sphere : public shape::Base
     {
     public:
-        float3 position_; //!< 中心座標
-        f32    radius_;   //!< 半径
+        float3 position_;  //!< 中心座標
+        f32    radius_;    //!< 半径
 
         //! コンストラクタ
         Sphere( const float3& position, f32 radius ) :
-            shape::Base( shape::Type::Sphere ), position_( position ), radius_( radius )
+            shape::Base( shape::Type::Sphere ),
+            position_( position ),
+            radius_( radius )
         {
         }
     };
@@ -59,10 +61,13 @@ namespace shape
     class Box : public shape::Base
     {
     public:
-        float3 extent_; //!< 幅
+        float3 extent_;  //!< 幅
 
         //! コンストラクタ
-        Box( const float3& extent ) : shape::Base( shape::Type::Box ), extent_( extent ) {}
+        Box( const float3& extent ) :
+            shape::Base( shape::Type::Box ), extent_( extent )
+        {
+        }
     };
 
     //===========================================================================
@@ -71,12 +76,14 @@ namespace shape
     class Capsule : public shape::Base
     {
     public:
-        f32 half_height_; //!< 高さの半分
-        f32 radius_;      //!< 半径
+        f32 half_height_;  //!< 高さの半分
+        f32 radius_;       //!< 半径
 
         //! コンストラクタ
         Capsule( f32 half_height, f32 radius ) :
-            shape::Base( shape::Type::Capsule ), half_height_( half_height ), radius_( radius )
+            shape::Base( shape::Type::Capsule ),
+            half_height_( half_height ),
+            radius_( radius )
         {
         }
     };
@@ -87,12 +94,14 @@ namespace shape
     class Cylinder : public shape::Base
     {
     public:
-        f32 half_height_; //!< 高さの半分
-        f32 radius_;      //!< 半径
+        f32 half_height_;  //!< 高さの半分
+        f32 radius_;       //!< 半径
 
         //! コンストラクタ
         Cylinder( f32 half_height, f32 radius ) :
-            shape::Base( shape::Type::Box ), half_height_( half_height ), radius_( radius )
+            shape::Base( shape::Type::Box ),
+            half_height_( half_height ),
+            radius_( radius )
         {
         }
     };
@@ -124,4 +133,4 @@ namespace shape
         Mesh( Model* model, f32 scale = 1.0f );
     };
 
-} // namespace shape
+}  // namespace shape

@@ -45,10 +45,10 @@ public:
     //! @param path モデル名
     void Load( std::string_view path );
 
-    virtual void Update() override; //!< 更新
-    virtual void Draw() override;   //!< 描画
-    virtual void Exit() override;   //!< 終了
-    virtual void GUI() override;    //!< GUI
+    virtual void Update() override;  //!< 更新
+    virtual void Draw() override;    //!< 描画
+    virtual void Exit() override;    //!< 終了
+    virtual void GUI() override;     //!< GUI
 
     //------------------------------------------------------------------------
     // @name アニメーション
@@ -74,7 +74,10 @@ public:
     //! @param loop ループするかどうか(デフォルト:しない)
     //! @param speed 補完秒数(デフォルト:0.2秒)
     //! @param start_time スタートする位置(デフォルト:0.0)
-    void PlayAnimation( std::string_view name, bool loop = false, float blend_time = 0.2f, float start_time = 0.0f );
+    void PlayAnimation( std::string_view name,
+                        bool             loop       = false,
+                        float            blend_time = 0.2f,
+                        float            start_time = 0.0f );
 
     //! @brief アニメーション中かどうか
     //! @retval true : アニメーション中
@@ -135,26 +138,41 @@ public:
     //---------------------------------------------------------------------------
     enum struct ModelBit : u64
     {
-        SetFileAlready,    //!< ファイル設定済み
-        Initialized,       //!< 初期化済み
-        ErrorFileNotFound, //!< ファイル読み込みエラー
-        UseShader,         //!< シェーダーを使用する
+        SetFileAlready,     //!< ファイル設定済み
+        Initialized,        //!< 初期化済み
+        ErrorFileNotFound,  //!< ファイル読み込みエラー
+        UseShader,          //!< シェーダーを使用する
     };
 
-    bool IsValid() const { return model_status_.is( ModelBit::Initialized ); } //!< モデルが読み込まれているか?
-    bool UseShader() const { return model_status_.is( ModelBit::UseShader ); } //!< シェーダーを利用するか?
+    bool IsValid() const
+    {
+        return model_status_.is( ModelBit::Initialized );
+    }  //!< モデルが読み込まれているか?
+    bool UseShader() const
+    {
+        return model_status_.is( ModelBit::UseShader );
+    }  //!< シェーダーを利用するか?
 
-    void UseShader( bool use ) { model_status_.set( ModelBit::UseShader, use ); }
+    void UseShader( bool use )
+    {
+        model_status_.set( ModelBit::UseShader, use );
+    }
     //---------------------------------------------------------------------------
     //! @name IMatrixインターフェースの利用するための定義
     //---------------------------------------------------------------------------
     //@{
 
-    matrix& Matrix() override { return model_transform_; } //!< マトリクス取得
+    matrix& Matrix() override { return model_transform_; }  //!< マトリクス取得
 
-    const matrix& GetMatrix() const override { return model_transform_; } //!< マトリクス取得
+    const matrix& GetMatrix() const override
+    {
+        return model_transform_;
+    }  //!< マトリクス取得
 
-    ComponentModelPtr SharedThis() { return std::dynamic_pointer_cast<ComponentModel>( shared_from_this() ); }
+    ComponentModelPtr SharedThis()
+    {
+        return std::dynamic_pointer_cast<ComponentModel>( shared_from_this() );
+    }
 
     //! @brief ワールドMatrixの取得
     //! @return 他のコンポーネントも含めた位置
@@ -170,9 +188,9 @@ private:
     //! モデル用のトランスフォーム
     matrix model_transform_ = matrix::scale( 0.1f );
 
-    Status<ModelBit>       model_status_;    //!< 状態
-    std::string            path_{};          //!< 読み込みモデル名
-    std::shared_ptr<Model> model_ = nullptr; //!< モデルクラス
+    Status<ModelBit>       model_status_;     //!< 状態
+    std::string            path_{};           //!< 読み込みモデル名
+    std::shared_ptr<Model> model_ = nullptr;  //!< モデルクラス
 
     ImGuizmo::OPERATION gizmo_operation_ = ImGuizmo::TRANSLATE;
     ImGuizmo::MODE      gizmo_mode_      = ImGuizmo::LOCAL;
@@ -187,7 +205,7 @@ private:
     std::string                old_animation_name_;
 
     float animation_time_ = 0.0f;
-    bool  anim_loop_      = false; //!< アニメーションループ設定
+    bool  anim_loop_      = false;  //!< アニメーションループ設定
 
     std::vector<Animation::Desc> animations_desc_;
 
@@ -207,7 +225,8 @@ private:
              cereal::make_nvp( "animation_time", animation_time_ ),
              cereal::make_nvp( "anim_loop", anim_loop_ ) );
 
-        arc( cereal::make_nvp( "Component", cereal::base_class<Component>( this ) ) );
+        arc( cereal::make_nvp( "Component",
+                               cereal::base_class<Component>( this ) ) );
 
         if( ! path_.empty() )
         {
@@ -225,10 +244,14 @@ private:
 //! @brief 外部Animation::Descのセーブロード
 CEREAL_SAVELOAD_OTHER( Animation::Desc, arc, other )
 {
-    arc( CEREAL_NVP( other.name_ ),            //!< アニメーション名(任意)
-         CEREAL_NVP( other.file_path_ ),       //!< ファイルパス
-         CEREAL_NVP( other.animation_index_ ), //!< ファイル内のアニメーション番号
-         CEREAL_NVP( other.animation_speed_ )  //!< アニメーションの再生速度(default:1.0f)
+    arc(
+        CEREAL_NVP( other.name_ ),       //!< アニメーション名(任意)
+        CEREAL_NVP( other.file_path_ ),  //!< ファイルパス
+        CEREAL_NVP(
+            other.animation_index_ ),  //!< ファイル内のアニメーション番号
+        CEREAL_NVP(
+            other
+                .animation_speed_ )  //!< アニメーションの再生速度(default:1.0f)
     );
 }
 

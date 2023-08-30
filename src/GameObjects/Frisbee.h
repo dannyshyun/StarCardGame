@@ -1,7 +1,6 @@
 #pragma once
 #include <System/Scene.h>
 
-
 USING_PTR( Frisbee );
 class Frisbee : public Object
 {

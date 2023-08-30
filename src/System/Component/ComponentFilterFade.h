@@ -52,19 +52,19 @@ public:
     bool IsFadeIn() { return fade_add_alpha_ > 0.0f; }
 
 private:
-    std::shared_ptr<Texture>  texture_work_;      //!< ワークテクスチャ
-    std::shared_ptr<ShaderPs> shader_ps_;         //!< ピクセルシェーダー
-    int                       parameter_cb_ = -1; //!< [DxLib] 定数バッファ
+    std::shared_ptr<Texture>  texture_work_;  //!< ワークテクスチャ
+    std::shared_ptr<ShaderPs> shader_ps_;     //!< ピクセルシェーダー
+    int parameter_cb_ = -1;                   //!< [DxLib] 定数バッファ
 
     //----------------------------------------------------------
     //! @name   調整パラメーター
     //----------------------------------------------------------
     //@{
 
-    f32 fade_alpha_   = 1.0f; //!< フェード係数(0.0f～1.0f)
-    int mosaic_width_ = 128;  //!< モザイクの最大ピクセル幅
+    f32 fade_alpha_   = 1.0f;  //!< フェード係数(0.0f～1.0f)
+    int mosaic_width_ = 128;   //!< モザイクの最大ピクセル幅
 
-    f32  fade_add_alpha_ = 1.0f; //!< 1秒で変わる量
+    f32  fade_add_alpha_ = 1.0f;  //!< 1秒で変わる量
     bool finish_fade_    = true;
     //@}
 
@@ -74,7 +74,12 @@ private:
     //--------------------------------------------------------------------
     //@{
 
-    CEREAL_SAVELOAD( arc, ver ) { arc( CEREAL_NVP( owner_ ), CEREAL_NVP( mosaic_width_ ), CEREAL_NVP( fade_alpha_ ) ); }
+    CEREAL_SAVELOAD( arc, ver )
+    {
+        arc( CEREAL_NVP( owner_ ),
+             CEREAL_NVP( mosaic_width_ ),
+             CEREAL_NVP( fade_alpha_ ) );
+    }
     //@}
 };
 

@@ -65,13 +65,15 @@ public:
                     if( auto target = target_.lock() )
                     {
                         // 徐々に敵の方に向ける(1フレーム最大3度)
-                        owner->SetRotationToPositionWithLimit( target->GetTranslate(),
-                                                               target_cam_side_speed_ * GetDeltaTime60() );
+                        owner->SetRotationToPositionWithLimit(
+                            target->GetTranslate(),
+                            target_cam_side_speed_ * GetDeltaTime60() );
 
                         // カメラローテーションをロック方向にしておくと
                         // 戻った時に違和感がない
                         cam_ry_ = owner->GetRotationAxisXYZ().y;
-                        cam_rx_ = ( cam_rx_ + target_cam_up_down ) * 0.95f - target_cam_up_down;
+                        cam_rx_ = ( cam_rx_ + target_cam_up_down ) * 0.95f -
+                                  target_cam_up_down;
 
                         arm->SetSpringArmRotate( { cam_rx_, 0, 0 } );
                     }
@@ -164,9 +166,10 @@ public:
 
                 ImGui::DragFloat( u8"移動速度", &speed_, 0.1f );
                 ImGui::DragFloat( u8"移動回転角度", &rot_speed_, 1.0f );
-                
+
                 ImGui::Checkbox( u8"カメラ方向にMouseを使用", &use_mouse_ );
-                ImGui::DragFloat( u8"カメラ左右回転スピード", &mouse_left_right_ );
+                ImGui::DragFloat( u8"カメラ左右回転スピード",
+                                  &mouse_left_right_ );
                 ImGui::DragFloat( u8"カメラ上下回転スピード", &mouse_up_down_ );
 
                 ImGui::DragFloat( u8"見る方向上リミット", &limit_cam_up_ );
@@ -200,12 +203,12 @@ protected:
     float mouse_up_down_    = 10.0f;
     float mouse_left_right_ = 10.0f;
 
-    float limit_cam_up_   = 5.0f;   //!< 上を眺める
-    float limit_cam_down_ = -45.0f; //!< 下を見る
+    float limit_cam_up_   = 5.0f;    //!< 上を眺める
+    float limit_cam_down_ = -45.0f;  //!< 下を見る
 
     ObjectWeakPtr target_;
     float         target_cam_side_speed_ = 3.0f;  //!< ロックオン時のカーソル移動速度
-    float         target_cam_up_down     = 10.0f; //!< ターゲットを見る際の上下固定
+    float target_cam_up_down = 10.0f;  //!< ターゲットを見る際の上下固定
 
     //--------------------------------------------------------------------
     //! @name Cereal処理
@@ -241,7 +244,8 @@ protected:
              CEREAL_NVP( target_cam_side_speed_ ),
              CEREAL_NVP( target_cam_up_down ) );
 
-        arc( cereal::make_nvp( "Component", cereal::base_class<Component>( this ) ) );
+        arc( cereal::make_nvp( "Component",
+                               cereal::base_class<Component>( this ) ) );
     }
 };
 

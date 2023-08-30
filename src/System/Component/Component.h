@@ -29,7 +29,7 @@ USING_PTR( Object );
 template<class T> class ClassComponentType : public Type
 {
 public:
-    using Type::Type; // 継承コンストラクタ
+    using Type::Type;  // 継承コンストラクタ
 
     virtual void* createComponentPtr( ObjectPtr obj )
     {
@@ -90,13 +90,19 @@ public:
 //! BP_OBJECT_IMPL(B, u8"クラスB")
 //! @endcode
 //---------------------------------------------------------------------------
-#define BP_COMPONENT_BASE_IMPL( CLASS, DESC_NAME ) \
-    /*! 型情報の実体 */                      \
-    ClassComponentType<CLASS> CLASS::TypeInfo( #CLASS, sizeof( CLASS ), DESC_NAME, nullptr );
+#define BP_COMPONENT_BASE_IMPL( CLASS, DESC_NAME )              \
+    /*! 型情報の実体 */                                   \
+    ClassComponentType<CLASS> CLASS::TypeInfo( #CLASS,          \
+                                               sizeof( CLASS ), \
+                                               DESC_NAME,       \
+                                               nullptr );
 
-#define BP_COMPONENT_IMPL( CLASS, DESC_NAME ) \
-    /*! 型情報の実体 */                 \
-    ClassComponentType<CLASS> CLASS::TypeInfo( #CLASS, sizeof( CLASS ), DESC_NAME, &Super::TypeInfo );
+#define BP_COMPONENT_IMPL( CLASS, DESC_NAME )                   \
+    /*! 型情報の実体 */                                   \
+    ClassComponentType<CLASS> CLASS::TypeInfo( #CLASS,          \
+                                               sizeof( CLASS ), \
+                                               DESC_NAME,       \
+                                               &Super::TypeInfo );
 
 //---------------------------------------------------------------------------
 //! @brief コンポーネント
@@ -124,26 +130,30 @@ public:
         proc_timings_.clear();
     }
 
-    Object*         GetOwner();          //!< オーナー(従属しているオブジェクト)の取得
-    const Object*   GetOwner() const;    //!< オーナー(従属しているオブジェクト)の取得
-    ObjectPtr       GetOwnerPtr();       //!< オーナー(従属しているオブジェクト)の取得(SharedPtr)
-    const ObjectPtr GetOwnerPtr() const; //!< オーナー(従属しているオブジェクト)の取得(SharedPtr)
+    Object* GetOwner();  //!< オーナー(従属しているオブジェクト)の取得
+    const Object*
+        GetOwner() const;  //!< オーナー(従属しているオブジェクト)の取得
+    ObjectPtr
+                    GetOwnerPtr();  //!< オーナー(従属しているオブジェクト)の取得(SharedPtr)
+    const ObjectPtr GetOwnerPtr()
+        const;  //!< オーナー(従属しているオブジェクト)の取得(SharedPtr)
 
-    virtual void Init();       //!< 初期化
-    virtual void Update();     //!< アップデート
-    virtual void LateUpdate(); //!< 遅いアップデート
-    virtual void Draw();       //!< 描画
-    virtual void LateDraw();   //!< 遅い描画
-    virtual void Exit();       //!< 終了
-    virtual void GUI();        //!< GUI表示
+    virtual void Init();        //!< 初期化
+    virtual void Update();      //!< アップデート
+    virtual void LateUpdate();  //!< 遅いアップデート
+    virtual void Draw();        //!< 描画
+    virtual void LateDraw();    //!< 遅い描画
+    virtual void Exit();        //!< 終了
+    virtual void GUI();         //!< GUI表示
 
-    virtual void PreUpdate();  //!< 更新前処理
-    virtual void PostUpdate(); //!< 更新後処理
-    virtual void PreDraw();    //!< 描画前処理
-    virtual void PostDraw();   //!< 描画後処理
-    virtual void PrePhysics(); //!< Physics前処理
+    virtual void PreUpdate();   //!< 更新前処理
+    virtual void PostUpdate();  //!< 更新後処理
+    virtual void PreDraw();     //!< 描画前処理
+    virtual void PostDraw();    //!< 描画後処理
+    virtual void PrePhysics();  //!< Physics前処理
 
-    virtual void InitSerialize(); //!< シリアライズでもどらないユーザー処理関数などを設定
+    virtual void
+        InitSerialize();  //!< シリアライズでもどらないユーザー処理関数などを設定
 
     void SetPriority( ProcTiming timing, Priority priority );
 
@@ -191,33 +201,33 @@ public:
 
     enum struct StatusBit : u64
     {
-        Alive = 0,    //!< 生存状態
-        ChangePrio,   //!< プライオリティの変更中
-        ShowGUI,      //!< GUI表示中
-        Initialized,  //!< 初期化終了
-        NoUpdate,     //!< Updateしない
-        NoDraw,       //!< Drawしない
-        DisablePause, //!< ポーズ不可
-        IsPause,      //!< ポーズ中
-        SameType,     //!< 同じタイプのコンポーネント可能
-        Exited,       //!< 正しく終了が呼ばれている
-        Serialized,   //!< シリアライズ済み.
+        Alive = 0,     //!< 生存状態
+        ChangePrio,    //!< プライオリティの変更中
+        ShowGUI,       //!< GUI表示中
+        Initialized,   //!< 初期化終了
+        NoUpdate,      //!< Updateしない
+        NoDraw,        //!< Drawしない
+        DisablePause,  //!< ポーズ不可
+        IsPause,       //!< ポーズ中
+        SameType,      //!< 同じタイプのコンポーネント可能
+        Exited,        //!< 正しく終了が呼ばれている
+        Serialized,    //!< シリアライズ済み.
     };
 
-    void SetStatus( StatusBit b, bool on ); //!< ステータスの設定
-    bool GetStatus( StatusBit b );          //!< ステータスの取得
+    void SetStatus( StatusBit b, bool on );  //!< ステータスの設定
+    bool GetStatus( StatusBit b );           //!< ステータスの取得
 
     Component();
     void Construct( ObjectPtr owner );
 
 protected:
-    ObjectPtr owner_ = nullptr; //!< オーナー
-    SlotProcs proc_timings_;    //!< 登録処理(update)
+    ObjectPtr owner_ = nullptr;  //!< オーナー
+    SlotProcs proc_timings_;     //!< 登録処理(update)
 
-    float update_delta_time_ = 0.0f; //!< update以外で使用できるように
+    float update_delta_time_ = 0.0f;  //!< update以外で使用できるように
 
 private:
-    Status<StatusBit> status_; //!< コンポーネント状態
+    Status<StatusBit> status_;  //!< コンポーネント状態
 
 private:
     //--------------------------------------------------------------------
@@ -230,9 +240,9 @@ private:
     //! @param ver バージョン
     CEREAL_SAVELOAD( arc, ver )
     {
-        arc( CEREAL_NVP( owner_ ),        //< オーナー
-             CEREAL_NVP( proc_timings_ ), //< プロセスタイミング
-             CEREAL_NVP( status_.get() )  //< ステータス
+        arc( CEREAL_NVP( owner_ ),         //< オーナー
+             CEREAL_NVP( proc_timings_ ),  //< プロセスタイミング
+             CEREAL_NVP( status_.get() )   //< ステータス
         );
     }
 

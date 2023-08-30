@@ -19,21 +19,23 @@
 
 namespace
 {
-    std::unordered_map<std::string, u64> obj_names_id;    //!< 存在するオブジェクト名
-    std::unordered_map<std::string, u64> obj_names_count; //!< 存在するオブジェクト名
+    std::unordered_map<std::string, u64>
+        obj_names_id;  //!< 存在するオブジェクト名
+    std::unordered_map<std::string, u64>
+        obj_names_count;  //!< 存在するオブジェクト名
 
     size_t obj_count = 0;
 
     std::vector<const char*> component_items = {
         // 追加できるコンポーネントアイテムリスト
-        "Camera",            //< カメラ
-        "Collision Capsule", //< カプセル(コリジョン)
-        "Collision Sphere",  //< スフィア(コリジョン)
-        "FilterFade",        //< フィルター
-        "Model",             //< モデル
-        "SpringArm",         //< スプリングアーム
-        "TargetTracking",    //< ターゲットトラッキング
-        "Transform",         //< トランスフォーム
+        "Camera",             //< カメラ
+        "Collision Capsule",  //< カプセル(コリジョン)
+        "Collision Sphere",   //< スフィア(コリジョン)
+        "FilterFade",         //< フィルター
+        "Model",              //< モデル
+        "SpringArm",          //< スプリングアーム
+        "TargetTracking",     //< ターゲットトラッキング
+        "Transform",          //< トランスフォーム
     };
     int component_select_index = 0;
 
@@ -72,7 +74,7 @@ namespace
                 break;
         }
     }
-} // namespace
+}  // namespace
 
 //! @brief 名前から、ユニークな名前を設定します
 //! @param name つけたい名前
@@ -190,7 +192,10 @@ void Object::GUI()
 
         char name[256];
         sprintf_s( name, "%s", name_.c_str() );
-        if( ImGui::InputText( u8"名前", name, 256, ImGuiInputTextFlags_EnterReturnsTrue ) )
+        if( ImGui::InputText( u8"名前",
+                              name,
+                              256,
+                              ImGuiInputTextFlags_EnterReturnsTrue ) )
         {
             name_default_ = name;
             name_         = setUniqueName( name );
@@ -208,7 +213,7 @@ void Object::GUI()
         //------------------------------------------
         // 登録されているComponentを列挙する
         //------------------------------------------
-        auto&                                 component      = Component::TypeInfo;
+        auto&                                 component = Component::TypeInfo;
         static ClassComponentType<Component>* component_type = nullptr;
 
         if( ImGui::BeginCombo( cap_item, sel_item.data() ) )
@@ -216,7 +221,8 @@ void Object::GUI()
             for( auto* p = component.child(); p; p = p->siblings() )
             {
                 // 表示文字列
-                std::string object_name = std::string( p->className() ) + " - " + p->descName();
+                std::string object_name = std::string( p->className() ) +
+                                          " - " + p->descName();
 
                 bool is_selected = ( sel_item == object_name );
                 if( ImGui::Selectable( object_name.data(), is_selected ) )
@@ -393,7 +399,7 @@ void Object::ModifyComponents()
             auto comp = components.begin() + i;
 
             ComponentWeakPtr weak_comp = *comp;
-            components.erase( comp ); //解放処理(自動delete)
+            components.erase( comp );  //解放処理(自動delete)
 
             if( weak_comp.lock() != nullptr )
             {

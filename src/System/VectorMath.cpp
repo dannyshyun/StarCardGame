@@ -138,7 +138,9 @@ matrix matrix::rotateAxis( const float3& axis, f32 radian )
 //---------------------------------------------------------------------------
 //!  [左手座標系] ビュー行列
 //---------------------------------------------------------------------------
-matrix matrix::lookAtLH( const float3& eye, const float3& lookAt, const float3& worldUp )
+matrix matrix::lookAtLH( const float3& eye,
+                         const float3& lookAt,
+                         const float3& worldUp )
 {
     float3 axis_z = normalize( lookAt - eye );
     float3 axis_x = normalize( cross( worldUp, axis_z ) );
@@ -160,7 +162,10 @@ matrix matrix::lookAtLH( const float3& eye, const float3& lookAt, const float3& 
 //---------------------------------------------------------------------------
 //! [左手座標系] 投影行列
 //---------------------------------------------------------------------------
-matrix matrix::perspectiveFovLH( f32 fovy, f32 aspect_ratio, f32 near_z, f32 far_z )
+matrix matrix::perspectiveFovLH( f32 fovy,
+                                 f32 aspect_ratio,
+                                 f32 near_z,
+                                 f32 far_z )
 {
     f32 s = std::sinf( fovy * 0.5f );
     f32 c = std::cosf( fovy * 0.5f );
@@ -181,7 +186,9 @@ matrix matrix::perspectiveFovLH( f32 fovy, f32 aspect_ratio, f32 near_z, f32 far
 //---------------------------------------------------------------------------
 //! [左手座標系] 無限遠投影行列
 //---------------------------------------------------------------------------
-matrix matrix::perspectiveFovInfiniteFarPlaneLH( f32 fovy, f32 aspect_ratio, f32 near_z )
+matrix matrix::perspectiveFovInfiniteFarPlaneLH( f32 fovy,
+                                                 f32 aspect_ratio,
+                                                 f32 near_z )
 {
     f32 s = std::sinf( fovy * 0.5f );
     f32 c = std::cosf( fovy * 0.5f );
@@ -201,17 +208,21 @@ matrix matrix::perspectiveFovInfiniteFarPlaneLH( f32 fovy, f32 aspect_ratio, f32
 //---------------------------------------------------------------------------
 //! [左手座標系] 平行投影行列
 //---------------------------------------------------------------------------
-matrix matrix::orthographicOffCenterLH( f32 left, f32 right, f32 bottom, f32 top, f32 near_z, f32 far_z )
+matrix matrix::orthographicOffCenterLH(
+    f32 left, f32 right, f32 bottom, f32 top, f32 near_z, f32 far_z )
 {
     float rcp_width  = 1.0f / ( right - left );
     float rcp_height = 1.0f / ( top - bottom );
     float range      = 1.0f / ( far_z - near_z );
 
     float4 m[4]{
-        {             rcp_width * 2.0f,                           0.0f,            0.0f, 0.0f},
-        {                         0.0f,              rcp_height * 2.0f,            0.0f, 0.0f},
-        {                         0.0f,                           0.0f,           range, 0.0f},
-        {-( left + right ) * rcp_width, -( top + bottom ) * rcp_height, -range * near_z, 1.0f}
+        {             rcp_width * 2.0f,0.0f,0.0f,0.0f                                                                 },
+        {                         0.0f, rcp_height * 2.0f,  0.0f,  0.0f},
+        {                         0.0f,              0.0f, range,  0.0f},
+        {-( left + right ) * rcp_width,
+         -( top + bottom ) * rcp_height,
+         -range * near_z,
+         1.0f                                                          }
     };
     return matrix( m[0], m[1], m[2], m[3] );
 }

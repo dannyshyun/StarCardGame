@@ -12,9 +12,10 @@ namespace
 {
 
     //! モデルリソースプール
-    std::unordered_map<std::string, std::shared_ptr<ResourceModel>> resource_model_pool;
+    std::unordered_map<std::string, std::shared_ptr<ResourceModel>>
+        resource_model_pool;
 
-} // namespace
+}  // namespace
 
 //---------------------------------------------------------------------------
 //! 読み込み
@@ -29,8 +30,9 @@ bool Model::load( std::string_view path )
 
         auto it = resource_model_pool.find( resource_path );
         if( it == resource_model_pool.end() )
-        { // 新規登録
-            resource_model_pool[resource_path] = std::make_shared<ResourceModel>( path );
+        {  // 新規登録
+            resource_model_pool[resource_path] =
+                std::make_shared<ResourceModel>( path );
         }
 
         // 共有
@@ -61,17 +63,22 @@ bool Model::load( std::string_view path )
         //----------------------------------------------------------
         // 頂点シェーダー
         // DX_MV1_VERTEX_TYPE_NUM 個のシェーダーバリエーションを生成
-        shader_vs_ = std::make_shared<ShaderVs>( "data/Shader/vs_model", VS_VARIANT_COUNT );
+        shader_vs_ = std::make_shared<ShaderVs>( "data/Shader/vs_model",
+                                                 VS_VARIANT_COUNT );
 
         // ピクセルシェーダー
-        shader_ps_ = std::make_shared<ShaderPs>( "data/Shader/ps_model", PS_VARIANT_COUNT );
+        shader_ps_ = std::make_shared<ShaderPs>( "data/Shader/ps_model",
+                                                 PS_VARIANT_COUNT );
 
         //----------------------------------------------------------
         // デフォルトテクスチャを読み込み
         //----------------------------------------------------------
-        tex_null_white_  = std::make_shared<Texture>( "data/System/null_white.dds" );
-        tex_null_black_  = std::make_shared<Texture>( "data/System/null_black.dds" );
-        tex_null_normal_ = std::make_shared<Texture>( "data/System/null_normal.dds" );
+        tex_null_white_ = std::make_shared<Texture>(
+            "data/System/null_white.dds" );
+        tex_null_black_ = std::make_shared<Texture>(
+            "data/System/null_black.dds" );
+        tex_null_normal_ = std::make_shared<Texture>(
+            "data/System/null_normal.dds" );
     }
 
     return resource_model_->isValid();
@@ -105,7 +112,7 @@ void Model::render( ShaderVs* override_vs, ShaderPs* override_ps )
     on_initialize();
 
     for( s32 mesh = 0; mesh < MV1GetMeshNum( mv1_handle_ ); ++mesh )
-    { // モデルに含まれるメッシュの数
+    {  // モデルに含まれるメッシュの数
         renderByMesh( mesh, override_vs, override_ps );
     }
 }
@@ -113,7 +120,9 @@ void Model::render( ShaderVs* override_vs, ShaderPs* override_ps )
 //---------------------------------------------------------------------------
 //! メッシュ番号指定で描画
 //---------------------------------------------------------------------------
-void Model::renderByMesh( s32 mesh, ShaderVs* override_vs, ShaderPs* override_ps )
+void Model::renderByMesh( s32       mesh,
+                          ShaderVs* override_vs,
+                          ShaderPs* override_ps )
 {
     if( ! resource_model_ )
         return;
@@ -147,16 +156,22 @@ void Model::renderByMesh( s32 mesh, ShaderVs* override_vs, ShaderPs* override_ps
 
     if( overridedTextures_[static_cast<s32>( Model::TextureType::Diffuse )] )
     {
-        SetUseTextureToShader( 0, *overridedTextures_[static_cast<s32>( Model::TextureType::Diffuse )] );
+        SetUseTextureToShader( 0,
+                               *overridedTextures_[static_cast<s32>(
+                                   Model::TextureType::Diffuse )] );
     }
     if( overridedTextures_[static_cast<s32>( Model::TextureType::Normal )] )
     {
-        SetUseTextureToShader( 1, *overridedTextures_[static_cast<s32>( Model::TextureType::Normal )] );
-        override_normalmap = true; // 法線マップを使用
+        SetUseTextureToShader( 1,
+                               *overridedTextures_[static_cast<s32>(
+                                   Model::TextureType::Normal )] );
+        override_normalmap = true;  // 法線マップを使用
     }
     if( overridedTextures_[static_cast<s32>( Model::TextureType::Specular )] )
     {
-        SetUseTextureToShader( 2, *overridedTextures_[static_cast<s32>( Model::TextureType::Specular )] );
+        SetUseTextureToShader( 2,
+                               *overridedTextures_[static_cast<s32>(
+                                   Model::TextureType::Specular )] );
     }
 
     //--------------------------------------------------
@@ -170,16 +185,18 @@ void Model::renderByMesh( s32 mesh, ShaderVs* override_vs, ShaderPs* override_ps
     MV1SetUseOrigShader( true );
 
     for( s32 t = 0; t < MV1GetMeshTListNum( mv1_handle_, mesh ); ++t )
-    { // メッシュに含まれるトライアングルリストの数
+    {  // メッシュに含まれるトライアングルリストの数
 
         // トライアングルリスト番号
         auto tlist = MV1GetMeshTList( mv1_handle_, mesh, t );
 
         // トライアングルリストが使用しているマテリアルのインデックスを取得する
-        auto material_index = MV1GetTriangleListUseMaterial( mv1_handle_, tlist );
+        auto material_index = MV1GetTriangleListUseMaterial( mv1_handle_,
+                                                             tlist );
 
         // 法線マップを使用しているかどうか
-        bool use_normalmap = MV1GetMaterialNormalMapTexture( mv1_handle_, material_index ) != -1;
+        bool use_normalmap =
+            MV1GetMaterialNormalMapTexture( mv1_handle_, material_index ) != -1;
 
         // 法線マップを使用しない場合はNull法線を登録しておく
         if( ! use_normalmap && ! override_normalmap )
@@ -193,7 +210,8 @@ void Model::renderByMesh( s32 mesh, ShaderVs* override_vs, ShaderPs* override_ps
         // 頂点データタイプ(DX_MV1_VERTEX_TYPE_1FRAME 等)
         auto vertex_type = MV1GetTriangleListVertexType( mv1_handle_, tlist );
 
-        u32 variant_vs = vertex_type; // DXライブラリの頂点タイプをそのままバリエーション番号に
+        u32 variant_vs =
+            vertex_type;  // DXライブラリの頂点タイプをそのままバリエーション番号に
 
         //--------------------------------------------------
         // トライアングルリストを描画
@@ -299,7 +317,8 @@ void Model::bindAnimation( Animation* animation )
 //---------------------------------------------------------------------------
 //!  既存テクスチャをオーバーライドします
 //---------------------------------------------------------------------------
-void Model::overrideTexture( Model::TextureType type, std::shared_ptr<Texture>& texture )
+void Model::overrideTexture( Model::TextureType        type,
+                             std::shared_ptr<Texture>& texture )
 {
     overridedTextures_[static_cast<s32>( type )] = texture;
 }
@@ -372,7 +391,8 @@ void Model::on_initialize()
     if( mv1_handle_ == -1 )
     {
         if( resource_model_ )
-            mv1_handle_ = MV1DuplicateModel( *resource_model_ ); // ハンドルを複製
+            mv1_handle_ = MV1DuplicateModel(
+                *resource_model_ );  // ハンドルを複製
 
         need_initialize_ = false;
     }

@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include <System/Scene.h>
 
-
 USING_PTR( Player );
 class Player : public Object
 {
@@ -14,6 +13,5 @@ public:
     void             Exit() override;
 
 private:
-    bool   is_throwing{};
     float3 pos{};
 };

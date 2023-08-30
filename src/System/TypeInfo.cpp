@@ -10,7 +10,7 @@ namespace
     //! ルートの型情報
     Type rootTypeInfo( "root", 0, nullptr );
 
-} // namespace
+}  // namespace
 
 //---------------------------------------------------------------------------
 //! コンストラクタ
@@ -22,7 +22,10 @@ namespace
 #pragma warning( push )
 #pragma warning( disable : 26495 )
 
-Type::Type( const char* class_name, size_t class_size, const char* desc_name, Type* parent_type )
+Type::Type( const char* class_name,
+            size_t      class_size,
+            const char* desc_name,
+            Type*       parent_type )
 {
     // パラメーターの保存
     class_name_ = class_name;
@@ -33,8 +36,8 @@ Type::Type( const char* class_name, size_t class_size, const char* desc_name, Ty
     // 継承ツリー構造の構築
     //----------------------------------------------------------
     if( parent_type == nullptr && strcmp( class_name, "root" ) )
-    {                                // "root"ではない
-        parent_type = &rootTypeInfo; // 基底クラスはルートに接続する
+    {                                 // "root"ではない
+        parent_type = &rootTypeInfo;  // 基底クラスはルートに接続する
     }
 
     parent_ = parent_type;

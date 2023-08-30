@@ -38,10 +38,10 @@ public:
         Load( path );
     }
 
-    virtual void Update() override; //!< 更新
-    virtual void Draw() override;   //!< 描画
-    virtual void Exit() override;   //!< 終了
-    virtual void GUI() override;    //!< GUI
+    virtual void Update() override;  //!< 更新
+    virtual void Draw() override;    //!< 描画
+    virtual void Exit() override;    //!< 終了
+    virtual void GUI() override;     //!< GUI
 
     //------------------------------------------------------------------------
     // @name エフェクト操作
@@ -96,25 +96,34 @@ public:
     //---------------------------------------------------------------------------
     enum struct EffectBit : u64
     {
-        Initialized,       //!< 初期化済み
-        ErrorFileNotFound, //!< ファイル読み込みエラー
-        Playing,           //!< エフェクト再生中
-        Paused,            //!< エフェクトポーズ中
-        Loop,              //!< ループ再生指定
+        Initialized,        //!< 初期化済み
+        ErrorFileNotFound,  //!< ファイル読み込みエラー
+        Playing,            //!< エフェクト再生中
+        Paused,             //!< エフェクトポーズ中
+        Loop,               //!< ループ再生指定
     };
 
-    bool IsValid() const { return effect_status_.is( EffectBit::Initialized ); } //!< モデルが読み込まれているか?
+    bool IsValid() const
+    {
+        return effect_status_.is( EffectBit::Initialized );
+    }  //!< モデルが読み込まれているか?
 
     //---------------------------------------------------------------------------
     //! @name IMatrixインターフェースの利用するための定義
     //---------------------------------------------------------------------------
     //@{
 
-    matrix& Matrix() override { return effect_transform_; } //!< マトリクス取得
+    matrix& Matrix() override { return effect_transform_; }  //!< マトリクス取得
 
-    const matrix& GetMatrix() const override { return effect_transform_; } //!< マトリクス取得
+    const matrix& GetMatrix() const override
+    {
+        return effect_transform_;
+    }  //!< マトリクス取得
 
-    ComponentEffectPtr SharedThis() { return std::dynamic_pointer_cast<ComponentEffect>( shared_from_this() ); }
+    ComponentEffectPtr SharedThis()
+    {
+        return std::dynamic_pointer_cast<ComponentEffect>( shared_from_this() );
+    }
 
     //! @brief ワールドMatrixの取得
     //! @return 他のコンポーネントも含めた位置
@@ -130,8 +139,8 @@ private:
     //! モデル用のトランスフォーム
     matrix effect_transform_ = matrix::scale( 1.0f );
 
-    Status<EffectBit> effect_status_; //!< 状態
-    std::string       path_{};        //!< 読み込みエフェクト名
+    Status<EffectBit> effect_status_;  //!< 状態
+    std::string       path_{};         //!< 読み込みエフェクト名
 
     //! @brief エフェクト
     static std::unordered_map<std::string, int> exist_effects_resource_;
@@ -162,9 +171,11 @@ private:
              cereal::make_nvp( "effect_transform", effect_transform_ ),
              cereal::make_nvp( "path", path_ ),
              cereal::make_nvp( "model_status", effect_status_.get() ),
-             cereal::make_nvp( "exist_effects_resource", exist_effects_resource_ ) );
+             cereal::make_nvp( "exist_effects_resource",
+                               exist_effects_resource_ ) );
 
-        arc( cereal::make_nvp( "Component", cereal::base_class<Component>( this ) ) );
+        arc( cereal::make_nvp( "Component",
+                               cereal::base_class<Component>( this ) ) );
 
         // エフェクトリソースは再度ロードをしなおす
         for( auto effect: exist_effects_resource_ )
@@ -172,7 +183,8 @@ private:
             // ロードしてリソース登録する
             auto wname = HelperLib::String::ToWString( effect.first );
 
-            exist_effects_resource_[effect.first] = LoadEffekseerEffect( wname.data() );
+            exist_effects_resource_[effect.first] = LoadEffekseerEffect(
+                wname.data() );
         }
 
         if( ! path_.empty() )

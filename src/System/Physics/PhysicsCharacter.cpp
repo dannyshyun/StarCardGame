@@ -59,7 +59,8 @@ namespace physics
         //@{
 
         //  コンタクトリスナーを設定
-        virtual void setListener( physics::Character::ContactListener* listener ) override;
+        virtual void setListener(
+            physics::Character::ContactListener* listener ) override;
 
         //  コンタクトリスナーを取得
         virtual physics::Character::ContactListener* listener() const override;
@@ -74,7 +75,8 @@ namespace physics
         virtual float3 linearVelocity() const override;
 
         //  速度を設定 (単位:m/s)
-        virtual void setLinearVelocity( const float3& linear_velocity ) override;
+        virtual void
+            setLinearVelocity( const float3& linear_velocity ) override;
 
         //  位置を取得
         virtual float3 position() const override;
@@ -120,10 +122,11 @@ namespace physics
         //! @param  [in]    jump_vector     ジャンプ方向ベクトル(ジャンプしない場合は0で渡します)
         //! @return 新しい補正後の移動速度
         //! 内部でwalkStairs()による階段歩行も行います
-        virtual float3 move( f32           delta_time,
-                             const float3& move_vector,
-                             const float3& old_position,
-                             const float3& jump_vector = float3( 0.0f, 0.0f, 0.0f ) ) override;
+        virtual float3 move(
+            f32           delta_time,
+            const float3& move_vector,
+            const float3& old_position,
+            const float3& jump_vector = float3( 0.0f, 0.0f, 0.0f ) ) override;
 
         //  階段を歩けるかどうかを取得
         //! @details この関数はキャラクターが急すぎる斜面（垂直な壁など）に移動した場合にtrueを返します。
@@ -147,7 +150,8 @@ namespace physics
                                  const float3& step_up,
                                  const float3& step_forward,
                                  const float3& step_forward_test,
-                                 const float3& step_down_extra = float3( 0.0f, 0.0f, 0.0f ) ) override;
+                                 const float3& step_down_extra =
+                                     float3( 0.0f, 0.0f, 0.0f ) ) override;
 
         //  衝突点を再検出
         //! この機能はキャラクターがテレポートした後に、新しい世界とのコンタクトを決定するために使用することができます。
@@ -158,8 +162,9 @@ namespace physics
         //! @param  [in]    shape_offset    形状位置をずらすオフセット
         //! @retval true    正常終了(形状の入れ替え成功)
         //! @retval false   形状の入れ替え後に衝突物があり、切り替えできなかった場合
-        virtual bool setShape( const shape::Base& shape,
-                               const float3&      shape_offset = float3( 0.0f, 0.0f, 0.0f ) ) override;
+        virtual bool setShape(
+            const shape::Base& shape,
+            const float3& shape_offset = float3( 0.0f, 0.0f, 0.0f ) ) override;
 
         //  シェイプを取得
         virtual shape::Base* shape() const override;
@@ -197,29 +202,33 @@ namespace physics
         //  キャラクターが指定されたボディと衝突可能かどうかをチェックします。
         //! @retval true    衝突可能
         //! @retval false   衝突しない
-        virtual bool OnContactValidate( [[maybe_unused]] const JPH::CharacterVirtual* character,
-                                        const JPH::BodyID&                            body_id2,
-                                        [[maybe_unused]] const JPH::SubShapeID&       sub_shape_id2 ) override;
+        virtual bool OnContactValidate(
+            [[maybe_unused]] const JPH::CharacterVirtual* character,
+            const JPH::BodyID&                            body_id2,
+            [[maybe_unused]] const JPH::SubShapeID& sub_shape_id2 ) override;
 
         //  キャラクターがボディと衝突するたびに呼び出されます
         //! @retval true    接触がキャラクターを押すことができる
         //! @retval false   接触がキャラクターを押すことができない
-        virtual void OnContactAdded( [[maybe_unused]] const JPH::CharacterVirtual* character,
-                                     const JPH::BodyID&                            body_id2,
-                                     [[maybe_unused]] const JPH::SubShapeID&       sub_shape_id2,
-                                     JPH::Vec3Arg                                  contact_position,
-                                     JPH::Vec3Arg                                  contact_normal,
-                                     JPH::CharacterContactSettings&                settings ) override;
+        virtual void OnContactAdded(
+            [[maybe_unused]] const JPH::CharacterVirtual* character,
+            const JPH::BodyID&                            body_id2,
+            [[maybe_unused]] const JPH::SubShapeID&       sub_shape_id2,
+            JPH::Vec3Arg                                  contact_position,
+            JPH::Vec3Arg                                  contact_normal,
+            JPH::CharacterContactSettings&                settings ) override;
 
         //@}
 
     private:
-        JPH::Ref<JPH::CharacterVirtual> jph_character_;                         //!< [JPH] Vitrualキャラクター
-        JPH::ShapeRefC                  jph_shape_;                             //!< [JPH] 設定中のシェイプ
-        u16                             layer_ = physics::ObjectLayers::MOVING; //!< オブジェクトレイヤー
+        JPH::Ref<JPH::CharacterVirtual>
+                       jph_character_;  //!< [JPH] Vitrualキャラクター
+        JPH::ShapeRefC jph_shape_;      //!< [JPH] 設定中のシェイプ
+        u16 layer_ = physics::ObjectLayers::MOVING;  //!< オブジェクトレイヤー
 
-        std::unique_ptr<shape::Base> shape_;               //!< 形状
-        float3 shape_offset_ = float3( 0.0f, 0.0f, 0.0f ); //!< シェイプの移動オフセット
+        std::unique_ptr<shape::Base> shape_;  //!< 形状
+        float3                       shape_offset_ =
+            float3( 0.0f, 0.0f, 0.0f );  //!< シェイプの移動オフセット
     };
 
     //---------------------------------------------------------------------------
@@ -254,10 +263,11 @@ namespace physics
 
         // 作成
         // (この段階ではまだシェイプは設定されていない)
-        jph_character_ = new JPH::CharacterVirtual( &settings,
-                                                    JPH::Vec3::sZero(),
-                                                    JPH::Quat::sIdentity(),
-                                                    physics::Engine::physicsSystem() );
+        jph_character_ =
+            new JPH::CharacterVirtual( &settings,
+                                       JPH::Vec3::sZero(),
+                                       JPH::Quat::sIdentity(),
+                                       physics::Engine::physicsSystem() );
 
         // コンタクトリスナーを設定
         // (このクラス自身がコンタクトリスナーを継承しています)
@@ -267,7 +277,8 @@ namespace physics
     //---------------------------------------------------------------------------
     //! コンタクトリスナーを設定
     //---------------------------------------------------------------------------
-    void CharacterImpl::setListener( physics::Character::ContactListener* listener )
+    void CharacterImpl::setListener(
+        physics::Character::ContactListener* listener )
     {
         listener_ = listener;
     }
@@ -385,7 +396,8 @@ namespace physics
 
         jph_character_->Update( delta_time,
                                 physics_system->GetGravity(),
-                                physics_system->GetDefaultBroadPhaseLayerFilter( layer_ ),
+                                physics_system->GetDefaultBroadPhaseLayerFilter(
+                                    layer_ ),
                                 physics_system->GetDefaultLayerFilter( layer_ ),
                                 JPH::BodyFilter(),
                                 JPH::ShapeFilter(),
@@ -412,38 +424,47 @@ namespace physics
             //------------------------------------------------------
 
             // 現在の水平方向(XZ成分)の速度ベクトル
-            float3 current_horizontal_velocity = linearVelocity() * float3( 1.0f, 0.0f, 1.0f ) * delta_time;
+            float3 current_horizontal_velocity =
+                linearVelocity() * float3( 1.0f, 0.0f, 1.0f ) * delta_time;
 
             // 水平方向のステップの長さ
-            f32 velocity_length = dot( current_horizontal_velocity, current_horizontal_velocity );
+            f32 velocity_length = dot( current_horizontal_velocity,
+                                       current_horizontal_velocity );
             if( velocity_length != 0.0f )
             {
                 velocity_length = sqrtf( velocity_length );
             }
 
             // 実際に水平方向にどれだけ移動したかを計算する
-            float3 horizontal_step   = ( position() - old_position ) * float3( 1.0f, 0.0f, 1.0f );
-            f32    horizontal_length = dot( horizontal_step, horizontal_step );
+            float3 horizontal_step = ( position() - old_position ) *
+                                     float3( 1.0f, 0.0f, 1.0f );
+            f32 horizontal_length = dot( horizontal_step, horizontal_step );
             if( horizontal_length != 0.0f )
             {
                 horizontal_length = sqrtf( horizontal_length );
             }
 
             // もし思うように進まず、急な斜面に面してしまった場合
-            if( horizontal_length + 0.0001f < velocity_length && canWalkStairs( move_direction ) )
+            if( horizontal_length + 0.0001f < velocity_length &&
+                canWalkStairs( move_direction ) )
             {
                 // あとどれだけ前に出ればいいかを計算する
                 float3 step_dir     = normalize( current_horizontal_velocity );
-                float3 step_forward = step_dir * ( velocity_length - horizontal_length );
+                float3 step_forward = step_dir *
+                                      ( velocity_length - horizontal_length );
 
                 // 床をどこまで検査すればいいかを計算する
-                static constexpr f32 min_step_forward  = 0.15f;
-                float3               step_forward_test = step_dir * min_step_forward;
+                static constexpr f32 min_step_forward = 0.15f;
+                float3 step_forward_test = step_dir * min_step_forward;
 
-                static const float3 step_up_height = float3( 0.0f, 0.4f, 0.0f ); // 段差の高さ
+                static const float3 step_up_height =
+                    float3( 0.0f, 0.4f, 0.0f );  // 段差の高さ
 
                 // 階段を歩く
-                walkStairs( delta_time, step_up_height, step_forward, step_forward_test );
+                walkStairs( delta_time,
+                            step_up_height,
+                            step_forward,
+                            step_forward_test );
             }
         }
 
@@ -453,7 +474,8 @@ namespace physics
         auto ground_state = groundState();
         if( ground_state == physics::Character::GroundState::OnSteepGround )
         {
-            float3 normal = normalize( groundNormal() * float3( 1.0f, 0.0f, 1.0f ) );
+            float3 normal = normalize( groundNormal() *
+                                       float3( 1.0f, 0.0f, 1.0f ) );
 
             f32 dot_result = dot( normal, move_direction );
             if( dot_result < 0.0f )
@@ -466,21 +488,25 @@ namespace physics
         float3 new_velocity;
 
         // 現在の垂直方向(Y成分)の速度ベクトル
-        float3 current_vertical_velocity = linearVelocity() * float3( 0.0f, 1.0f, 0.0f );
+        float3 current_vertical_velocity = linearVelocity() *
+                                           float3( 0.0f, 1.0f, 0.0f );
 
         // 移動床の速度
         float3 ground_velocity = groundVelocity();
 
-        f32 relative_vertical_velocity = current_vertical_velocity.y - ground_velocity.y; // 相対速度
+        f32 relative_vertical_velocity = current_vertical_velocity.y -
+                                         ground_velocity.y;  // 相対速度
 
-        if( ground_state == physics::Character::GroundState::OnGround // 地面に接地している時
-            && ( relative_vertical_velocity < 0.1f ) ) // かつ、地面から離れようとしていない時
+        if( ground_state == physics::Character::GroundState::
+                                OnGround  // 地面に接地している時
+            && ( relative_vertical_velocity <
+                 0.1f ) )  // かつ、地面から離れようとしていない時
         {
             // 移動床の速度を新しい速度にする
             new_velocity = ground_velocity;
 
             // ジャンプ
-            new_velocity += jump_vector; // ジャンプ速度
+            new_velocity += jump_vector;  // ジャンプ速度
         }
         else
         {
@@ -509,8 +535,9 @@ namespace physics
     {
         auto* physics_system = physics::Engine::physicsSystem();
 
-        auto broad_phase_layer_filter = physics_system->GetDefaultBroadPhaseLayerFilter( layer_ );
-        auto layer_filter             = physics_system->GetDefaultLayerFilter( layer_ );
+        auto broad_phase_layer_filter =
+            physics_system->GetDefaultBroadPhaseLayerFilter( layer_ );
+        auto layer_filter = physics_system->GetDefaultLayerFilter( layer_ );
 
         return jph_character_->WalkStairs( delta_time,
                                            castJPH( step_up ),
@@ -531,30 +558,36 @@ namespace physics
     {
         auto* physics_system = physics::Engine::physicsSystem();
 
-        jph_character_->RefreshContacts( physics_system->GetDefaultBroadPhaseLayerFilter( layer_ ),
-                                         physics_system->GetDefaultLayerFilter( layer_ ),
-                                         JPH::BodyFilter{},
-                                         JPH::ShapeFilter{},
-                                         *physics::Engine::tempAllocator() );
+        jph_character_->RefreshContacts(
+            physics_system->GetDefaultBroadPhaseLayerFilter( layer_ ),
+            physics_system->GetDefaultLayerFilter( layer_ ),
+            JPH::BodyFilter{},
+            JPH::ShapeFilter{},
+            *physics::Engine::tempAllocator() );
     }
 
     //---------------------------------------------------------------------------
     //! キャラクターの形状を入れ替える（しゃがみ、構え方など）
     //---------------------------------------------------------------------------
-    bool CharacterImpl::setShape( const shape::Base& shape, const float3& shape_offset )
+    bool CharacterImpl::setShape( const shape::Base& shape,
+                                  const float3&      shape_offset )
     {
-        assert( shape.shapeType() == shape::Type::Capsule && "カプセル以外は未対応です." );
+        assert( shape.shapeType() == shape::Type::Capsule &&
+                "カプセル以外は未対応です." );
 
         //------------------------------------------------------
         // カプセルを生成
         //------------------------------------------------------
         std::unique_ptr<shape::Capsule> s = std::make_unique<shape::Capsule>(
             static_cast<const shape::Capsule&>( shape ) );
-        JPH::ShapeRefC jph_shape = new JPH::CapsuleShape( s->half_height_, s->radius_ );
+        JPH::ShapeRefC jph_shape = new JPH::CapsuleShape( s->half_height_,
+                                                          s->radius_ );
 
         // 移動されたシェイプを作成
         JPH::ShapeRefC translated_shape =
-            JPH::RotatedTranslatedShapeSettings( castJPH( shape_offset ), JPH::Quat::sIdentity(), jph_shape )
+            JPH::RotatedTranslatedShapeSettings( castJPH( shape_offset ),
+                                                 JPH::Quat::sIdentity(),
+                                                 jph_shape )
                 .Create()
                 .Get();
 
@@ -564,23 +597,25 @@ namespace physics
         //------------------------------------------------------
         auto* physics_system = physics::Engine::physicsSystem();
 
-        auto broad_phase_layer_filter = physics_system->GetDefaultBroadPhaseLayerFilter( layer_ );
-        auto layer_filter             = physics_system->GetDefaultLayerFilter( layer_ );
+        auto broad_phase_layer_filter =
+            physics_system->GetDefaultBroadPhaseLayerFilter( layer_ );
+        auto layer_filter = physics_system->GetDefaultLayerFilter( layer_ );
 
-        bool is_succeed = jph_character_->SetShape( translated_shape, // シェイプ
-                                                    0.1f, // 切り替え後に許容される最大めり込み量
-                                                    broad_phase_layer_filter,
-                                                    layer_filter,
-                                                    JPH::BodyFilter{},
-                                                    JPH::ShapeFilter{},
-                                                    *physics::Engine::tempAllocator() );
+        bool is_succeed = jph_character_->SetShape(
+            translated_shape,  // シェイプ
+            0.1f,  // 切り替え後に許容される最大めり込み量
+            broad_phase_layer_filter,
+            layer_filter,
+            JPH::BodyFilter{},
+            JPH::ShapeFilter{},
+            *physics::Engine::tempAllocator() );
 
         if( is_succeed )
         {
             // 記録内容を更新
             jph_shape_    = jph_shape;
-            shape_        = std::move( s ); // 形状
-            shape_offset_ = shape_offset;   // シェイプの移動オフセット
+            shape_        = std::move( s );  // 形状
+            shape_offset_ = shape_offset;  // シェイプの移動オフセット
         }
         return is_succeed;
     }
@@ -652,9 +687,10 @@ namespace physics
     //---------------------------------------------------------------------------
     //! キャラクターが指定されたボディと衝突可能かどうかをチェックします。
     //---------------------------------------------------------------------------
-    bool CharacterImpl::OnContactValidate( [[maybe_unused]] const JPH::CharacterVirtual* character,
-                                           const JPH::BodyID&                            body_id2,
-                                           [[maybe_unused]] const JPH::SubShapeID&       sub_shape_id2 )
+    bool CharacterImpl::OnContactValidate(
+        [[maybe_unused]] const JPH::CharacterVirtual* character,
+        const JPH::BodyID&                            body_id2,
+        [[maybe_unused]] const JPH::SubShapeID&       sub_shape_id2 )
     {
         // デフォルトは常に衝突許可
         if( listener_ == nullptr )
@@ -669,12 +705,13 @@ namespace physics
     //---------------------------------------------------------------------------
     //! キャラクターがボディと衝突するたびに呼び出されます
     //---------------------------------------------------------------------------
-    void CharacterImpl::OnContactAdded( [[maybe_unused]] const JPH::CharacterVirtual* character,
-                                        const JPH::BodyID&                            body_id2,
-                                        [[maybe_unused]] const JPH::SubShapeID&       sub_shape_id2,
-                                        JPH::Vec3Arg                                  contact_position,
-                                        JPH::Vec3Arg                                  contact_normal,
-                                        JPH::CharacterContactSettings&                settings )
+    void CharacterImpl::OnContactAdded(
+        [[maybe_unused]] const JPH::CharacterVirtual* character,
+        const JPH::BodyID&                            body_id2,
+        [[maybe_unused]] const JPH::SubShapeID&       sub_shape_id2,
+        JPH::Vec3Arg                                  contact_position,
+        JPH::Vec3Arg                                  contact_normal,
+        JPH::CharacterContactSettings&                settings )
     {
         // デフォルトではなにもしない
         if( listener_ == nullptr )
@@ -689,8 +726,12 @@ namespace physics
 
         listener_->onContactAdded( this,
                                    body_id,
-                                   float3( contact_position.GetX(), contact_position.GetY(), contact_position.GetZ() ),
-                                   float3( contact_normal.GetX(), contact_normal.GetY(), contact_normal.GetZ() ),
+                                   float3( contact_position.GetX(),
+                                           contact_position.GetY(),
+                                           contact_position.GetZ() ),
+                                   float3( contact_normal.GetX(),
+                                           contact_normal.GetY(),
+                                           contact_normal.GetZ() ),
                                    result );
 
         settings.mCanPushCharacter   = result.can_push_character_;
@@ -711,4 +752,4 @@ namespace physics
 
     //@}
 
-} // namespace physics
+}  // namespace physics

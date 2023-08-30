@@ -19,13 +19,13 @@ public:
 
     ComponentCollisionLine() { collision_type_ = CollisionType::LINE; }
 
-    virtual void Init() override;       //!< 初期化
-    virtual void Update() override;     //!< 更新
-    virtual void PostUpdate() override; //!< 更新後の処理
-    virtual void Draw() override;       //!< 描画
-    virtual void Exit() override;       //!< 終了
+    virtual void Init() override;        //!< 初期化
+    virtual void Update() override;      //!< 更新
+    virtual void PostUpdate() override;  //!< 更新後の処理
+    virtual void Draw() override;        //!< 描画
+    virtual void Exit() override;        //!< 終了
 
-    virtual void GUI() override; //!< GUI
+    virtual void GUI() override;  //!< GUI
 
     //! @brief ローカル座標系でのラインの設定
     //! @return 自分のSharedPtr
@@ -56,7 +56,8 @@ public:
 
     virtual ComponentCollisionLinePtr SharedThis() override
     {
-        return std::dynamic_pointer_cast<ComponentCollisionLine>( shared_from_this() );
+        return std::dynamic_pointer_cast<ComponentCollisionLine>(
+            shared_from_this() );
     }
 
     //! @brief ワールドMatrixの取得
@@ -65,41 +66,48 @@ public:
 
     //! @brief 1フレーム前のワールドMatrixの取得
     //! @return 他のコンポーネントも含めた位置
-    virtual const matrix GetOldWorldMatrix() const override { return old_transform_; }
+    virtual const matrix GetOldWorldMatrix() const override
+    {
+        return old_transform_;
+    }
 
     //@}
 
-#if 1 // CompoentCollisionからの移行
+#if 1  // CompoentCollisionからの移行
 
     inline ComponentCollisionLinePtr SetName( std::string_view name )
     {
         name_ = name;
-        return std::dynamic_pointer_cast<ComponentCollisionLine>( shared_from_this() );
+        return std::dynamic_pointer_cast<ComponentCollisionLine>(
+            shared_from_this() );
     }
 
     inline ComponentCollisionLinePtr SetHitCollisionGroup( u32 hit_group )
     {
         collision_hit_ = hit_group;
-        return std::dynamic_pointer_cast<ComponentCollisionLine>( shared_from_this() );
+        return std::dynamic_pointer_cast<ComponentCollisionLine>(
+            shared_from_this() );
     }
 
     inline ComponentCollisionLinePtr SetCollisionGroup( CollisionGroup grp )
     {
         collision_group_ = grp;
-        return std::dynamic_pointer_cast<ComponentCollisionLine>( shared_from_this() );
+        return std::dynamic_pointer_cast<ComponentCollisionLine>(
+            shared_from_this() );
     }
 
     inline ComponentCollisionLinePtr SetMass( float mass )
     {
         collision_mass_ = mass;
-        return std::dynamic_pointer_cast<ComponentCollisionLine>( shared_from_this() );
+        return std::dynamic_pointer_cast<ComponentCollisionLine>(
+            shared_from_this() );
     }
 #endif
 
 protected:
 #ifdef USE_JOLT_PHYSICS
     bool set_size_ = false;
-#endif //USE_JOLT_PHYSICS
+#endif  //USE_JOLT_PHYSICS
     float line_scale_ = 1.0f;
 
 private:
@@ -111,11 +119,14 @@ private:
     {
         arc( cereal::make_nvp( "owner", owner_ ) );
         arc( cereal::make_nvp( "line", line_scale_ ) );
-        arc( cereal::make_nvp( "ComponentCollision", cereal::base_class<ComponentCollision>( this ) ) );
+        arc( cereal::make_nvp( "ComponentCollision",
+                               cereal::base_class<ComponentCollision>(
+                                   this ) ) );
     }
 
     //@}
 };
 
 CEREAL_REGISTER_TYPE( ComponentCollisionLine )
-CEREAL_REGISTER_POLYMORPHIC_RELATION( ComponentCollision, ComponentCollisionLine )
+CEREAL_REGISTER_POLYMORPHIC_RELATION( ComponentCollision,
+                                      ComponentCollisionLine )

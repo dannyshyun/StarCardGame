@@ -4,8 +4,8 @@
 //---------------------------------------------------------------------------
 #include <mutex>
 
-#include <d3d11.h>       // DirectX11
-#include <d3dcompiler.h> // シェーダーコンパイラ
+#include <d3d11.h>        // DirectX11
+#include <d3dcompiler.h>  // シェーダーコンパイラ
 
 #include "System/FileWatcher.h"
 #include "Shader.h"
@@ -18,15 +18,16 @@
 namespace
 {
 
-    FileWatcher    file_watcher_;    //!< シェーダーホットリロード時のためのファイル監視
-    std::once_flag once_initialize_; //!< 初回実行用フラグ
+    FileWatcher
+                   file_watcher_;  //!< シェーダーホットリロード時のためのファイル監視
+    std::once_flag once_initialize_;  //!< 初回実行用フラグ
 
     //! 現在アクティブなシェーダーリスト
     //! @note 起動時の初期化順序の都合で固定長配列にしている
     //! @note 個数が足りなくなった場合は適宜増やす
     std::array<ShaderBase*, 1024> shaders_;
-    u32                           shader_count_; // シェーダー個数
-} // namespace
+    u32                           shader_count_;  // シェーダー個数
+}  // namespace
 
 //---------------------------------------------------------------------------
 //! コンストラクタ
@@ -43,7 +44,8 @@ ShaderBase::ShaderBase()
 //---------------------------------------------------------------------------
 //! 作成
 //---------------------------------------------------------------------------
-ShaderBase::ShaderBase( std::string_view path, u32 type, u32 variant_count ) : ShaderBase()
+ShaderBase::ShaderBase( std::string_view path, u32 type, u32 variant_count ) :
+    ShaderBase()
 {
     assert( type <= DX_SHADERTYPE_HULL );
 
@@ -73,11 +75,13 @@ ShaderBase::ShaderBase( std::string_view path, u32 type, u32 variant_count ) : S
                 std::transform( shader_path.begin(),
                                 shader_path.end(),
                                 shader_path.begin(),
-                                reinterpret_cast<wchar_t ( * )( wchar_t )>( ::tolower ) );
+                                reinterpret_cast<wchar_t ( * )( wchar_t )>(
+                                    ::tolower ) );
                 std::transform( notified_path.begin(),
                                 notified_path.end(),
                                 notified_path.begin(),
-                                reinterpret_cast<wchar_t ( * )( wchar_t )>( ::tolower ) );
+                                reinterpret_cast<wchar_t ( * )( wchar_t )>(
+                                    ::tolower ) );
 
                 if( shader_path == notified_path )
                 {
@@ -107,7 +111,7 @@ ShaderBase::ShaderBase( std::string_view path, u32 type, u32 variant_count ) : S
 
     for( auto& x: handles_ )
     {
-        x = -1; // デフォルト値
+        x = -1;  // デフォルト値
     }
 
     compile();
@@ -120,7 +124,9 @@ ShaderBase::~ShaderBase()
 {
     // シェーダーリストから登録解除
     {
-        auto it = std::find( std::begin( shaders_ ), std::begin( shaders_ ) + shader_count_, this );
+        auto it = std::find( std::begin( shaders_ ),
+                             std::begin( shaders_ ) + shader_count_,
+                             this );
         if( it != std::begin( shaders_ ) + shader_count_ )
         {
             shader_count_--;
@@ -161,9 +167,11 @@ bool ShaderBase::compile()
     std::vector<std::byte> source;
     {
         // ファイルから読み込み
-        std::ifstream file( source_path.c_str(),
-                            std::ios::in | std::ios::binary |
-                                std::ios::ate ); // ateを指定すると最初からファイルポインタが末尾に移動
+        std::ifstream file(
+            source_path.c_str(),
+            std::ios::in | std::ios::binary |
+                std::ios::
+                    ate );  // ateを指定すると最初からファイルポインタが末尾に移動
         if( ! file.is_open() )
         {
             return false;
@@ -189,12 +197,12 @@ bool ShaderBase::compile()
 
     //! シェーダーモデル名
     static const char* target_names[]{
-        "vs_5_0", // DX_SHADERTYPE_VERTEX   // 頂点シェーダー
-        "ps_5_0", // DX_SHADERTYPE_PIXEL    // ピクセルシェーダー
-        "gs_5_0", // DX_SHADERTYPE_GEOMETRY // ジオメトリシェーダー
-        "cs_5_0", // DX_SHADERTYPE_COMPUTE  // コンピュートシェーダー
-        "ds_5_0", // DX_SHADERTYPE_DOMAIN   // ドメインシェーダー
-        "hs_5_0", // DX_SHADERTYPE_HULL     // ハルシェーダー
+        "vs_5_0",  // DX_SHADERTYPE_VERTEX   // 頂点シェーダー
+        "ps_5_0",  // DX_SHADERTYPE_PIXEL    // ピクセルシェーダー
+        "gs_5_0",  // DX_SHADERTYPE_GEOMETRY // ジオメトリシェーダー
+        "cs_5_0",  // DX_SHADERTYPE_COMPUTE  // コンピュートシェーダー
+        "ds_5_0",  // DX_SHADERTYPE_DOMAIN   // ドメインシェーダー
+        "hs_5_0",  // DX_SHADERTYPE_HULL     // ハルシェーダー
     };
 
     auto compile_shader_variant = [&]( u32 index ) -> int {
@@ -209,18 +217,19 @@ bool ShaderBase::compile()
         Microsoft::WRL::ComPtr<ID3DBlob> byte_code = nullptr;
         Microsoft::WRL::ComPtr<ID3DBlob> errors;
 
-        auto hr =
-            D3DCompile( source.data(),                    // [in]  ソースコードのメモリ上のアドレス
-                        source.size(),                    // [in]  ソースコードサイズ
-                        convertTo( source_path ).c_str(), // [in]  ソースコードのファイルパス(使用しない場合はnullptr)
-                        defines,                          // [in]  プリプロセッサマクロ定義
-                        D3D_COMPILE_STANDARD_FILE_INCLUDE, // [in]  カスタムインクルード処理
-                        "main",                            // [in]  関数名
-                        target_names[type_],               // [in]  シェーダーモデル名
-                        compile_flags,                     // [in]  コンパイラフラグ  (D3DCOMPILE_xxxx)
-                        0,                                 // [in]  コンパイラフラグ2 (D3DCOMPILE_FLAGS2_xxxx)
-                        &byte_code,                        // [out] コンパイルされたバイトコード
-                        &errors );                         // [out] エラーメッセージ
+        auto hr = D3DCompile(
+            source.data(),  // [in]  ソースコードのメモリ上のアドレス
+            source.size(),  // [in]  ソースコードサイズ
+            convertTo( source_path )
+                .c_str(),  // [in]  ソースコードのファイルパス(使用しない場合はnullptr)
+            defines,       // [in]  プリプロセッサマクロ定義
+            D3D_COMPILE_STANDARD_FILE_INCLUDE,  // [in]  カスタムインクルード処理
+            "main",                             // [in]  関数名
+            target_names[type_],  // [in]  シェーダーモデル名
+            compile_flags,  // [in]  コンパイラフラグ  (D3DCOMPILE_xxxx)
+            0,  // [in]  コンパイラフラグ2 (D3DCOMPILE_FLAGS2_xxxx)
+            &byte_code,  // [out] コンパイルされたバイトコード
+            &errors );   // [out] エラーメッセージ
 
         // エラー警告出力
         if( errors != nullptr )
@@ -246,19 +255,21 @@ bool ShaderBase::compile()
         //------------------------------------------------------
         // [DxLib] シェーダーを作成
         //------------------------------------------------------
-        const void* shader_ptr = byte_code->GetBufferPointer(); // シェーダーバイナリの先頭アドレス
-        auto shader_size = static_cast<int>( byte_code->GetBufferSize() ); // シェーダーバイナリのサイズ
-        int  handle      = -1;
+        const void* shader_ptr =
+            byte_code->GetBufferPointer();  // シェーダーバイナリの先頭アドレス
+        auto shader_size = static_cast<int>(
+            byte_code->GetBufferSize() );  // シェーダーバイナリのサイズ
+        int handle = -1;
 
         switch( type_ )
         {
-            case DX_SHADERTYPE_VERTEX : // 頂点シェーダー
+            case DX_SHADERTYPE_VERTEX :  // 頂点シェーダー
                 handle = LoadVertexShaderFromMem( shader_ptr, shader_size );
                 break;
-            case DX_SHADERTYPE_PIXEL : // ピクセルシェーダー
+            case DX_SHADERTYPE_PIXEL :  // ピクセルシェーダー
                 handle = LoadPixelShaderFromMem( shader_ptr, shader_size );
                 break;
-            case DX_SHADERTYPE_GEOMETRY : // ジオメトリシェーダー
+            case DX_SHADERTYPE_GEOMETRY :  // ジオメトリシェーダー
                 handle = LoadGeometryShaderFromMem( shader_ptr, shader_size );
                 break;
             default : break;

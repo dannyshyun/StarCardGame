@@ -14,8 +14,9 @@ namespace
     std::string null_name = "  ";
 
     // string用のCombo
-    static int
-        Combo( const std::string& caption, std::string& current_item, const std::vector<std::string_view>& items )
+    static int Combo( const std::string&                   caption,
+                      std::string&                         current_item,
+                      const std::vector<std::string_view>& items )
     {
         int select_index = -1;
 
@@ -40,7 +41,7 @@ namespace
         return select_index;
     }
 
-} // namespace
+}  // namespace
 
 //---------------------------------------------------------
 //! カメラ初期化
@@ -83,7 +84,8 @@ void ComponentTargetTracking::PostUpdate()
     if( auto model = owner_model_.lock() )
     {
         // trackingするマトリクス
-        tracking_matrix_ = cast( MV1GetFrameLocalMatrix( model->GetModel(), tracked_node_index_ ) );
+        tracking_matrix_ = cast(
+            MV1GetFrameLocalMatrix( model->GetModel(), tracked_node_index_ ) );
         // 正しい向きのノードMatrixを取得しておく
         float3 node_rot;
         float3 node_trans;
@@ -94,17 +96,22 @@ void ComponentTargetTracking::PostUpdate()
                                      (float*)&node_scale );
 #if 1
         // モデルの方向を取得する
-        float3 model_vec = normalize( mul( float4( front_vector_, 0 ), model->GetWorldMatrix() ).xyz );
+        float3 model_vec = normalize(
+            mul( float4( front_vector_, 0 ), model->GetWorldMatrix() ).xyz );
 
         // モデルを通常に戻すインバーズマトリクスを取得しておく
-        auto fmat = inverse( HelperLib::Math::CreateMatrixByFrontVector( model_vec ) );
+        auto fmat = inverse(
+            HelperLib::Math::CreateMatrixByFrontVector( model_vec ) );
 
         // ターゲットへの向きを取得して( MV1GetFrameLocalWorldMatrixでとると100%位置はあっているがどうやら…1Frame遅れる)
-        float3 node_pos  = tracking_matrix_._41_42_43;
-        float3 model_pos = mul( float4( node_pos, 1 ), GetOwner()->GetMatrix() ).xyz;
+        float3 node_pos = tracking_matrix_._41_42_43;
+        float3 model_pos =
+            mul( float4( node_pos, 1 ), GetOwner()->GetMatrix() ).xyz;
 
         float3 vec = target_pos - model_pos;
-        auto   mat = HelperLib::Math::CreateMatrixByFrontVector( vec, { 0, 1, 0 }, true );
+        auto   mat = HelperLib::Math::CreateMatrixByFrontVector( vec,
+                                                               { 0, 1, 0 },
+                                                               true );
 
         // それにインバースを掛け合わせて0基準のベクトルに変換する
         mat           = mul( mat, fmat );
@@ -115,7 +122,10 @@ void ComponentTargetTracking::PostUpdate()
         float3 new_trans;
         float3 new_scale;
         // その回転をノードMatrixにさらに加えて向きの回転を実現する
-        DecomposeMatrixToComponents( (float*)mat.f32_128_0, (float*)&new_trans, (float*)&new_rot, (float*)&new_scale );
+        DecomposeMatrixToComponents( (float*)mat.f32_128_0,
+                                     (float*)&new_trans,
+                                     (float*)&new_rot,
+                                     (float*)&new_scale );
 
         // ZベクトルをY軸固定で角度に変化させる
         float3 zvec  = mat.axisZ();
@@ -176,7 +186,9 @@ void ComponentTargetTracking::PostUpdate()
         //auto rotx = matrix::rotateX(radians((float1)theta_yz));
         //mat = mul(mul(tracking_matrix_, rotx), roty);
 
-        MV1SetFrameUserLocalMatrix( model->GetModel(), tracked_node_index_, cast( mat ) );
+        MV1SetFrameUserLocalMatrix( model->GetModel(),
+                                    tracked_node_index_,
+                                    cast( mat ) );
 
         // これをONにすると他のGizmoのIsOverなどがチェックが取れずPICKが常に有効になる(地面が選ばれてしまう)
         //ShowGizmo( (float*)mat.f32_128_0, ImGuizmo::OPERATION::TRANSLATE, ImGuizmo::MODE::LOCAL, 0xab1245 );
@@ -219,8 +231,9 @@ void ComponentTargetTracking::GUI()
             int select_node_index = -1;
             if( auto model = GetOwner()->GetComponent<ComponentModel>() )
             {
-                auto list         = model->GetNodesName();
-                select_node_index = Combo( u8"トラッキングノード", tracked_node_, list );
+                auto list = model->GetNodesName();
+                select_node_index =
+                    Combo( u8"トラッキングノード", tracked_node_, list );
                 if( select_node_index < list.size() )
                     SetTrackingNode( select_node_index );
             }
@@ -260,14 +273,31 @@ void ComponentTargetTracking::GUI()
 
             if( ! tracking_status_.is( TrackingBit::ObjectTracking ) )
             {
-                ImGui::DragFloat3( u8"ターゲットポイント", (float*)&look_at_, 0.01f );
+                ImGui::DragFloat3( u8"ターゲットポイント",
+                                   (float*)&look_at_,
+                                   0.01f );
             }
 
             ImGui::Separator();
-            ImGui::DragFloat2( u8"左右角度制限", (float*)&limit_lr_, 0.1f, 0, 180, "%.1f" );
-            ImGui::DragFloat2( u8"上下角度制限", (float*)&limit_ud_, 0.1f, 0, 89, "%.1f" );
+            ImGui::DragFloat2( u8"左右角度制限",
+                               (float*)&limit_lr_,
+                               0.1f,
+                               0,
+                               180,
+                               "%.1f" );
+            ImGui::DragFloat2( u8"上下角度制限",
+                               (float*)&limit_ud_,
+                               0.1f,
+                               0,
+                               89,
+                               "%.1f" );
             ImGui::Separator();
-            ImGui::DragFloat3( u8"前ベクトル", (float*)&front_vector_, 0.1f, 0, 180, "%.1f" );
+            ImGui::DragFloat3( u8"前ベクトル",
+                               (float*)&front_vector_,
+                               0.1f,
+                               0,
+                               180,
+                               "%.1f" );
 
             ImGui::TreePop();
         }
@@ -285,7 +315,8 @@ void ComponentTargetTracking::SetTargetObjectPtr( ObjectWeakPtr obj )
     }
 }
 
-void ComponentTargetTracking::SetTargetObjectPtr( const std::string_view obj_name )
+void ComponentTargetTracking::SetTargetObjectPtr(
+    const std::string_view obj_name )
 {
     auto obj = Scene::GetObjectPtr<Object>( obj_name );
     SetTargetObjectPtr( obj );
@@ -319,7 +350,8 @@ void ComponentTargetTracking::SetTrackingNode( const std::string& name )
 
         tracked_node_index_ = MV1SearchFrame( model->GetModel(), name.c_str() );
 
-        auto mat         = cast( MV1GetFrameLocalMatrix( model->GetModel(), tracked_node_index_ ) );
+        auto mat = cast(
+            MV1GetFrameLocalMatrix( model->GetModel(), tracked_node_index_ ) );
         tracking_matrix_ = mat;
     }
 }
@@ -333,7 +365,8 @@ void ComponentTargetTracking::SetTrackingNode( int tracking_node_index )
     {
         tracked_node_index_ = tracking_node_index;
 
-        auto mat         = cast( MV1GetFrameLocalMatrix( model->GetModel(), tracked_node_index_ ) );
+        auto mat = cast(
+            MV1GetFrameLocalMatrix( model->GetModel(), tracked_node_index_ ) );
         tracking_matrix_ = mat;
     }
 }

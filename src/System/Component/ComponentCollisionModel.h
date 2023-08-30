@@ -20,7 +20,7 @@ public:
     ComponentCollisionModel()
     {
         collision_type_  = CollisionType::MODEL;
-        collision_mass_  = -1; //< 移動しないように
+        collision_mass_  = -1;  //< 移動しないように
         collision_group_ = CollisionGroup::GROUND;
     }
 
@@ -30,7 +30,7 @@ public:
     virtual void Draw() override;
     virtual void Exit() override;
 
-    virtual void GUI() override; //!< GUI
+    virtual void GUI() override;  //!< GUI
 
     // 現在のモデルにアタッチします(標準はtrueに変更)
     void AttachToModel( bool update = true );
@@ -49,7 +49,8 @@ public:
 
     virtual ComponentCollisionModelPtr SharedThis() override
     {
-        return std::dynamic_pointer_cast<ComponentCollisionModel>( shared_from_this() );
+        return std::dynamic_pointer_cast<ComponentCollisionModel>(
+            shared_from_this() );
     }
 
     //! @brief ワールドMatrixの取得
@@ -58,7 +59,10 @@ public:
 
     //! @brief 1フレーム前のワールドMatrixの取得
     //! @return 他のコンポーネントも含めた位置
-    virtual const matrix GetOldWorldMatrix() const override { return old_transform_; }
+    virtual const matrix GetOldWorldMatrix() const override
+    {
+        return old_transform_;
+    }
 
     //@}
 
@@ -68,38 +72,43 @@ public:
     //! @return 実際動ける量
     float3 checkMovement( float3 pos, float3 vec, float force = 1.0f );
 
-#if 1 // CompoentCollisionからの移行
+#if 1  // CompoentCollisionからの移行
 
     inline ComponentCollisionModelPtr SetName( std::string_view name )
     {
         name_ = name;
-        return std::dynamic_pointer_cast<ComponentCollisionModel>( shared_from_this() );
+        return std::dynamic_pointer_cast<ComponentCollisionModel>(
+            shared_from_this() );
     }
 
     inline ComponentCollisionModelPtr SetHitCollisionGroup( u32 hit_group )
     {
         collision_hit_ = hit_group;
-        return std::dynamic_pointer_cast<ComponentCollisionModel>( shared_from_this() );
+        return std::dynamic_pointer_cast<ComponentCollisionModel>(
+            shared_from_this() );
     }
 
     inline ComponentCollisionModelPtr SetCollisionGroup( CollisionGroup grp )
     {
         collision_group_ = grp;
-        return std::dynamic_pointer_cast<ComponentCollisionModel>( shared_from_this() );
+        return std::dynamic_pointer_cast<ComponentCollisionModel>(
+            shared_from_this() );
     }
 
     inline ComponentCollisionModelPtr SetMass( float mass )
     {
         collision_mass_ = mass;
-        return std::dynamic_pointer_cast<ComponentCollisionModel>( shared_from_this() );
+        return std::dynamic_pointer_cast<ComponentCollisionModel>(
+            shared_from_this() );
     }
 #endif
 
 private:
-    bool                                  update_    = false;
-    int                                   ref_model_ = -1;
-    MV1_REF_POLYGONLIST                   ref_poly_{};    //!< ポリゴンデータ
-    std::vector<MV1_COLL_RESULT_POLY_DIM> hit_poly_dims_; //!< 結果代入用ポリゴン配列
+    bool                update_    = false;
+    int                 ref_model_ = -1;
+    MV1_REF_POLYGONLIST ref_poly_{};  //!< ポリゴンデータ
+    std::vector<MV1_COLL_RESULT_POLY_DIM>
+        hit_poly_dims_;  //!< 結果代入用ポリゴン配列
 
     //--------------------------------------------------------------------
     //! @name Cereal処理
@@ -109,7 +118,9 @@ private:
     {
         arc( cereal::make_nvp( "owner", owner_ ) );
         arc( CEREAL_NVP( update_ ) );
-        arc( cereal::make_nvp( "ComponentCollision", cereal::base_class<ComponentCollision>( this ) ) );
+        arc( cereal::make_nvp( "ComponentCollision",
+                               cereal::base_class<ComponentCollision>(
+                                   this ) ) );
         AttachToModel( update_ );
     }
 
@@ -117,4 +128,5 @@ private:
 };
 
 CEREAL_REGISTER_TYPE( ComponentCollisionModel )
-CEREAL_REGISTER_POLYMORPHIC_RELATION( ComponentCollision, ComponentCollisionModel )
+CEREAL_REGISTER_POLYMORPHIC_RELATION( ComponentCollision,
+                                      ComponentCollisionModel )

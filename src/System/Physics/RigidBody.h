@@ -6,18 +6,18 @@
 
 namespace shape
 {
-    class Sphere;         //!< 球
-    class Box;            //!< ボックス
-    class HeightField;    //!< 高さマップ
-    class Mesh;           //!< 静的メッシュ
-    class ConvexHull;     //!< 凸形状
-    class Capsule;        //!< カプセル
-    class TaperedCapsule; //!< 両端半径が異なるカプセル
-    class Cylinder;       //!< 円筒
-    class Triangle;       //!< 三角形
+    class Sphere;          //!< 球
+    class Box;             //!< ボックス
+    class HeightField;     //!< 高さマップ
+    class Mesh;            //!< 静的メッシュ
+    class ConvexHull;      //!< 凸形状
+    class Capsule;         //!< カプセル
+    class TaperedCapsule;  //!< 両端半径が異なるカプセル
+    class Cylinder;        //!< 円筒
+    class Triangle;        //!< 三角形
     class StaticCompound;
     class MutableCompound;
-} // namespace shape
+}  // namespace shape
 
 namespace physics
 {
@@ -27,9 +27,9 @@ namespace physics
     //--------------------------------------------------------------
     enum class MotionType
     {
-        Static,    //!< 静的。動かない。
-        Kinematic, //!< 速度のみで移動可能で、力には反応しない。
-        Dynamic,   //!< 通常の物理オブジェクトとして力に応答する。
+        Static,  //!< 静的。動かない。
+        Kinematic,  //!< 速度のみで移動可能で、力には反応しない。
+        Dynamic,  //!< 通常の物理オブジェクトとして力に応答する。
     };
 
     //===========================================================================
@@ -62,7 +62,8 @@ namespace physics
         //! 位置を設定
         //! @param  [in]    position    設定座標
         //! @param  [in]    is_activate アクティブ化するかどうか true:アクティブにする false:アクティブにしない
-        virtual void setPosition( const float3& position, bool is_activate = true ) = 0;
+        virtual void setPosition( const float3& position,
+                                  bool          is_activate = true ) = 0;
 
         //! 位置を取得
         virtual float3 position() const = 0;
@@ -73,7 +74,8 @@ namespace physics
         //! 回転姿勢を設定
         //! @param  [in]    rot         設定角度
         //! @param  [in]    is_activate アクティブ化するかどうか true:アクティブにする false:アクティブにしない
-        virtual void setRotation( const quaternion& rot, bool is_activate = true ) = 0;
+        virtual void setRotation( const quaternion& rot,
+                                  bool              is_activate = true ) = 0;
 
         //! 回転姿勢を設定
         virtual quaternion rotation() const = 0;
@@ -97,8 +99,9 @@ namespace physics
         //! @param  [in]    delta_time      所要時間
         //! target_position/target_rotation に delta_time 秒で位置するようにボディの速度を設定します。
         //! 必要に応じてボディをアクティブにします。
-        virtual void
-            moveKinematic( const float3& target_position, const quaternion& target_rotation, f32 delta_time ) = 0;
+        virtual void moveKinematic( const float3&     target_position,
+                                    const quaternion& target_rotation,
+                                    f32               delta_time ) = 0;
 
         //! 速度を設定
         //! @param  [in]    v   速度
@@ -154,7 +157,8 @@ namespace physics
         //! 指定位置に撃力を与える
         //! @param  [in]    impulse 与える撃力
         //! @param  [in]    point   位置
-        virtual void addImpulse( const float3& impulse, const float3& point ) = 0;
+        virtual void addImpulse( const float3& impulse,
+                                 const float3& point ) = 0;
 
         //! 角力積を与える
         //! @param  [in]    angular_impulse 与える角力積
@@ -204,7 +208,8 @@ namespace physics
         //! 動的/静的/キネマティックを切り替え
         //! @param  [in]    motion_type 動作タイプ
         //! @param  [in]    is_activate アクティブ化するかどうか true:アクティブにする false:アクティブにしない
-        virtual void setMotionType( physics::MotionType motion_type, bool is_activate = true ) = 0;
+        virtual void setMotionType( physics::MotionType motion_type,
+                                    bool is_activate = true ) = 0;
 
         //! ワールド空間の逆慣性テンソルを取得する
         virtual matrix inverseInertia() const = 0;
@@ -226,33 +231,34 @@ namespace physics
     //@{
 
     //  Sphere剛体を作成
-    std::shared_ptr<physics::RigidBody>
-        createRigidBody( const shape::Sphere& o,     //
-                         u16                  layer, //
-                         physics::MotionType  motion_type = physics::MotionType::Dynamic );
+    std::shared_ptr<physics::RigidBody> createRigidBody(
+        const shape::Sphere& o,      //
+        u16                  layer,  //
+        physics::MotionType  motion_type = physics::MotionType::Dynamic );
 
     //  Box剛体を作成
-    std::shared_ptr<physics::RigidBody>
-        createRigidBody( const shape::Box&   o,     //
-                         u16                 layer, //
-                         physics::MotionType motion_type = physics::MotionType::Dynamic );
+    std::shared_ptr<physics::RigidBody> createRigidBody(
+        const shape::Box&   o,      //
+        u16                 layer,  //
+        physics::MotionType motion_type = physics::MotionType::Dynamic );
 
     //  Cylinder剛体を作成
-    std::shared_ptr<physics::RigidBody>
-        createRigidBody( const shape::Cylinder& o,     //
-                         u16                    layer, //
-                         physics::MotionType    motion_type = physics::MotionType::Dynamic );
+    std::shared_ptr<physics::RigidBody> createRigidBody(
+        const shape::Cylinder& o,      //
+        u16                    layer,  //
+        physics::MotionType    motion_type = physics::MotionType::Dynamic );
 
     //  ConvexHull剛体を作成
-    std::shared_ptr<physics::RigidBody>
-        createRigidBody( const shape::ConvexHull& o,     //
-                         u16                      layer, //
-                         physics::MotionType      motion_type = physics::MotionType::Dynamic );
+    std::shared_ptr<physics::RigidBody> createRigidBody(
+        const shape::ConvexHull& o,      //
+        u16                      layer,  //
+        physics::MotionType      motion_type = physics::MotionType::Dynamic );
 
     //  Mesh剛体を作成
     //! @note   メッシュ剛体は常に静的で生成されます
-    std::shared_ptr<physics::RigidBody> createRigidBody( const shape::Mesh& o, u16 layer );
+    std::shared_ptr<physics::RigidBody> createRigidBody( const shape::Mesh& o,
+                                                         u16 layer );
 
     //@}
 
-} // namespace physics
+}  // namespace physics

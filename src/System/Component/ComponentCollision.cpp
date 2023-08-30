@@ -35,7 +35,7 @@ namespace
 
         return vh;
     }
-} // namespace
+}  // namespace
 
 ComponentCollision::ComponentCollision()
 {
@@ -70,7 +70,8 @@ void ComponentCollision::OnHit( const HitInfo& hitInfo )
     if( IsOverlap( hitInfo.hit_collision_->collision_group_ ) )
         return;
     // 相手もオーバーラップする場合は当たりをすり抜ける
-    if( hitInfo.hit_collision_->IsOverlap( hitInfo.collision_->collision_group_ ) )
+    if( hitInfo.hit_collision_->IsOverlap(
+            hitInfo.collision_->collision_group_ ) )
         return;
 
     auto obj = GetOwner();
@@ -113,7 +114,8 @@ const char* const collisionGroupName[] = {
 
 void ComponentCollision::GUICollisionData( bool use_attach )
 {
-    auto str = u8"コリジョンタイプ : " + CollisionTypeName[(u32)collision_type_];
+    auto str = u8"コリジョンタイプ : " +
+               CollisionTypeName[(u32)collision_type_];
     ImGui::Text( str.c_str() );
     ImGui::Separator();
     ImGui::Text( u8"コリジョングループ: " );
@@ -122,37 +124,74 @@ void ComponentCollision::GUICollisionData( bool use_attach )
     if( ImGui::Combo( u8"##コリジョングループ",
                       &index,
                       collisionGroupName,
-                      ( sizeof( collisionGroupName ) / sizeof( collisionGroupName[0] ) ) ) )
+                      ( sizeof( collisionGroupName ) /
+                        sizeof( collisionGroupName[0] ) ) ) )
     {
         collision_group_ = static_cast<CollisionGroup>( 1 << index );
     }
     ImGui::Separator();
     //  ImGui::CheckboxFlags(u8"初期化済み", &collision_status_.get(), 1 << (u32)CollisionBit::Initialized);
-    ImGui::CheckboxFlags( u8"ヒットしない", &collision_status_.get(), 1 << (u32)CollisionBit::DisableHit );
-    ImGui::CheckboxFlags( u8"ゲーム中表示", &collision_status_.get(), 1 << (u32)CollisionBit::ShowInGame );
+    ImGui::CheckboxFlags( u8"ヒットしない",
+                          &collision_status_.get(),
+                          1 << (u32)CollisionBit::DisableHit );
+    ImGui::CheckboxFlags( u8"ゲーム中表示",
+                          &collision_status_.get(),
+                          1 << (u32)CollisionBit::ShowInGame );
     ImGui::Separator();
     if( ImGui::TreeNode( u8"Hitするグループ" ) )
     {
-        ImGui::CheckboxFlags( "WALL", (u32*)&collision_hit_, (u32)CollisionGroup::WALL );
-        ImGui::CheckboxFlags( "GROUND", (u32*)&collision_hit_, (u32)CollisionGroup::GROUND );
-        ImGui::CheckboxFlags( "PLAYER", (u32*)&collision_hit_, (u32)CollisionGroup::PLAYER );
-        ImGui::CheckboxFlags( "ENEMY", (u32*)&collision_hit_, (u32)CollisionGroup::ENEMY );
-        ImGui::CheckboxFlags( "WEAPON", (u32*)&collision_hit_, (u32)CollisionGroup::WEAPON );
-        ImGui::CheckboxFlags( "ITEM", (u32*)&collision_hit_, (u32)CollisionGroup::ITEM );
-        ImGui::CheckboxFlags( "CAMERA", (u32*)&collision_hit_, (u32)CollisionGroup::CAMERA );
-        ImGui::CheckboxFlags( "ETC", (u32*)&collision_hit_, (u32)CollisionGroup::ETC );
+        ImGui::CheckboxFlags( "WALL",
+                              (u32*)&collision_hit_,
+                              (u32)CollisionGroup::WALL );
+        ImGui::CheckboxFlags( "GROUND",
+                              (u32*)&collision_hit_,
+                              (u32)CollisionGroup::GROUND );
+        ImGui::CheckboxFlags( "PLAYER",
+                              (u32*)&collision_hit_,
+                              (u32)CollisionGroup::PLAYER );
+        ImGui::CheckboxFlags( "ENEMY",
+                              (u32*)&collision_hit_,
+                              (u32)CollisionGroup::ENEMY );
+        ImGui::CheckboxFlags( "WEAPON",
+                              (u32*)&collision_hit_,
+                              (u32)CollisionGroup::WEAPON );
+        ImGui::CheckboxFlags( "ITEM",
+                              (u32*)&collision_hit_,
+                              (u32)CollisionGroup::ITEM );
+        ImGui::CheckboxFlags( "CAMERA",
+                              (u32*)&collision_hit_,
+                              (u32)CollisionGroup::CAMERA );
+        ImGui::CheckboxFlags( "ETC",
+                              (u32*)&collision_hit_,
+                              (u32)CollisionGroup::ETC );
         ImGui::TreePop();
     }
     if( ImGui::TreeNode( u8"オーバーラップするグループ" ) )
     {
-        ImGui::CheckboxFlags( "WALL", (u32*)&collision_overlap_, (u32)CollisionGroup::WALL );
-        ImGui::CheckboxFlags( "GROUND", (u32*)&collision_overlap_, (u32)CollisionGroup::GROUND );
-        ImGui::CheckboxFlags( "PLAYER", (u32*)&collision_overlap_, (u32)CollisionGroup::PLAYER );
-        ImGui::CheckboxFlags( "ENEMY", (u32*)&collision_overlap_, (u32)CollisionGroup::ENEMY );
-        ImGui::CheckboxFlags( "WEAPON", (u32*)&collision_overlap_, (u32)CollisionGroup::WEAPON );
-        ImGui::CheckboxFlags( "ITEM", (u32*)&collision_overlap_, (u32)CollisionGroup::ITEM );
-        ImGui::CheckboxFlags( "CAMERA", (u32*)&collision_overlap_, (u32)CollisionGroup::CAMERA );
-        ImGui::CheckboxFlags( "ETC", (u32*)&collision_overlap_, (u32)CollisionGroup::ETC );
+        ImGui::CheckboxFlags( "WALL",
+                              (u32*)&collision_overlap_,
+                              (u32)CollisionGroup::WALL );
+        ImGui::CheckboxFlags( "GROUND",
+                              (u32*)&collision_overlap_,
+                              (u32)CollisionGroup::GROUND );
+        ImGui::CheckboxFlags( "PLAYER",
+                              (u32*)&collision_overlap_,
+                              (u32)CollisionGroup::PLAYER );
+        ImGui::CheckboxFlags( "ENEMY",
+                              (u32*)&collision_overlap_,
+                              (u32)CollisionGroup::ENEMY );
+        ImGui::CheckboxFlags( "WEAPON",
+                              (u32*)&collision_overlap_,
+                              (u32)CollisionGroup::WEAPON );
+        ImGui::CheckboxFlags( "ITEM",
+                              (u32*)&collision_overlap_,
+                              (u32)CollisionGroup::ITEM );
+        ImGui::CheckboxFlags( "CAMERA",
+                              (u32*)&collision_overlap_,
+                              (u32)CollisionGroup::CAMERA );
+        ImGui::CheckboxFlags( "ETC",
+                              (u32*)&collision_overlap_,
+                              (u32)CollisionGroup::ETC );
         ImGui::TreePop();
     }
 
@@ -160,9 +199,14 @@ void ComponentCollision::GUICollisionData( bool use_attach )
     ImGui::Checkbox( u8"重力を使用する", &use_gravity_ );
     ImGui::DragFloat3( u8"重力加速度", (float*)&gravity_ );
 
-    if( ImGui::DragFloat( u8"質量", (float*)&collision_mass_, 0.001f, 0, 1000000.0f ) )
+    if( ImGui::DragFloat( u8"質量",
+                          (float*)&collision_mass_,
+                          0.001f,
+                          0,
+                          1000000.0f ) )
     {
-        collision_mass_ = std::min( 1000000.0f, std::max( collision_mass_, 0.001f ) );
+        collision_mass_ = std::min( 1000000.0f,
+                                    std::max( collision_mass_, 0.001f ) );
     }
 
     // アタッチが存在しないときはここで終了
@@ -193,7 +237,10 @@ void ComponentCollision::GUICollisionData( bool use_attach )
         }
 
         auto items = cmp->GetNodesNamePChar();
-        if( ImGui::Combo( "Node", &attach_node_, items.data(), (int)items.size() ) )
+        if( ImGui::Combo( "Node",
+                          &attach_node_,
+                          items.data(),
+                          (int)items.size() ) )
         {
             // 切り替えたとき
             collision_transform_ = matrix::identity();
@@ -212,7 +259,8 @@ void ComponentCollision::Update()
         attach_node_matrix_ = matrix::identity();
         if( auto mdl = GetOwner()->GetComponent<ComponentModel>() )
         {
-            attach_node_matrix_ = MV1GetFrameLocalWorldMatrix( mdl->GetModel(), attach_node_ );
+            attach_node_matrix_ = MV1GetFrameLocalWorldMatrix( mdl->GetModel(),
+                                                               attach_node_ );
         }
     }
 #ifdef USE_JOLT_PHYSICS
@@ -266,15 +314,16 @@ void ComponentCollision::AttachToModel( const std::string_view name )
 //! @param col1 Capsuleコリジョン
 //! @param col2 Sphere コリジョン
 //! @return 当たり情報
-ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionCapsulePtr col1,
-                                                       ComponentCollisionSpherePtr  col2 )
+ComponentCollision::HitInfo
+    ComponentCollision::isHit( ComponentCollisionCapsulePtr col1,
+                               ComponentCollisionSpherePtr  col2 )
 {
     ComponentCollision::HitInfo info{};
 
     // 自分のコリジョン
     float3 cpos1 = col1->GetTranslate();
     float3 cpos2 = col1->GetVectorAxisY() * col1->GetHeight() + cpos1;
-    float  cs    = 1.0f; //< スケール
+    float  cs    = 1.0f;  //< スケール
 
     // モデルアタッチ
     if( col1->attach_node_ >= 0 )
@@ -295,7 +344,9 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionCapsule
             cpos1 = mul( float4( cpos1, 1 ), cmp->GetMatrix() ).xyz;
             cpos2 = mul( float4( cpos2, 1 ), cmp->GetMatrix() ).xyz;
             // 半径はXZで平均としておく
-            cs = ( length( cmp->GetMatrix().axisX() ) + length( cmp->GetMatrix().axisZ() ) ) / 2;
+            cs = ( length( cmp->GetMatrix().axisX() ) +
+                   length( cmp->GetMatrix().axisZ() ) ) /
+                 2;
         }
     }
 
@@ -343,7 +394,7 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionCapsule
         // 最も近い点
         float3 c0  = cast( result.Seg_MinDist_Pos );
         float3 e0  = cast( e1 );
-        float3 vec = e0 - c0; // 調べたほうの跳ね返りの方向(100%)
+        float3 vec = e0 - c0;  // 調べたほうの跳ね返りの方向(100%)
         float  len = length( vec );
         if( abs( len ) <= abs( len ) * FLT_EPSILON )
         {
@@ -367,11 +418,12 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionCapsule
 //! @param col1 Sphereコリジョン
 //! @param col2 Capsule コリジョン
 //! @return 当たり情報
-ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionSpherePtr  col1,
-                                                       ComponentCollisionCapsulePtr col2 )
+ComponentCollision::HitInfo
+    ComponentCollision::isHit( ComponentCollisionSpherePtr  col1,
+                               ComponentCollisionCapsulePtr col2 )
 {
     auto hit  = isHit( col2, col1 );
-    hit.push_ = -hit.push_; // push方向を反対にする
+    hit.push_ = -hit.push_;  // push方向を反対にする
     return hit;
 }
 
@@ -379,15 +431,17 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionSphereP
 //! @param col1 Capsuleコリジョン
 //! @param col2 Capsule コリジョン
 //! @return 当たり情報
-ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionCapsulePtr col1,
-                                                       ComponentCollisionCapsulePtr col2 )
+ComponentCollision::HitInfo
+    ComponentCollision::isHit( ComponentCollisionCapsulePtr col1,
+                               ComponentCollisionCapsulePtr col2 )
 {
     ComponentCollision::HitInfo info{};
 
     // 自分のコリジョン
     float3 cpos1 = col1->GetTranslate();
-    float3 cpos2 = normalize( col1->GetVectorAxisY() ) * col1->GetHeight() + cpos1;
-    float  cs    = 1.0f; //< スケール
+    float3 cpos2 = normalize( col1->GetVectorAxisY() ) * col1->GetHeight() +
+                   cpos1;
+    float cs = 1.0f;  //< スケール
 
     // モデルアタッチ
     if( col1->attach_node_ >= 0 )
@@ -415,8 +469,9 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionCapsule
 
     // 相手のコリジョン
     float3 epos1 = col2->GetTranslate();
-    float3 epos2 = normalize( col2->GetVectorAxisY() ) * col2->GetHeight() + epos1;
-    float  es    = 1.0f; //< スケール
+    float3 epos2 = normalize( col2->GetVectorAxisY() ) * col2->GetHeight() +
+                   epos1;
+    float es = 1.0f;  //< スケール
 
     // モデルアタッチ
     if( col2->attach_node_ >= 0 )
@@ -455,7 +510,7 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionCapsule
     SEGMENT_SEGMENT_RESULT result;
     Segment_Segment_Analyse( &c1, &c2, &e1, &e2, &result );
 
-#if 0 // 当たり不具合チェック用
+#if 0  // 当たり不具合チェック用
 	if ( col1->attach_node_ )
 		DrawCapsule3D( c1, c2, cr, 10, GetColor( 0, 0, 255 ), GetColor( 0, 0, 255 ), FALSE );
 
@@ -469,7 +524,7 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionCapsule
         // 最も近い点
         float3 c0  = cast( result.SegA_MinDist_Pos );
         float3 e0  = cast( result.SegB_MinDist_Pos );
-        float3 vec = e0 - c0; // 調べたほうの跳ね返りの方向(100%)
+        float3 vec = e0 - c0;  // 調べたほうの跳ね返りの方向(100%)
 
         float len = length( vec );
         if( abs( len ) <= abs( len ) * FLT_EPSILON )
@@ -493,8 +548,9 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionCapsule
 //! @param col1 Sphereコリジョン
 //! @param col2 Sphere コリジョン
 //! @return 当たり情報
-ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionSpherePtr col1,
-                                                       ComponentCollisionSpherePtr col2 )
+ComponentCollision::HitInfo
+    ComponentCollision::isHit( ComponentCollisionSpherePtr col1,
+                               ComponentCollisionSpherePtr col2 )
 {
     ComponentCollision::HitInfo info{};
 
@@ -550,7 +606,10 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionSphereP
         }
     }
 
-    if( HitCheck_Sphere_Sphere( cast( pos1 ), col1->GetRadius() * scale1, cast( pos2 ), col2->GetRadius() * scale2 ) )
+    if( HitCheck_Sphere_Sphere( cast( pos1 ),
+                                col1->GetRadius() * scale1,
+                                cast( pos2 ),
+                                col2->GetRadius() * scale2 ) )
     {
         // 中間地点を当たった場所にする
         info.hit_          = true;
@@ -565,9 +624,9 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionSphereP
             distance = { 0, 0, 1 };
         }
 
-        float3 vec     = normalize( distance );
-        float  reallen = col1->GetRadius() * scale1 + col2->GetRadius() * scale2;
-        vec            = vec * ( reallen - len );
+        float3 vec    = normalize( distance );
+        float reallen = col1->GetRadius() * scale1 + col2->GetRadius() * scale2;
+        vec           = vec * ( reallen - len );
 
         // このpush_は、調べたほうの押し戻し方向100%で作成する
         info.push_ = vec;
@@ -580,8 +639,9 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionSphereP
 //! @param col1 Model コリジョン
 //! @param col2 Sphereコリジョン
 //! @return 当たり情報
-ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionSpherePtr col1,
-                                                       ComponentCollisionModelPtr  col2 )
+ComponentCollision::HitInfo
+    ComponentCollision::isHit( ComponentCollisionSpherePtr col1,
+                               ComponentCollisionModelPtr  col2 )
 {
     ComponentCollision::HitInfo info{};
 
@@ -594,16 +654,22 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionSphereP
     float3 cpos{};
     if( col1->attach_node_ >= 0 )
     {
-        cpos = mul( float4( col1->GetTranslate(), 1 ), col1->attach_node_matrix_ ).xyz;
+        cpos = mul( float4( col1->GetTranslate(), 1 ),
+                    col1->attach_node_matrix_ )
+                   .xyz;
         opos = cpos;
     }
     else
     {
         // オブジェクト位置に対するコリジョン(1フレーム前)
-        opos = mul( float4( col1->GetTranslate(), 1 ), col1->GetOwner()->GetOldWorldMatrix() ).xyz;
+        opos = mul( float4( col1->GetTranslate(), 1 ),
+                    col1->GetOwner()->GetOldWorldMatrix() )
+                   .xyz;
 
         // オブジェクト位置に対するコリジョン
-        cpos = mul( float4( col1->GetTranslate(), 1 ), col1->GetOwner()->GetMatrix() ).xyz;
+        cpos = mul( float4( col1->GetTranslate(), 1 ),
+                    col1->GetOwner()->GetMatrix() )
+                   .xyz;
 
         // 実際の移動できる量にする
         auto  move  = cpos - opos;
@@ -617,9 +683,9 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionSphereP
             cpos   = opos + move;
 
             // 当たりからキャラの位置を求める
-            auto rot                      = col1->GetOwner()->GetMatrix();
-            rot._41_42_43                 = float3{ 0.0f, 0.0f, 0.0f };
-            auto col1r                    = mul( float4( col1->GetTranslate(), 1 ), rot ).xyz;
+            auto rot      = col1->GetOwner()->GetMatrix();
+            rot._41_42_43 = float3{ 0.0f, 0.0f, 0.0f };
+            auto col1r    = mul( float4( col1->GetTranslate(), 1 ), rot ).xyz;
             col1->GetOwner()->Translate() = cpos - col1r;
         }
     }
@@ -725,7 +791,11 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionSphereP
         //DrawCapsule3D( cast( ocenter ), cast( ncenter ), radius, 10, GetColor( 0, 0, 255 ), GetColor( 0, 0, 255 ), FALSE );
 
         // スピードは一旦無視。面倒なのでカプセルをそのまま利用
-        hit_poly_dim = MV1CollCheck_Capsule( mdl->GetModel(), -1, cast( ocenter ), cast( ncenter ), radius );
+        hit_poly_dim = MV1CollCheck_Capsule( mdl->GetModel(),
+                                             -1,
+                                             cast( ocenter ),
+                                             cast( ncenter ),
+                                             radius );
         for( int i = 0; i < hit_poly_dim.HitNum; i++ )
         {
             SEGMENT_TRIANGLE_RESULT result{};
@@ -744,7 +814,8 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionSphereP
             float3 tri_nml  = cast( hit_poly_dim.Dim[i].Normal );
 
             // カプセルへの戻し方向
-            if( HelperLib::Math::NearlyEqual( length( line_pos - tri_pos ), 0 ) )
+            if( HelperLib::Math::NearlyEqual( length( line_pos - tri_pos ),
+                                              0 ) )
             {
                 float3 v = ( tri_pos - ncenter );
                 v        = v + ( tri_nml * radius );
@@ -775,11 +846,12 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionSphereP
 //! @param col1 Sphereコリジョン
 //! @param col2 Capsule コリジョン
 //! @return 当たり情報
-ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionModelPtr  col1,
-                                                       ComponentCollisionSpherePtr col2 )
+ComponentCollision::HitInfo
+    ComponentCollision::isHit( ComponentCollisionModelPtr  col1,
+                               ComponentCollisionSpherePtr col2 )
 {
     auto hit  = isHit( col2, col1 );
-    hit.push_ = -hit.push_; // push方向を反対にする
+    hit.push_ = -hit.push_;  // push方向を反対にする
     return hit;
 }
 
@@ -787,8 +859,9 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionModelPt
 //! @param col1 Modelコリジョン
 //! @param col2 Capsule コリジョン
 //! @return 当たり情報
-ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionCapsulePtr col1,
-                                                       ComponentCollisionModelPtr   col2 )
+ComponentCollision::HitInfo
+    ComponentCollision::isHit( ComponentCollisionCapsulePtr col1,
+                               ComponentCollisionModelPtr   col2 )
 {
     ComponentCollision::HitInfo info{};
 
@@ -806,7 +879,8 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionCapsule
     if( col1->attach_node_ >= 0 )
     {
         cpos  = trans.translate();
-        cpos1 = normalize( (float3&)trans.axisVectorY() ) * col1->GetHeight() + cpos;
+        cpos1 = normalize( (float3&)trans.axisVectorY() ) * col1->GetHeight() +
+                cpos;
 
         opos  = cpos;
         opos1 = cpos1;
@@ -814,10 +888,14 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionCapsule
     else
     {
         // オブジェクト位置に対するコリジョン(1フレーム前)
-        opos = mul( float4( col1->GetTranslate(), 1 ), col1->GetOwner()->GetOldWorldMatrix() ).xyz;
+        opos = mul( float4( col1->GetTranslate(), 1 ),
+                    col1->GetOwner()->GetOldWorldMatrix() )
+                   .xyz;
 
         // オブジェクト位置に対するコリジョン
-        cpos = mul( float4( col1->GetTranslate(), 1 ), col1->GetOwner()->GetMatrix() ).xyz;
+        cpos = mul( float4( col1->GetTranslate(), 1 ),
+                    col1->GetOwner()->GetMatrix() )
+                   .xyz;
 
         // 実際の移動できる量にする
         auto  move  = cpos - opos;
@@ -831,17 +909,21 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionCapsule
             cpos   = opos + move;
 
             // 当たりからキャラの位置を求める
-            auto rot                      = col1->GetOwner()->GetMatrix();
-            rot._41_42_43                 = float3{ 0.0f, 0.0f, 0.0f };
-            auto col1r                    = mul( float4( col1->GetTranslate(), 1 ), rot ).xyz;
+            auto rot      = col1->GetOwner()->GetMatrix();
+            rot._41_42_43 = float3{ 0.0f, 0.0f, 0.0f };
+            auto col1r    = mul( float4( col1->GetTranslate(), 1 ), rot ).xyz;
             col1->GetOwner()->Translate() = cpos - col1r;
         }
 
         // その頭の位置
-        opos1 = mul( float4( col1->GetTranslate() + float3( 0, col1->GetHeight(), 0 ), 1 ),
+        opos1 = mul( float4( col1->GetTranslate() +
+                                 float3( 0, col1->GetHeight(), 0 ),
+                             1 ),
                      col1->GetOwner()->GetOldWorldMatrix() )
                     .xyz;
-        cpos1 = mul( float4( col1->GetTranslate() + float3( 0, col1->GetHeight(), 0 ), 1 ),
+        cpos1 = mul( float4( col1->GetTranslate() +
+                                 float3( 0, col1->GetHeight(), 0 ),
+                             1 ),
                      col1->GetOwner()->GetMatrix() )
                     .xyz;
     }
@@ -859,9 +941,11 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionCapsule
     float radius = col1->GetRadius() * scale;
 
     MV1_COLL_RESULT_POLY hit_poly{};
-    float3               bottom = cpos;  //-float3{ 0, col1->GetRadius() * scale, 0 };
-    float3               top    = cpos1; //bottom + float3{ 0, col1->GetRadius() * scale * 2, 0 };
-    hit_poly                    = MV1CollCheck_Line( mdl->GetModel(), -1, cast( top ), cast( bottom ) );
+    float3 bottom = cpos;  //-float3{ 0, col1->GetRadius() * scale, 0 };
+    float3 top =
+        cpos1;  //bottom + float3{ 0, col1->GetRadius() * scale * 2, 0 };
+    hit_poly =
+        MV1CollCheck_Line( mdl->GetModel(), -1, cast( top ), cast( bottom ) );
 
     if( hit_poly.HitFlag != 0 )
     {
@@ -942,7 +1026,11 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionCapsule
 
         //DrawCapsule3D( cast( oc ), cast( cc ), radius, 10, GetColor( 0, 0, 255 ), GetColor( 0, 0, 255 ), FALSE );
 
-        hit_poly_dim = MV1CollCheck_Capsule( mdl->GetModel(), -1, cast( oc ), cast( cc ), radius );
+        hit_poly_dim = MV1CollCheck_Capsule( mdl->GetModel(),
+                                             -1,
+                                             cast( oc ),
+                                             cast( cc ),
+                                             radius );
         for( int i = 0; i < hit_poly_dim.HitNum; i++ )
         {
             SEGMENT_TRIANGLE_RESULT result{};
@@ -960,7 +1048,8 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionCapsule
             float3 tri_pos  = cast( result.Tri_MinDist_Pos );
 
             // カプセルへの戻し方向
-            if( HelperLib::Math::NearlyEqual( length( line_pos - tri_pos ), 0 ) )
+            if( HelperLib::Math::NearlyEqual( length( line_pos - tri_pos ),
+                                              0 ) )
             {
                 float3 v = ( tri_pos - cpos );
                 vh       = merge( vh, v );
@@ -999,7 +1088,11 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionCapsule
 
         //DrawCapsule3D( cast( topx ), cast( bottomx ), radius, 10, GetColor( 0, 0, 255 ), GetColor( 0, 0, 255 ), FALSE );
 
-        hit_poly_dim = MV1CollCheck_Capsule( mdl->GetModel(), -1, cast( topx ), cast( bottomx ), radius );
+        hit_poly_dim = MV1CollCheck_Capsule( mdl->GetModel(),
+                                             -1,
+                                             cast( topx ),
+                                             cast( bottomx ),
+                                             radius );
         for( int i = 0; i < hit_poly_dim.HitNum; i++ )
         {
             SEGMENT_TRIANGLE_RESULT result{};
@@ -1017,7 +1110,8 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionCapsule
             float3 tri_pos  = cast( result.Tri_MinDist_Pos );
 
             // カプセルへの戻し方向
-            if( HelperLib::Math::NearlyEqual( length( line_pos - tri_pos ), 0 ) )
+            if( HelperLib::Math::NearlyEqual( length( line_pos - tri_pos ),
+                                              0 ) )
             {
                 float3 v = ( tri_pos - cpos );
                 vh       = merge( vh, v );
@@ -1043,8 +1137,9 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionCapsule
 }
 
 // Line(col1)とSphere(col2)の当たりをチェックします
-ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionLinePtr   col1,
-                                                       ComponentCollisionSpherePtr col2 )
+ComponentCollision::HitInfo
+    ComponentCollision::isHit( ComponentCollisionLinePtr   col1,
+                               ComponentCollisionSpherePtr col2 )
 {
     // 当たり情報
     ComponentCollision::HitInfo info{};
@@ -1086,7 +1181,8 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionLinePtr
     {
         auto vec           = normalize( line[0] - line[1] );
         info.hit_          = true;
-        info.hit_position_ = point + vec * acos( len / radius ) / 0.5f * DX_PI_F;
+        info.hit_position_ = point +
+                             vec * acos( len / radius ) / 0.5f * DX_PI_F;
     }
 
     // 判定結果を返す
@@ -1094,8 +1190,9 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionLinePtr
 }
 
 // Line(col1)とCapsule(col2)の当たりをチェックします
-ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionLinePtr    col1,
-                                                       ComponentCollisionCapsulePtr col2 )
+ComponentCollision::HitInfo
+    ComponentCollision::isHit( ComponentCollisionLinePtr    col1,
+                               ComponentCollisionCapsulePtr col2 )
 {
     ComponentCollision::HitInfo info{};
 
@@ -1143,7 +1240,8 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionLinePtr
         // 当たったら情報を入れておく
         auto vec           = normalize( line[0] - line[1] );
         info.hit_          = true;
-        info.hit_position_ = point + vec * acos( len / radius ) / 0.5f * DX_PI_F;
+        info.hit_position_ = point +
+                             vec * acos( len / radius ) / 0.5f * DX_PI_F;
     }
 
     // 判定結果を返す
@@ -1151,7 +1249,9 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionLinePtr
 }
 
 // ライン(col1)とモデル(col2)での当たりを判定する
-ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionLinePtr col1, ComponentCollisionModelPtr col2 )
+ComponentCollision::HitInfo
+    ComponentCollision::isHit( ComponentCollisionLinePtr  col1,
+                               ComponentCollisionModelPtr col2 )
 {
     ComponentCollision::HitInfo info{};
 
@@ -1172,11 +1272,16 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionLinePtr
     MV1_COLL_RESULT_POLY hit_poly{};
 
     // MV1とラインのチェック関数を呼び出す
-    hit_poly = MV1CollCheck_Line( model->GetModel(), -1, cast( line[0] ), cast( line[1] ) );
+    hit_poly = MV1CollCheck_Line( model->GetModel(),
+                                  -1,
+                                  cast( line[0] ),
+                                  cast( line[1] ) );
 
     // 当たったかどうかのフラグを設定し、当たった位置も入れておく
     info.hit_          = hit_poly.HitFlag;
-    info.hit_position_ = float3( hit_poly.HitPosition.x, hit_poly.HitPosition.y, hit_poly.HitPosition.z );
+    info.hit_position_ = float3( hit_poly.HitPosition.x,
+                                 hit_poly.HitPosition.y,
+                                 hit_poly.HitPosition.z );
 
     return info;
 }
@@ -1185,10 +1290,11 @@ ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionLinePtr
 //! @param col1 Capsuleコリジョン
 //! @param col2 Model コリジョン
 //! @return 当たり情報
-ComponentCollision::HitInfo ComponentCollision::isHit( ComponentCollisionModelPtr   col1,
-                                                       ComponentCollisionCapsulePtr col2 )
+ComponentCollision::HitInfo
+    ComponentCollision::isHit( ComponentCollisionModelPtr   col1,
+                               ComponentCollisionCapsulePtr col2 )
 {
     auto hit  = isHit( col2, col1 );
-    hit.push_ = -hit.push_; // push方向を反対にする
+    hit.push_ = -hit.push_;  // push方向を反対にする
     return hit;
 }

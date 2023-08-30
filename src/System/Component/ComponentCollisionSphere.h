@@ -25,7 +25,7 @@ public:
     virtual void Draw() override;
     virtual void Exit() override;
 
-    virtual void GUI() override; //!< GUI
+    virtual void GUI() override;  //!< GUI
 
     //! @brief 半径の設定
     //! @param radius 半径
@@ -49,7 +49,8 @@ public:
 
     virtual ComponentCollisionSpherePtr SharedThis() override
     {
-        return std::dynamic_pointer_cast<ComponentCollisionSphere>( shared_from_this() );
+        return std::dynamic_pointer_cast<ComponentCollisionSphere>(
+            shared_from_this() );
     }
 
     //! @brief ワールドMatrixの取得
@@ -58,41 +59,48 @@ public:
 
     //! @brief 1フレーム前のワールドMatrixの取得
     //! @return 他のコンポーネントも含めた位置
-    virtual const matrix GetOldWorldMatrix() const override { return old_transform_; }
+    virtual const matrix GetOldWorldMatrix() const override
+    {
+        return old_transform_;
+    }
 
     //@}
-#if 1 // CompoentCollisionからの移行
+#if 1  // CompoentCollisionからの移行
 
     inline ComponentCollisionSpherePtr SetName( std::string_view name )
     {
         name_ = name;
-        return std::dynamic_pointer_cast<ComponentCollisionSphere>( shared_from_this() );
+        return std::dynamic_pointer_cast<ComponentCollisionSphere>(
+            shared_from_this() );
     }
 
     inline ComponentCollisionSpherePtr SetHitCollisionGroup( u32 hit_group )
     {
         collision_hit_ = hit_group;
-        return std::dynamic_pointer_cast<ComponentCollisionSphere>( shared_from_this() );
+        return std::dynamic_pointer_cast<ComponentCollisionSphere>(
+            shared_from_this() );
     }
 
     inline ComponentCollisionSpherePtr SetCollisionGroup( CollisionGroup grp )
     {
         collision_group_ = grp;
-        return std::dynamic_pointer_cast<ComponentCollisionSphere>( shared_from_this() );
+        return std::dynamic_pointer_cast<ComponentCollisionSphere>(
+            shared_from_this() );
     }
 
     inline ComponentCollisionSpherePtr SetMass( float mass )
     {
         collision_mass_ = mass;
-        return std::dynamic_pointer_cast<ComponentCollisionSphere>( shared_from_this() );
+        return std::dynamic_pointer_cast<ComponentCollisionSphere>(
+            shared_from_this() );
     }
 #endif
 
 protected:
 #ifdef USE_JOLT_PHYSICS
     bool set_size_ = false;
-#endif                    //USE_JOLT_PHYSICS
-    float radius_ = 1.0f; //!< 半径
+#endif                     //USE_JOLT_PHYSICS
+    float radius_ = 1.0f;  //!< 半径
 
 private:
     //--------------------------------------------------------------------
@@ -103,11 +111,14 @@ private:
     {
         arc( cereal::make_nvp( "owner", owner_ ) );
         arc( cereal::make_nvp( "radius", radius_ ) );
-        arc( cereal::make_nvp( "ComponentCollision", cereal::base_class<ComponentCollision>( this ) ) );
+        arc( cereal::make_nvp( "ComponentCollision",
+                               cereal::base_class<ComponentCollision>(
+                                   this ) ) );
     }
 
     //@}
 };
 
 CEREAL_REGISTER_TYPE( ComponentCollisionSphere )
-CEREAL_REGISTER_POLYMORPHIC_RELATION( ComponentCollision, ComponentCollisionSphere )
+CEREAL_REGISTER_POLYMORPHIC_RELATION( ComponentCollision,
+                                      ComponentCollisionSphere )

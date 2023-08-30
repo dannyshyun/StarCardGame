@@ -15,13 +15,14 @@ public:
 
     ComponentCamera() {}
 
-    virtual void Init() override;       //!< カメラ初期化
-    virtual void PreUpdate() override;  //!< カメラ更新
-    virtual void Update() override;     //!< カメラ更新
-    virtual void PostUpdate() override; //!< カメラ更新
-    virtual void Draw() override; //!< 標準カメラや別のカメラから見た時のカメラモデルを表示する
-    virtual void Exit() override; //!< カメラ終了処理
-    virtual void GUI() override;  //!< カメラGUI処理
+    virtual void Init() override;        //!< カメラ初期化
+    virtual void PreUpdate() override;   //!< カメラ更新
+    virtual void Update() override;      //!< カメラ更新
+    virtual void PostUpdate() override;  //!< カメラ更新
+    virtual void Draw()
+        override;  //!< 標準カメラや別のカメラから見た時のカメラモデルを表示する
+    virtual void Exit() override;  //!< カメラ終了処理
+    virtual void GUI() override;   //!< カメラGUI処理
 
     //! @brief カメラの位置設定
     void SetCameraTransform();
@@ -38,7 +39,8 @@ public:
     //! @brief 画角設定
     //! @param fov          画角(角度0~360[通常45~90くらい])
     //! @param aspect_ratio アスペクト比
-    std::shared_ptr<ComponentCamera> SetPerspective( float fov, float aspect_ratio = 16.0f / 9.0f )
+    std::shared_ptr<ComponentCamera>
+        SetPerspective( float fov, float aspect_ratio = 16.0f / 9.0f )
     {
         fovy_         = fov;
         aspect_ratio_ = aspect_ratio;
@@ -49,8 +51,8 @@ public:
     //! @param position カメラポジション
     //! @param look_at  注視点ターゲット
     //! @param up       上ベクトル
-    std::shared_ptr<ComponentCamera>
-        SetPositionAndTarget( float3 position, float3 look_at, float3 up = { 0.0f, 1.0f, 0.0f } )
+    std::shared_ptr<ComponentCamera> SetPositionAndTarget(
+        float3 position, float3 look_at, float3 up = { 0.0f, 1.0f, 0.0f } )
     {
         position_ = position;
         look_at_  = look_at;
@@ -121,34 +123,37 @@ public:
     //---------------------------------------------------------------------------
     enum struct CameraBit : u32
     {
-        Initialized,        //!< 初期化済み
-        EnableTimeLine,     //!< TimelineComponentを利用して移動する
-        ChangeReq,          //!< カレントカメラ変更リクエスト
-        Current,            //!< 現状のカレントのカメラ
-        UpdateOnPreUpdate,  //!< PreUpdate時に更新する
-        UpdateOnUpdate,     //!< Update時に更新する
-        UpdateOnPostUpdate, //!< PostUpdate時に更新する
-        ShowFrustum,        //!< Frustumを描画する
-        DebugCamera,        //!< 自分がデバッグカメラ
+        Initialized,         //!< 初期化済み
+        EnableTimeLine,      //!< TimelineComponentを利用して移動する
+        ChangeReq,           //!< カレントカメラ変更リクエスト
+        Current,             //!< 現状のカレントのカメラ
+        UpdateOnPreUpdate,   //!< PreUpdate時に更新する
+        UpdateOnUpdate,      //!< Update時に更新する
+        UpdateOnPostUpdate,  //!< PostUpdate時に更新する
+        ShowFrustum,         //!< Frustumを描画する
+        DebugCamera,         //!< 自分がデバッグカメラ
     };
 
-    void SetCameraStatus( CameraBit bit, bool on ) { camera_status_.set( bit, on ); }
+    void SetCameraStatus( CameraBit bit, bool on )
+    {
+        camera_status_.set( bit, on );
+    }
     bool GetCameraStatus( CameraBit bit ) { return camera_status_.is( bit ); }
 
 private:
-    Status<CameraBit> camera_status_; //!< 状態
+    Status<CameraBit> camera_status_;  //!< 状態
 
-    float3 position_ = { 0, 5, -10 }; //!< カメラ座標
-    float3 look_at_  = { 0, 0, 0 };   //!< 注視点
-    float3 up_       = { 0, 1, 0 };   //!< 上ベクトル
+    float3 position_ = { 0, 5, -10 };  //!< カメラ座標
+    float3 look_at_  = { 0, 0, 0 };    //!< 注視点
+    float3 up_       = { 0, 1, 0 };    //!< 上ベクトル
 
-    float aspect_ratio_ = 16.0f / 9.0f; //!< アスペクト比
-    float fovy_         = 45.0f;        //!< FieldOfView
-    float near_z_       = 0.01f;        //!< Near
-    float far_z_        = 10000.0f;     //!< Far
+    float aspect_ratio_ = 16.0f / 9.0f;  //!< アスペクト比
+    float fovy_         = 45.0f;         //!< FieldOfView
+    float near_z_       = 0.01f;         //!< Near
+    float far_z_        = 10000.0f;      //!< Far
 
-    matrix mat_view_; //!< ビュー行列。Updateで計算、Draw手前で使用している
-    matrix mat_proj_; //!< 投影行列。Updateで計算、Draw手前で使用している
+    matrix mat_view_;  //!< ビュー行列。Updateで計算、Draw手前で使用している
+    matrix mat_proj_;  //!< 投影行列。Updateで計算、Draw手前で使用している
 
     Frustum frustum_{};
 
@@ -161,12 +166,12 @@ private:
 
     struct CameraInfo
     {
-        matrix mat_view_;     //!< ビュー行列
-        matrix mat_proj_;     //!< 投影行列
-        float3 eye_position_; //!< カメラの位置
+        matrix mat_view_;      //!< ビュー行列
+        matrix mat_proj_;      //!< 投影行列
+        float3 eye_position_;  //!< カメラの位置
     };
 
-    int cb_camera_info_ = -1; //!< [DxLib] カメラ情報定数バッファハンドル
+    int cb_camera_info_ = -1;  //!< [DxLib] カメラ情報定数バッファハンドル
 
     //@}
 
@@ -181,15 +186,17 @@ private:
     //! @param ver バージョン
     CEREAL_SAVELOAD( arc, ver )
     {
-        arc( CEREAL_NVP( owner_ ) );               //< オーナー
-        arc( CEREAL_NVP( camera_status_.get() ) ); //< カメラステート
-        arc( CEREAL_NVP( position_ ), CEREAL_NVP( look_at_ ),
-             CEREAL_NVP( up_ ) ); //< カメラ位置とターゲット
+        arc( CEREAL_NVP( owner_ ) );                //< オーナー
+        arc( CEREAL_NVP( camera_status_.get() ) );  //< カメラステート
+        arc( CEREAL_NVP( position_ ),
+             CEREAL_NVP( look_at_ ),
+             CEREAL_NVP( up_ ) );  //< カメラ位置とターゲット
         arc( CEREAL_NVP( aspect_ratio_ ),
-             CEREAL_NVP( fovy_ ) );                         //< アスペクト比と画角
-        arc( CEREAL_NVP( near_z_ ), CEREAL_NVP( far_z_ ) ); //< Near/Far
+             CEREAL_NVP( fovy_ ) );  //< アスペクト比と画角
+        arc( CEREAL_NVP( near_z_ ), CEREAL_NVP( far_z_ ) );  //< Near/Far
         arc( CEREAL_NVP( current_camera_ ) );
-        arc( cereal::make_nvp( "Component", cereal::base_class<Component>( this ) ) );
+        arc( cereal::make_nvp( "Component",
+                               cereal::base_class<Component>( this ) ) );
 
         Init();
     }

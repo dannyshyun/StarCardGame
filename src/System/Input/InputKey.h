@@ -68,6 +68,6 @@ namespace Input
     bool IsKeyUp( int keyID );
 
     //@}
-} // namespace Input
+}  // namespace Input
 
 using namespace Input;

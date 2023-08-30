@@ -26,7 +26,7 @@ public:
     virtual void Draw() override;
     virtual void Exit() override;
 
-    virtual void GUI() override; //!< GUI
+    virtual void GUI() override;  //!< GUI
 
     //! @brief 半径の設定
     //! @param radius 半径
@@ -59,7 +59,8 @@ public:
 
     virtual ComponentCollisionCapsulePtr SharedThis() override
     {
-        return std::dynamic_pointer_cast<ComponentCollisionCapsule>( shared_from_this() );
+        return std::dynamic_pointer_cast<ComponentCollisionCapsule>(
+            shared_from_this() );
     }
 
     //! @brief ワールドMatrixの取得
@@ -68,7 +69,10 @@ public:
 
     //! @brief 1フレーム前のワールドMatrixの取得
     //! @return 他のコンポーネントも含めた位置
-    virtual const matrix GetOldWorldMatrix() const override { return old_transform_; }
+    virtual const matrix GetOldWorldMatrix() const override
+    {
+        return old_transform_;
+    }
 
     //@}
 
@@ -76,57 +80,68 @@ public:
 
     float gravity() { return gravity_.y; }
 
-#if 1 // CompoentCollisionからの移行
+#if 1  // CompoentCollisionからの移行
 
     inline ComponentCollisionCapsulePtr SetName( std::string_view name )
     {
         name_ = name;
-        return std::dynamic_pointer_cast<ComponentCollisionCapsule>( shared_from_this() );
+        return std::dynamic_pointer_cast<ComponentCollisionCapsule>(
+            shared_from_this() );
     }
 
     inline ComponentCollisionCapsulePtr SetHitCollisionGroup( u32 hit_group )
     {
         collision_hit_ = hit_group;
-        return std::dynamic_pointer_cast<ComponentCollisionCapsule>( shared_from_this() );
+        return std::dynamic_pointer_cast<ComponentCollisionCapsule>(
+            shared_from_this() );
     }
 
     inline ComponentCollisionCapsulePtr SetCollisionGroup( CollisionGroup grp )
     {
         collision_group_ = grp;
-        return std::dynamic_pointer_cast<ComponentCollisionCapsule>( shared_from_this() );
+        return std::dynamic_pointer_cast<ComponentCollisionCapsule>(
+            shared_from_this() );
     }
 
     inline ComponentCollisionCapsulePtr SetMass( float mass )
     {
         collision_mass_ = mass;
-        return std::dynamic_pointer_cast<ComponentCollisionCapsule>( shared_from_this() );
+        return std::dynamic_pointer_cast<ComponentCollisionCapsule>(
+            shared_from_this() );
     }
 #endif
 
 private:
-    float radius_ = 1.0f; //!< 半径
-    float height_ = 3.0f; //!< 高さ
+    float radius_ = 1.0f;  //!< 半径
+    float height_ = 3.0f;  //!< 高さ
 #ifdef USE_JOLT_PHYSICS
     bool set_size_ = false;
 
-    std::shared_ptr<physics::Character> character_{}; //!< キャラクターコントローラー
+    std::shared_ptr<physics::Character>
+        character_{};  //!< キャラクターコントローラー
 
     class CapsuleListener : public physics::Character::ContactListener
     {
-        void onContactAdded( [[maybe_unused]] const physics::Character*            character,
-                             [[maybe_unused]] u64                                  other_body_id,
-                             [[maybe_unused]] const float3&                        contact_position,
-                             [[maybe_unused]] const float3&                        contact_normal,
-                             [[maybe_unused]] physics::Character::ContactSettings& result ) override
+        void onContactAdded(
+            [[maybe_unused]] const physics::Character* character,
+            [[maybe_unused]] u64                       other_body_id,
+            [[maybe_unused]] const float3&             contact_position,
+            [[maybe_unused]] const float3&             contact_normal,
+            [[maybe_unused]] physics::Character::ContactSettings& result )
+            override
         {
             // ノーマルの方向にて現在の重力加速を抑える
             float d = dot( -contact_normal, { 0, 1, 0 } );
             if( GetComponent() )
-                GetComponent()->setGravity( GetComponent()->gravity() * ( 1 - d ) );
+                GetComponent()->setGravity( GetComponent()->gravity() *
+                                            ( 1 - d ) );
         }
 
     public:
-        void SetComponent( ComponentCollisionCapsulePtr comp ) { component_ = comp; }
+        void SetComponent( ComponentCollisionCapsulePtr comp )
+        {
+            component_ = comp;
+        }
 
         ComponentCollisionCapsulePtr GetComponent() { return component_; }
 
@@ -137,7 +152,7 @@ private:
     CapsuleListener listener_;
     // 重力加速度
     float3 gravity_ = 0.0f;
-#endif //USE_JOLT_PHYSICS
+#endif  //USE_JOLT_PHYSICS
     //--------------------------------------------------------------------
     //! @name Cereal処理
     //--------------------------------------------------------------------
@@ -147,11 +162,14 @@ private:
         arc( cereal::make_nvp( "owner", owner_ ) );
         arc( cereal::make_nvp( "radius", radius_ ) );
         arc( cereal::make_nvp( "height", height_ ) );
-        arc( cereal::make_nvp( "ComponentCollision", cereal::base_class<ComponentCollision>( this ) ) );
+        arc( cereal::make_nvp( "ComponentCollision",
+                               cereal::base_class<ComponentCollision>(
+                                   this ) ) );
     }
 
     //@}
 };
 
 CEREAL_REGISTER_TYPE( ComponentCollisionCapsule )
-CEREAL_REGISTER_POLYMORPHIC_RELATION( ComponentCollision, ComponentCollisionCapsule )
+CEREAL_REGISTER_POLYMORPHIC_RELATION( ComponentCollision,
+                                      ComponentCollisionCapsule )

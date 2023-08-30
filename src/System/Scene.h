@@ -33,9 +33,9 @@ public:
     //---------------------------------------------------------------------------
     enum struct StatusBit : u64
     {
-        Initialized,         //!< 初期化済み
-        Serialized,          //!< シリアライズ済み.
-        AliveInAnotherScene, //!< 別シーン移行でも終了しない
+        Initialized,          //!< 初期化済み
+        Serialized,           //!< シリアライズ済み.
+        AliveInAnotherScene,  //!< 別シーン移行でも終了しない
     };
 
     //---------------------------------------------------------------------------
@@ -56,27 +56,30 @@ public:
         Base();
         virtual ~Base();
 
-        const std::string_view GetName() const { return typeInfo()->className(); }
+        const std::string_view GetName() const
+        {
+            return typeInfo()->className();
+        }
 
         //----------------------------------------------------------------------
         //! @name ユーザー処理
         //----------------------------------------------------------------------
         //@{
 
-        virtual bool Init() { return true; }; //!< 初期化
-        virtual void Update(){};              //!< 更新
-        virtual void Draw(){};                //!< 描画
-        virtual void Exit(){};                //!< 終了
-        virtual void GUI(){};                 //!< GUI表示
+        virtual bool Init() { return true; };  //!< 初期化
+        virtual void Update(){};               //!< 更新
+        virtual void Draw(){};                 //!< 描画
+        virtual void Exit(){};                 //!< 終了
+        virtual void GUI(){};                  //!< GUI表示
 
-        virtual void PreUpdate(){};  //!< 更新前処理
-        virtual void LateUpdate(){}; //!< 通常更新の後更新処理
-        virtual void PrePhysics(){}; //!< 物理前(アクション後)処理
-        virtual void PostUpdate(){}; //!< 更新後(物理後)処理
+        virtual void PreUpdate(){};   //!< 更新前処理
+        virtual void LateUpdate(){};  //!< 通常更新の後更新処理
+        virtual void PrePhysics(){};  //!< 物理前(アクション後)処理
+        virtual void PostUpdate(){};  //!< 更新後(物理後)処理
 
-        virtual void PreDraw(){};  //!< 描画前処理
-        virtual void LateDraw(){}; //!< 遅い描画の処理
-        virtual void PostDraw(){}; //!< 描画後の処理
+        virtual void PreDraw(){};   //!< 描画前処理
+        virtual void LateDraw(){};  //!< 遅い描画の処理
+        virtual void PostDraw(){};  //!< 描画後の処理
 
         virtual void InitSerialize(){};
 
@@ -91,11 +94,16 @@ public:
         //! @param obj オブジェクト
         //! @param update 更新プライオリティ
         //! @param draw 描画プライオリティ
-        void PreRegister( ObjectPtr obj, Priority update = Priority::NORMAL, Priority draw = Priority::NORMAL );
+        void PreRegister( ObjectPtr obj,
+                          Priority  update = Priority::NORMAL,
+                          Priority  draw   = Priority::NORMAL );
 
-        template<class T> void PreRegister( T* obj, Priority update, Priority draw );
+        template<class T>
+        void PreRegister( T* obj, Priority update, Priority draw );
 
-        void Register( ObjectPtr obj, Priority update = Priority::NORMAL, Priority draw = Priority::NORMAL );
+        void Register( ObjectPtr obj,
+                       Priority  update = Priority::NORMAL,
+                       Priority  draw   = Priority::NORMAL );
         void RegisterForLoad( ObjectPtr obj );
         void Unregister( ObjectPtr obj );
         void UnregisterAll();
@@ -110,7 +118,9 @@ public:
         void SetPriority( ObjectPtr obj, ProcTiming timing, Priority priority );
 
         //! 優先を設定変更します
-        void SetPriority( ComponentPtr commponent, ProcTiming timing, Priority priority );
+        void SetPriority( ComponentPtr commponent,
+                          ProcTiming   timing,
+                          Priority     priority );
 
         //@}
         //----------------------------------------------------------------------
@@ -142,13 +152,15 @@ public:
 
         //! 存在するオブジェクトの取得
         //! @tparam [in] class T 取得するオブジェクトタイプ
-        template<class T> std::shared_ptr<T> GetObjectPtr( std::string_view name = "" );
+        template<class T>
+        std::shared_ptr<T> GetObjectPtr( std::string_view name = "" );
 
         //! 存在する複数オブジェクトの取得
         //! @tparam [in] class T 取得するオブジェクトタイプ
         template<class T> std::vector<std::shared_ptr<T>> GetObjectsPtr();
 
-        template<class T> std::shared_ptr<T> GetObjectPtrWithCreate( std::string_view name = "" );
+        template<class T>
+        std::shared_ptr<T> GetObjectPtrWithCreate( std::string_view name = "" );
 
         //! 複数オブジェクト配列の取得
         const ObjectPtrVec GetObjectPtrVec() { return objects_; }
@@ -160,19 +172,28 @@ public:
         //@{
         enum struct StatusBit : u64
         {
-            Initialized,         //!< 初期化済み
-            Serialized,          //!< シリアライズ済み.
-            AliveInAnotherScene, //!< 別シーン移行でも終了しない
+            Initialized,          //!< 初期化済み
+            Serialized,           //!< シリアライズ済み.
+            AliveInAnotherScene,  //!< 別シーン移行でも終了しない
         };
 
-        void SetStatus( StatusBit b, bool on ) { on ? status_.on( b ) : status_.off( b ); }
+        void SetStatus( StatusBit b, bool on )
+        {
+            on ? status_.on( b ) : status_.off( b );
+        }
         bool GetStatus( StatusBit b ) { return status_.is( b ); }
 
         //! 別のシーンで生存するように設定する
-        void AliveInAnotherScene( bool alive = true ) { SetStatus( StatusBit::AliveInAnotherScene, alive ); }
+        void AliveInAnotherScene( bool alive = true )
+        {
+            SetStatus( StatusBit::AliveInAnotherScene, alive );
+        }
 
         //! 別のシーンで生存するように設定されているか?
-        bool IsAliveInAnotherScene() { return GetStatus( StatusBit::AliveInAnotherScene ); }
+        bool IsAliveInAnotherScene()
+        {
+            return GetStatus( StatusBit::AliveInAnotherScene );
+        }
 
         //@}
         //----------------------------------------------------------------------
@@ -180,20 +201,35 @@ public:
         //----------------------------------------------------------------------
         //@{
 
-        SignalsDefault& GetSignals( ProcTiming timing ) { return signals_[static_cast<int>( timing )]; }
+        SignalsDefault& GetSignals( ProcTiming timing )
+        {
+            return signals_[static_cast<int>( timing )];
+        }
 
         //@}
         //--------------------------------------------------------------------
         //! @name ユーザーシグナル
         //--------------------------------------------------------------------
         //! Shadowタイミングシグナル取得
-        SignalsDefault& GetSignalsShadow() { return signals_[static_cast<int>( ProcTiming::Shadow )]; }
+        SignalsDefault& GetSignalsShadow()
+        {
+            return signals_[static_cast<int>( ProcTiming::Shadow )];
+        }
         //! Gbufferタイミングシグナル取得
-        SignalsDefault& GetSignalsGbuffer() { return signals_[static_cast<int>( ProcTiming::Gbuffer )]; }
+        SignalsDefault& GetSignalsGbuffer()
+        {
+            return signals_[static_cast<int>( ProcTiming::Gbuffer )];
+        }
         //! Lightタイミングシグナル取得
-        SignalsDefault& GetSignalsLight() { return signals_[static_cast<int>( ProcTiming::Light )]; }
+        SignalsDefault& GetSignalsLight()
+        {
+            return signals_[static_cast<int>( ProcTiming::Light )];
+        }
         //! Lightタイミングシグナル取得
-        SignalsDefault& GetSignalsHDR() { return signals_[static_cast<int>( ProcTiming::HDR )]; }
+        SignalsDefault& GetSignalsHDR()
+        {
+            return signals_[static_cast<int>( ProcTiming::HDR )];
+        }
 
         //----------------------------------------------------------------------
         //! @name Cereal セーブロード
@@ -218,12 +254,13 @@ public:
         //! @brief コンポーネントの指定処理を削除する
         void resetProc( ComponentPtr component, SlotProc& slot );
 
-        ObjectPtrVec      pre_objects_; //!< シーンに存在させるオブジェクト(仮登録)
-        ObjectPtrVec      objects_;     //!< シーンに存在するオブジェクト
-        Status<StatusBit> status_;      //!< 状態
+        ObjectPtrVec pre_objects_;  //!< シーンに存在させるオブジェクト(仮登録)
+        ObjectPtrVec objects_;  //!< シーンに存在するオブジェクト
+        Status<StatusBit> status_;  //!< 状態
 
         // プロセスタイミングによるシグナル (実行処理)
-        std::array<SignalsDefault, static_cast<int>( ProcTiming::NUM )> signals_;
+        std::array<SignalsDefault, static_cast<int>( ProcTiming::NUM )>
+            signals_;
     };
 
     //----------------------------------------------------------------
@@ -256,7 +293,10 @@ public:
     //! @param [in] name シーン名
     template<class T> static void ReleaseScene() { Base::ReleaseScene<T>(); }
 
-    static void ReleaseScene( const ::Scene::BasePtr& scene ) { ::Scene::Base::ReleaseScene( scene ); }
+    static void ReleaseScene( const ::Scene::BasePtr& scene )
+    {
+        ::Scene::Base::ReleaseScene( scene );
+    }
 
     //! シーン切り替え
     //! @param scene 次に再生するシーン
@@ -280,11 +320,14 @@ public:
     //----------------------------------------------------------------
     //@{
     template<class T>
-    static std::shared_ptr<T> [[deprecated( "命名変更 "
-                                            "CreateObjectPtr()"
-                                            "を使用してください" )]] CreateObject( bool     no_transform = false,
-                                                                                   Priority update = Priority::NORMAL,
-                                                                                   Priority draw   = Priority::NORMAL )
+    static std::shared_ptr<T> [[deprecated(
+        "命名変更 "
+        "CreateObjectPtr()"
+        "を使用してください" )]] CreateObject( bool     no_transform = false,
+                                               Priority update =
+                                                   Priority::NORMAL,
+                                               Priority draw =
+                                                   Priority::NORMAL )
     {
         return CreateObjectPtr<T>( no_transform, update, draw );
     }
@@ -295,9 +338,10 @@ public:
     //! @param update 処理優先
     //! @param draw 描画優先
     template<class T>
-    static std::shared_ptr<T> CreateObjectPtr( bool     no_transform = false,
-                                               Priority update       = Priority::NORMAL,
-                                               Priority draw         = Priority::NORMAL )
+    static std::shared_ptr<T>
+        CreateObjectPtr( bool     no_transform = false,
+                         Priority update       = Priority::NORMAL,
+                         Priority draw         = Priority::NORMAL )
     {
         if( current_scene_ )
         {
@@ -327,9 +371,10 @@ public:
     //! @param update 処理優先
     //! @param draw 描画優先
     template<class T>
-    static std::shared_ptr<T> CreateObjectDelayInitialize( bool     no_transform = false,
-                                                           Priority update       = Priority::NORMAL,
-                                                           Priority draw         = Priority::NORMAL )
+    static std::shared_ptr<T>
+        CreateObjectDelayInitialize( bool     no_transform = false,
+                                     Priority update       = Priority::NORMAL,
+                                     Priority draw         = Priority::NORMAL )
     {
         if( current_scene_ )
         {
@@ -427,7 +472,8 @@ public:
     //! @tparam T 取得したいオブジェクトタイプ
     //! @param name 取得したいオブジェクトの名前
     //! @return オブジェクト
-    template<class T> static std::shared_ptr<T> GetObjectPtr( std::string_view name = "" )
+    template<class T>
+    static std::shared_ptr<T> GetObjectPtr( std::string_view name = "" )
     {
         //! @todo nullptrの時、存在しないので、ここでLOGでエラーを出しておく
         return current_scene_->GetObjectPtr<T>( name );
@@ -442,7 +488,9 @@ public:
         return current_scene_->GetObjectsPtr<T>();
     }
 
-    template<class T> static std::shared_ptr<T> GetObjectPtrWithCreate( std::string_view name = "" )
+    template<class T>
+    static std::shared_ptr<T>
+        GetObjectPtrWithCreate( std::string_view name = "" )
     {
         return current_scene_->GetObjectPtrWithCreate<T>( name );
     }
@@ -465,7 +513,10 @@ public:
     //@{
 
 public:
-    static SignalsDefault& GetSignals( ProcTiming timing ) { return current_scene_->GetSignals( timing ); }
+    static SignalsDefault& GetSignals( ProcTiming timing )
+    {
+        return current_scene_->GetSignals( timing );
+    }
 
     //@}
 
@@ -492,11 +543,17 @@ public:
 
     enum struct EditorStatusBit : u64
     {
-        EditorPlacement,        //!< エディタ配置
-        EditorPlacement_Always, //!< エディタ配置(常に引っ付く)
+        EditorPlacement,         //!< エディタ配置
+        EditorPlacement_Always,  //!< エディタ配置(常に引っ付く)
     };
-    static void                     SetEditorStatus( EditorStatusBit b, bool on ) { editor_status_.set( b, on ); }
-    static bool                     GetEditorStatus( EditorStatusBit b ) { return editor_status_.is( b ); }
+    static void SetEditorStatus( EditorStatusBit b, bool on )
+    {
+        editor_status_.set( b, on );
+    }
+    static bool GetEditorStatus( EditorStatusBit b )
+    {
+        return editor_status_.is( b );
+    }
     static Status<EditorStatusBit>& SceneStatus() { return editor_status_; }
 
     //----------------------------------------------------------------------
@@ -515,7 +572,7 @@ public:
     //@}
 
 private:
-    static Status<EditorStatusBit> editor_status_; //!< 状態
+    static Status<EditorStatusBit> editor_status_;  //!< 状態
     static float2                  inspector_size;
     static float2                  object_detail_size;
 
@@ -529,16 +586,17 @@ private:
 
     static void checkNextAlive();
 
-    static BasePtr current_scene_; //!< 現在のシーン
-    static BasePtr next_scene_;    //!< 変更シーン
+    static BasePtr current_scene_;  //!< 現在のシーン
+    static BasePtr next_scene_;     //!< 変更シーン
 
-    static BasePtrMap scenes_; //!< 存在する全シーン
+    static BasePtrMap scenes_;  //!< 存在する全シーン
 };
 
 //! @brief オブジェクト取得
 //! @tparam T 取得したいオブジェクトクラス
 //! @return 取得オブジェクト
-template<class T> std::shared_ptr<T> Scene::Base::GetObjectPtr( std::string_view name )
+template<class T>
+std::shared_ptr<T> Scene::Base::GetObjectPtr( std::string_view name )
 {
     if( name.empty() )
     {
@@ -615,12 +673,15 @@ template<class T> std::vector<std::shared_ptr<T>> Scene::Base::GetObjectsPtr()
     return objects;
 }
 
-template<class T> std::shared_ptr<T> Scene::Base::GetObjectPtrWithCreate( std::string_view name )
+template<class T>
+std::shared_ptr<T> Scene::Base::GetObjectPtrWithCreate( std::string_view name )
 {
-    std::shared_ptr<T> ptr = std::dynamic_pointer_cast<T>( Scene::GetCurrentScene()->GetObjectPtr<T>( name ) );
+    std::shared_ptr<T> ptr = std::dynamic_pointer_cast<T>(
+        Scene::GetCurrentScene()->GetObjectPtr<T>( name ) );
     if( ptr == nullptr )
     {
-        ptr = std::dynamic_pointer_cast<T>( Scene::CreateObjectPtr<T>()->SetName( std::string( name ) ) );
+        ptr = std::dynamic_pointer_cast<T>(
+            Scene::CreateObjectPtr<T>()->SetName( std::string( name ) ) );
     }
     return ptr;
 }
