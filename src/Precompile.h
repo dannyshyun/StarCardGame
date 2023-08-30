@@ -81,7 +81,6 @@ using namespace hlslpp;
 #include "System/Graphics/Shader.h"
 #include "System/Graphics/Texture.h"
 #include "System/Graphics/Model.h"
-#include "UI/Image.h"
 //--------------------------------------------------------------
 // 数学定数
 //--------------------------------------------------------------
@@ -114,6 +113,8 @@ inline f32 D2R( f32 degree )
 #define YELLOW   GetColor( 255, 255, 0 )
 #define PINK     GetColor( 255, 0, 255 )
 #define SKYBLUE  GetColor( 0, 255, 255 )
+
+
 
 #define toString std::to_string
 // std::stringをstd::wstringへ変換する

@@ -17,8 +17,7 @@ namespace shape
     //---------------------------------------------------------------------------
     //! コンストラクタ
     //---------------------------------------------------------------------------
-    ConvexHull::ConvexHull( Model* model ) :
-        shape::Base( shape::Type::ConvexHull )
+    ConvexHull::ConvexHull( Model* model ) : shape::Base( shape::Type::ConvexHull )
     {
         auto* resource_model = model->resource();
         auto* model_cache    = resource_model->modelCache();
@@ -34,8 +33,7 @@ namespace shape
         auto& varray = model_cache->vertices();
         for( auto& v: varray )
         {
-            vertices_.push_back(
-                cast( v ) );  // DxLib::VECTOR→float3にキャストしながらコピー
+            vertices_.push_back( cast( v ) ); // DxLib::VECTOR→float3にキャストしながらコピー
         }
     }
 
@@ -65,13 +63,11 @@ namespace shape
         auto& varray = model_cache->vertices();
         for( auto& v: varray )
         {
-            vertices_.push_back(
-                cast( v ) *
-                scale );  // DxLib::VECTOR→float3にキャストしながらコピー
+            vertices_.push_back( cast( v ) * scale ); // DxLib::VECTOR→float3にキャストしながらコピー
         }
 
         // インデックス配列
         indices_ = model_cache->indices();
     }
 
-}  // namespace shape
+} // namespace shape

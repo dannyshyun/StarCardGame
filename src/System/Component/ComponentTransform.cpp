@@ -17,10 +17,7 @@ Component* ComponentTransform::select_component_ = nullptr;
 //! @param mode モード
 //! @param id 個別ID
 //! @return 表示できたか
-bool ShowGizmo( float*              matrix,
-                ImGuizmo::OPERATION ope,
-                ImGuizmo::MODE      mode,
-                uint64_t            id )
+bool ShowGizmo( float* matrix, ImGuizmo::OPERATION ope, ImGuizmo::MODE mode, uint64_t id )
 {
     // Gizmoを表示するためのMatrixをDxLibから取得
     auto camera_view = GetCameraViewMatrix();
@@ -40,10 +37,7 @@ bool ShowGizmo( float*              matrix,
     float windowWidth  = (float)rect.right - rect.left;
     float windowHeight = (float)rect.bottom - rect.top;
     float windowBar    = windowHeight - crect.bottom;
-    ImGuizmo::SetRect( (float)rect.left,
-                       (float)rect.top + windowBar / 2,
-                       windowWidth,
-                       windowHeight - windowBar / 2 );
+    ImGuizmo::SetRect( (float)rect.left, (float)rect.top + windowBar / 2, windowWidth, windowHeight - windowBar / 2 );
 
     // Manipulateを表示する
     static bool  useSnap         = false;
@@ -53,7 +47,7 @@ bool ShowGizmo( float*              matrix,
     static bool  boundSizing     = false;
     static bool  boundSizingSnap = false;
     ImGuizmo::SetID( (int)id );
-    ImGuizmo::AllowAxisFlip( false );  //< これがないとGizmoが反転してしまう
+    ImGuizmo::AllowAxisFlip( false ); //< これがないとGizmoが反転してしまう
 
     return ImGuizmo::Manipulate( (const float*)&camera_view,
                                  (const float*)&camera_proj,
@@ -71,10 +65,7 @@ bool ShowGizmo( float*              matrix,
 //! @param translation 位置
 //! @param rotation 回転
 //! @param scale スケール
-void DecomposeMatrixToComponents( const float* matx,
-                                  float*       translation,
-                                  float*       rotation,
-                                  float*       scale )
+void DecomposeMatrixToComponents( const float* matx, float* translation, float* rotation, float* scale )
 {
     matrix mat = *(matrix*)matx;
 
@@ -103,19 +94,13 @@ void DecomposeMatrixToComponents( const float* matx,
 //! @param rotation 回転
 //! @param scale スケール
 //! @param matx マトリクス
-void RecomposeMatrixFromComponents( const float* translation,
-                                    const float* rotation,
-                                    const float* scale,
-                                    float*       matx )
+void RecomposeMatrixFromComponents( const float* translation, const float* rotation, const float* scale, float* matx )
 {
     constexpr float DEG2RAD = ( DX_PI_F / 180.0f );
     MATRIX          dxmat;
 
     // ZXYでマトリクスを作成 (DxLib命令を利用)
-    CreateRotationZXYMatrix( &dxmat,
-                             rotation[0] * DEG2RAD,
-                             rotation[1] * DEG2RAD,
-                             rotation[2] * DEG2RAD );
+    CreateRotationZXYMatrix( &dxmat, rotation[0] * DEG2RAD, rotation[1] * DEG2RAD, rotation[2] * DEG2RAD );
 
     matrix mat = cast( dxmat );
 
@@ -145,10 +130,7 @@ void ComponentTransform::GUI()
     if( is_guizmo_ )
     {
         // Gizmo表示
-        ShowGizmo( GetMatrixFloat(),
-                   gizmo_operation_,
-                   gizmo_mode_,
-                   reinterpret_cast<uint64_t>( this ) );
+        ShowGizmo( GetMatrixFloat(), gizmo_operation_, gizmo_mode_, reinterpret_cast<uint64_t>( this ) );
 
         // キーにより、Manipulateの処理を変更する
         // TODO : 一旦UE4に合わせておくが、のちにEditor.iniで設定できるようにする
@@ -171,30 +153,10 @@ void ComponentTransform::GUI()
         is_guizmo_ = false;
         if( ImGui::TreeNode( "Transform" ) )
         {
-            ImGui::DragFloat4( u8"Ｘ軸",
-                               VectorAxisXFloat(),
-                               0.01f,
-                               -10000.0f,
-                               10000.0f,
-                               "%.2f" );
-            ImGui::DragFloat4( u8"Ｙ軸",
-                               VectorAxisYFloat(),
-                               0.01f,
-                               -10000.0f,
-                               10000.0f,
-                               "%.2f" );
-            ImGui::DragFloat4( u8"Ｚ軸",
-                               VectorAxisZFloat(),
-                               0.01f,
-                               -10000.0f,
-                               10000.0f,
-                               "%.2f" );
-            ImGui::DragFloat4( u8"座標",
-                               TranslateFloat(),
-                               0.01f,
-                               -10000.0f,
-                               10000.0f,
-                               "%.2f" );
+            ImGui::DragFloat4( u8"Ｘ軸", VectorAxisXFloat(), 0.01f, -10000.0f, 10000.0f, "%.2f" );
+            ImGui::DragFloat4( u8"Ｙ軸", VectorAxisYFloat(), 0.01f, -10000.0f, 10000.0f, "%.2f" );
+            ImGui::DragFloat4( u8"Ｚ軸", VectorAxisZFloat(), 0.01f, -10000.0f, 10000.0f, "%.2f" );
+            ImGui::DragFloat4( u8"座標", TranslateFloat(), 0.01f, -10000.0f, 10000.0f, "%.2f" );
             ImGui::Separator();
             ImGui::TreePop();
         }
@@ -208,23 +170,19 @@ void ComponentTransform::GUI()
 
         // ギズモモードの選択
         // ギズモの座標
-        if( ImGui::RadioButton( u8"座標",
-                                gizmo_operation_ == ImGuizmo::TRANSLATE ) )
+        if( ImGui::RadioButton( u8"座標", gizmo_operation_ == ImGuizmo::TRANSLATE ) )
             gizmo_operation_ = ImGuizmo::TRANSLATE;
         ImGui::SameLine();
         // ギズモの回転
-        if( ImGui::RadioButton( u8"回転",
-                                gizmo_operation_ == ImGuizmo::ROTATE ) )
+        if( ImGui::RadioButton( u8"回転", gizmo_operation_ == ImGuizmo::ROTATE ) )
             gizmo_operation_ = ImGuizmo::ROTATE;
         ImGui::SameLine();
         // ギズモのスケール
-        if( ImGui::RadioButton( u8"スケール",
-                                gizmo_operation_ == ImGuizmo::SCALE ) )
+        if( ImGui::RadioButton( u8"スケール", gizmo_operation_ == ImGuizmo::SCALE ) )
             gizmo_operation_ = ImGuizmo::SCALE;
         ImGui::SameLine();
         // ギズモの全部
-        if( ImGui::RadioButton( u8"全部",
-                                gizmo_operation_ == ImGuizmo::UNIVERSAL ) )
+        if( ImGui::RadioButton( u8"全部", gizmo_operation_ == ImGuizmo::UNIVERSAL ) )
             gizmo_operation_ = ImGuizmo::UNIVERSAL;
 
         // ギズモスケール以外はLocal/Worldの選択ができるようにしておく
@@ -241,20 +199,14 @@ void ComponentTransform::GUI()
         bool   update = false;
         float* mat    = GetMatrixFloat();
         float  matrixTranslation[3], matrixRotation[3], matrixScale[3];
-        DecomposeMatrixToComponents( mat,
-                                     matrixTranslation,
-                                     matrixRotation,
-                                     matrixScale );
+        DecomposeMatrixToComponents( mat, matrixTranslation, matrixRotation, matrixScale );
 
         if( ImGui::DragFloat3( u8"座標(T)", matrixTranslation, 0.1f ) )
             update = true;
 
         ImGui::DragFloat3( u8"回転(R)", matrixRotation, 0.1f );
         ImGui::DragFloat3( u8"スケール(S)", matrixScale, 0.01f );
-        RecomposeMatrixFromComponents( matrixTranslation,
-                                       matrixRotation,
-                                       matrixScale,
-                                       mat );
+        RecomposeMatrixFromComponents( matrixTranslation, matrixRotation, matrixScale, mat );
 
         if( update )
             PostUpdate();

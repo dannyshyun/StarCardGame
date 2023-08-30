@@ -11,7 +11,7 @@
 BP_COMPONENT_IMPL( ComponentEffect, u8"Effectコンポーネント" );
 
 std::unordered_map<std::string, int> ComponentEffect::exist_effects_resource_{};
-int ComponentEffect::component_effect_count = 0;
+int                                  ComponentEffect::component_effect_count = 0;
 
 //! @brief Effekseerエフェクトロード
 //! @param path エフェクトファイル(.efkefc)
@@ -41,8 +41,7 @@ void ComponentEffect::Load( std::string_view path )
         return;
     }
 
-    int result = LoadEffekseerEffect(
-        HelperLib::String::ToWString( path_ ).data() );
+    int result = LoadEffekseerEffect( HelperLib::String::ToWString( path_ ).data() );
     if( result == -1 )
     {
         // ロードできなかった
@@ -58,20 +57,9 @@ void ComponentEffect::Load( std::string_view path )
     effect_status_.on( EffectBit::Initialized );
 }
 
-void ComponentEffect::Init()
-{
-    __super::Init();
-
-    // 位置決定はアタッチよりも遅くする必要がある
-    Scene::GetCurrentScene()->SetPriority(
-        shared_from_this(),
-        ProcTiming::PostUpdate,
-        Priority( PRIORITY( Priority::LOWEST ) + 1 ) );
-}
-
 //! @brief モデル更新
 //! @param delta 1フレームの秒数
-void ComponentEffect::PostUpdate()
+void ComponentEffect::Update()
 {
     float delta = GetDeltaTime();
 
@@ -99,18 +87,9 @@ void ComponentEffect::PostUpdate()
         float  pos[3], rot[3], scale[3];
         DecomposeMatrixToComponents( matz, pos, rot, scale );
 
-        SetPosPlayingEffekseer3DEffect( effect_play_handle_,
-                                        pos[0],
-                                        pos[1],
-                                        pos[2] );
-        SetScalePlayingEffekseer3DEffect( effect_play_handle_,
-                                          scale[0],
-                                          scale[1],
-                                          scale[2] );
-        SetRotationPlayingEffekseer3DEffect( effect_play_handle_,
-                                             radians( (float1)rot[0] ),
-                                             radians( (float1)rot[1] ),
-                                             radians( (float1)rot[2] ) );
+        SetPosPlayingEffekseer3DEffect( effect_play_handle_, pos[0], pos[1], pos[2] );
+        SetScalePlayingEffekseer3DEffect( effect_play_handle_, scale[0], scale[1], scale[2] );
+        SetRotationPlayingEffekseer3DEffect( effect_play_handle_, rot[0], rot[1], rot[2] );
     }
 }
 
@@ -129,9 +108,8 @@ void ComponentEffect::Draw()
         SetSpeedPlayingEffekseer3DEffect( effect_play_handle_, effect_speed_ );
     }
 
-    bool playing = IsEffekseer3DEffectPlaying( effect_play_handle_ ) == 0
-                       ? ! effect_status_.is( EffectBit::Paused )
-                       : false;
+    bool playing = IsEffekseer3DEffectPlaying( effect_play_handle_ ) == 0 ? ! effect_status_.is( EffectBit::Paused )
+                                                                          : false;
     effect_status_.set( EffectBit::Playing, playing );
     if( ! playing && effect_status_.is( EffectBit::Loop ) )
     {
@@ -143,8 +121,6 @@ void ComponentEffect::Draw()
 void ComponentEffect::Exit()
 {
     __super::Exit();
-
-    Stop();
     // ここで解放必要なし
 }
 
@@ -170,7 +146,7 @@ void ComponentEffect::GUI()
             // ロード完了チェックフラグ
             bool loaded = IsValid();
 
-            ImGui::BeginDisabled( true );  // UI上の編集不可(ReadOnly)
+            ImGui::BeginDisabled( true ); // UI上の編集不可(ReadOnly)
             {
                 if( loaded )
                     ImGui::Checkbox( u8"【LoadOK】", &loaded );
@@ -194,9 +170,7 @@ void ComponentEffect::GUI()
 
             if( IsValid() )
             {
-                ImGui::CheckboxFlags( "Loop",
-                                      &effect_status_.get(),
-                                      1 << (int)EffectBit::Loop );
+                ImGui::CheckboxFlags( "Loop", &effect_status_.get(), 1 << (int)EffectBit::Loop );
 
                 if( IsPaused() )
                 {
@@ -229,39 +203,17 @@ void ComponentEffect::GUI()
             if( IsPlaying() )
             {
                 ImGui::TextColored( { 0.5, 1, 0.5, 1 }, u8"再生中" );
-                ImGui::Text( u8"[%3.2f]%s",
-                             effect_time_,
-                             GetEffectName().data() );
+                ImGui::Text( u8"[%3.2f]%s", effect_time_, GetEffectName().data() );
                 ImGui::Separator();
             }
 
             // モデル姿勢
             if( ImGui::TreeNode( u8"エフェクト姿勢" ) )
             {
-                ImGui::DragFloat4( u8"Ｘ軸",
-                                   effect_transform_.f32_128_0,
-                                   0.01f,
-                                   -10000.0f,
-                                   10000.0f,
-                                   "%.2f" );
-                ImGui::DragFloat4( u8"Ｙ軸",
-                                   effect_transform_.f32_128_1,
-                                   0.01f,
-                                   -10000.0f,
-                                   10000.0f,
-                                   "%.2f" );
-                ImGui::DragFloat4( u8"Ｚ軸",
-                                   effect_transform_.f32_128_2,
-                                   0.01f,
-                                   -10000.0f,
-                                   10000.0f,
-                                   "%.2f" );
-                ImGui::DragFloat4( u8"座標",
-                                   effect_transform_.f32_128_3,
-                                   0.01f,
-                                   -10000.0f,
-                                   10000.0f,
-                                   "%.2f" );
+                ImGui::DragFloat4( u8"Ｘ軸", effect_transform_.f32_128_0, 0.01f, -10000.0f, 10000.0f, "%.2f" );
+                ImGui::DragFloat4( u8"Ｙ軸", effect_transform_.f32_128_1, 0.01f, -10000.0f, 10000.0f, "%.2f" );
+                ImGui::DragFloat4( u8"Ｚ軸", effect_transform_.f32_128_2, 0.01f, -10000.0f, 10000.0f, "%.2f" );
+                ImGui::DragFloat4( u8"座標", effect_transform_.f32_128_3, 0.01f, -10000.0f, 10000.0f, "%.2f" );
                 ImGui::Separator();
                 ImGui::TreePop();
             }
@@ -269,32 +221,11 @@ void ComponentEffect::GUI()
             // 姿勢を TRSで変更できるように設定
             float* mat = effect_transform_.f32_128_0;
             float  matrixTranslation[3], matrixRotation[3], matrixScale[3];
-            DecomposeMatrixToComponents( mat,
-                                         matrixTranslation,
-                                         matrixRotation,
-                                         matrixScale );
-            ImGui::DragFloat3( u8"座標(T)",
-                               matrixTranslation,
-                               0.01f,
-                               -100000.00f,
-                               100000.0f,
-                               "%.2f" );
-            ImGui::DragFloat3( u8"回転(R)",
-                               matrixRotation,
-                               0.1f,
-                               -360.0f,
-                               360.0f,
-                               "%.2f" );
-            ImGui::DragFloat3( u8"サイズ(S)",
-                               matrixScale,
-                               0.01f,
-                               0.00f,
-                               1000.0f,
-                               "%.2f" );
-            RecomposeMatrixFromComponents( matrixTranslation,
-                                           matrixRotation,
-                                           matrixScale,
-                                           mat );
+            DecomposeMatrixToComponents( mat, matrixTranslation, matrixRotation, matrixScale );
+            ImGui::DragFloat3( u8"座標(T)", matrixTranslation, 0.01f, -100000.00f, 100000.0f, "%.2f" );
+            ImGui::DragFloat3( u8"回転(R)", matrixRotation, 0.1f, -360.0f, 360.0f, "%.2f" );
+            ImGui::DragFloat3( u8"サイズ(S)", matrixScale, 0.01f, 0.00f, 1000.0f, "%.2f" );
+            RecomposeMatrixFromComponents( matrixTranslation, matrixRotation, matrixScale, mat );
 
             ImGui::TreePop();
         }
@@ -310,15 +241,6 @@ void ComponentEffect::Play( bool loop )
     effect_status_.set( EffectBit::Loop, loop );
 
     effect_play_handle_ = PlayEffekseer3DEffect( effect_handle_ );
-}
-
-void ComponentEffect::Stop()
-{
-    if( effect_play_handle_ != -1 )
-    {
-        StopEffekseer3DEffect( effect_play_handle_ );
-        effect_play_handle_ = -1;
-    }
 }
 
 void ComponentEffect::SetPlaySpeed( float speed )

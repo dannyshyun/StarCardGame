@@ -191,14 +191,14 @@ void ComponentCollisionCapsule::Draw()
     float3 pos1 = normalize( (float3&)trans.axisVectorY() ) * height_ + pos2;
 
     float3 vec = normalize( pos2 - pos1 );
-
-    DrawCapsule3D( cast( pos1 + vec * radius ),
-                   cast( pos2 - vec * radius ),
-                   radius,
-                   10,
-                   GetColor( 0, 255, 0 ),
-                   GetColor( 0, 0, 0 ),
-                   FALSE );
+    if( show_collision_ )
+        DrawCapsule3D( cast( pos1 + vec * radius ),
+                       cast( pos2 - vec * radius ),
+                       radius,
+                       10,
+                       GetColor( 0, 255, 0 ),
+                       GetColor( 0, 0, 0 ),
+                       FALSE );
     SetLightEnable( TRUE );
     SetUseLighting( TRUE );
 #endif
@@ -271,6 +271,7 @@ void ComponentCollisionCapsule::GUI()
                               1000.0f,
                               "%.2f" );
 
+            ImGui::Checkbox( u8"コリジョン描画", &show_collision_ );
             ImGui::TreePop();
         }
     }

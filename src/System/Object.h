@@ -31,7 +31,7 @@ USING_PTR( Component );
 template<class T> class ClassObjectType : public Type
 {
 public:
-    using Type::Type;  // 継承コンストラクタ
+    using Type::Type; // 継承コンストラクタ
 
     virtual void* createObjectPtr()
     {
@@ -93,19 +93,13 @@ public:
 //! BP_OBJECT_IMPL(B, u8"クラスB")
 //! @endcode
 //---------------------------------------------------------------------------
-#define BP_OBJECT_BASE_IMPL( CLASS, DESC_NAME )              \
-    /*! 型情報の実体 */                                \
-    ClassObjectType<CLASS> CLASS::TypeInfo( #CLASS,          \
-                                            sizeof( CLASS ), \
-                                            DESC_NAME,       \
-                                            nullptr );
+#define BP_OBJECT_BASE_IMPL( CLASS, DESC_NAME ) \
+    /*! 型情報の実体 */                   \
+    ClassObjectType<CLASS> CLASS::TypeInfo( #CLASS, sizeof( CLASS ), DESC_NAME, nullptr );
 
-#define BP_OBJECT_IMPL( CLASS, DESC_NAME )                   \
-    /*! 型情報の実体 */                                \
-    ClassObjectType<CLASS> CLASS::TypeInfo( #CLASS,          \
-                                            sizeof( CLASS ), \
-                                            DESC_NAME,       \
-                                            &Super::TypeInfo );
+#define BP_OBJECT_IMPL( CLASS, DESC_NAME ) \
+    /*! 型情報の実体 */              \
+    ClassObjectType<CLASS> CLASS::TypeInfo( #CLASS, sizeof( CLASS ), DESC_NAME, &Super::TypeInfo );
 
 //---------------------------------------------------------------------------
 //! オブジェクトクラス
@@ -118,25 +112,24 @@ class Object : public std::enable_shared_from_this<Object>,
 public:
     BP_OBJECT_BASE_TYPE( Object );
 
-    Object();           //!< コンストラクタ
-    virtual ~Object();  //!< デストラクタ
+    Object();          //!< コンストラクタ
+    virtual ~Object(); //!< デストラクタ
 
-    virtual bool Init();        //!< 初期化
-    virtual void Update();      //!< 更新
-    virtual void LateUpdate();  //!< 遅い更新
-    virtual void Draw();        //!< 描画
-    virtual void LateDraw();    //!< 遅い描画
-    virtual void Exit();        //!< 終了
-    virtual void GUI();         //!< GUI表示
+    virtual bool Init();       //!< 初期化
+    virtual void Update();     //!< 更新
+    virtual void LateUpdate(); //!< 遅い更新
+    virtual void Draw();       //!< 描画
+    virtual void LateDraw();   //!< 遅い描画
+    virtual void Exit();       //!< 終了
+    virtual void GUI();        //!< GUI表示
 
-    virtual void PreUpdate();   //!< 更新前処理
-    virtual void PostUpdate();  //!< 更新後処理
-    virtual void PreDraw();     //!< 描画前処理
-    virtual void PostDraw();    //!< 描画後処理
-    virtual void PrePhysics();  //!< 物理シミュレーション前処理
+    virtual void PreUpdate();  //!< 更新前処理
+    virtual void PostUpdate(); //!< 更新後処理
+    virtual void PreDraw();    //!< 描画前処理
+    virtual void PostDraw();   //!< 描画後処理
+    virtual void PrePhysics(); //!< 物理シミュレーション前処理
 
-    virtual void
-        InitSerialize();  //!< シリアライズでもどらないユーザー処理関数などを設定
+    virtual void InitSerialize(); //!< シリアライズでもどらないユーザー処理関数などを設定
 
     void UseWarp();
     //----------------------------------------------------------
@@ -163,8 +156,8 @@ public:
         return std::shared_ptr<Object>( nullptr );
     }
 
-    std::string_view GetName() const;         //!< 名前の取得
-    std::string_view GetNameDefault() const;  //!< 名前の取得
+    std::string_view GetName() const;        //!< 名前の取得
+    std::string_view GetNameDefault() const; //!< 名前の取得
 
     //@}
     //----------------------------------------------------------
@@ -175,22 +168,22 @@ public:
     //! オブジェクトステータスビット
     enum struct StatusBit : u64
     {
-        Alive = 0,     //!< 生存状態
-        ChangePrio,    //!< プライオリティの変更中
-        ShowGUI,       //!< GUI表示中
-        Initialized,   //!< 初期化終了
-        NoUpdate,      //!< Updateしない
-        NoDraw,        //!< Drawしない
-        DisablePause,  //!< ポーズ不可
-        IsPause,       //!< ポーズ中
-        Exited,        //!< 終了呼び出し済み.
-        Serialized,    //!< シリアライズ済み.
-        CalledGUI,     //!< GUIが正しく呼ばれた.
-        Located,       //!< 配置されている.
+        Alive = 0,    //!< 生存状態
+        ChangePrio,   //!< プライオリティの変更中
+        ShowGUI,      //!< GUI表示中
+        Initialized,  //!< 初期化終了
+        NoUpdate,     //!< Updateしない
+        NoDraw,       //!< Drawしない
+        DisablePause, //!< ポーズ不可
+        IsPause,      //!< ポーズ中
+        Exited,       //!< 終了呼び出し済み.
+        Serialized,   //!< シリアライズ済み.
+        CalledGUI,    //!< GUIが正しく呼ばれた.
+        Located,      //!< 配置されている.
     };
 
-    void SetStatus( StatusBit b, bool on );  //!< ステータスの設定
-    bool GetStatus( StatusBit b );           //!< ステータスの取得
+    void SetStatus( StatusBit b, bool on ); //!< ステータスの設定
+    bool GetStatus( StatusBit b );          //!< ステータスの取得
 
     //! 存在するオブジェクト数
     static size_t ExistObjectCount();
@@ -205,8 +198,7 @@ public:
     //! @tparam [in] class T コンポーネントタイプ
     //! @tparam [in] Args コンポーネント初期化パラメータ
     //! @return 追加されたコンポーネント
-    template<class T, class... Args>
-    std::shared_ptr<T> AddComponent( Args... args );
+    template<class T, class... Args> std::shared_ptr<T> AddComponent( Args... args );
 
     //! コンポーネント取得
     //! @tparam T コンポーネントタイプ
@@ -243,8 +235,7 @@ public:
 
     //! @brief コンポーネントのヒットコールバック
     //! @param hitInfo ヒット情報
-    virtual void
-        OnHit( [[maybe_unused]] const ComponentCollision::HitInfo& hitInfo )
+    virtual void OnHit( [[maybe_unused]] const ComponentCollision::HitInfo& hitInfo )
     {
         if( auto cmp = GetComponent<ComponentTransform>() )
         {
@@ -254,12 +245,9 @@ public:
         // @todo 重力加速も初期化する
 #pragma warning( disable : 26813 )
         // ここは&で参照すべき所ではない
-        if( hitInfo.hit_collision_->GetCollisionGroup() ==
-            ComponentCollision::CollisionGroup::GROUND )
+        if( hitInfo.hit_collision_->GetCollisionGroup() == ComponentCollision::CollisionGroup::GROUND )
         {
-            hitInfo.collision_->SetCollisionStatus(
-                ComponentCollision::CollisionBit::IsGround,
-                true );
+            hitInfo.collision_->SetCollisionStatus( ComponentCollision::CollisionBit::IsGround, true );
         }
 #pragma warning( default : 26813 )
     }
@@ -298,8 +286,7 @@ public:
                        Priority           prio   = Priority::NORMAL )
     {
         auto& proc = GetProc( proc_name, timing );
-        if( proc_name != proc.GetName() || timing != proc.GetTiming() ||
-            prio != proc.GetPriority() || proc.IsDirty() )
+        if( proc_name != proc.GetName() || timing != proc.GetTiming() || prio != proc.GetPriority() || proc.IsDirty() )
         {
             proc.SetProc( proc_name, timing, prio, func );
         }
@@ -311,8 +298,8 @@ public:
                           Priority                  prio   = Priority::NORMAL )
     {
         auto& proc = GetProc( func->GetName(), timing );
-        if( func->GetName() != proc.GetName() || timing != proc.GetTiming() ||
-            prio != proc.GetPriority() || proc.IsDirty() )
+        if( func->GetName() != proc.GetName() || timing != proc.GetTiming() || prio != proc.GetPriority() ||
+            proc.IsDirty() )
         {
             proc.SetAddProc( func, timing, prio );
         }
@@ -398,11 +385,11 @@ public:
     //@}
 
 protected:
-    std::string name_{};              //!< オブジェクト名
-    std::string name_default_{};      //!< 番号なしのオブジェクト名
-    Status<StatusBit> status_{};      //!< ステータス
-    ComponentPtrVec   components_;    //!< コンポーネント
-    SlotProcs         proc_timings_;  //!< 登録処理
+    std::string       name_{};         //!< オブジェクト名
+    std::string       name_default_{}; //!< 番号なしのオブジェクト名
+    Status<StatusBit> status_{};       //!< ステータス
+    ComponentPtrVec   components_;     //!< コンポーネント
+    SlotProcs         proc_timings_;   //!< 登録処理
     float3            gravity_;
 
     // コンポーネントリークチェック用
@@ -418,9 +405,7 @@ private:
     CEREAL_SAVELOAD( arc, ver )
     {
         arc( CEREAL_NVP( name_ ) );
-        arc( CEREAL_NVP( name_default_ ),
-             CEREAL_NVP( status_.get() ),
-             CEREAL_NVP( proc_timings_ ) );
+        arc( CEREAL_NVP( name_default_ ), CEREAL_NVP( status_.get() ), CEREAL_NVP( proc_timings_ ) );
 
         arc( CEREAL_NVP( components_ ) );
         arc( CEREAL_NVP( gravity_ ) );
@@ -435,13 +420,11 @@ private:
 //---------------------------------------------------------------------------
 CEREAL_CLASS_VERSION( Object, 0 );
 
-template<class T, class... Args>
-std::shared_ptr<T> Object::AddComponent( Args... args )
+template<class T, class... Args> std::shared_ptr<T> Object::AddComponent( Args... args )
 {
-    assert( this != nullptr &&
-            "実行しているオブジェクト(this)"
-            "がありません。「再試行」をおして、「呼び出し履歴」からどこでempty"
-            "になったのかを確認してください。" );
+    assert( this != nullptr && "実行しているオブジェクト(this)"
+                               "がありません。「再試行」をおして、「呼び出し履歴」からどこでempty"
+                               "になったのかを確認してください。" );
 
     // 同じタイプを許容しない場合
     // 同じものが存在する場合はエラーとする
@@ -471,10 +454,9 @@ std::shared_ptr<T> Object::AddComponent( Args... args )
 //! @return 追加されたコンポーネント
 template<class T> std::shared_ptr<T> Object::GetComponent()
 {
-    assert( this != nullptr &&
-            "実行しているオブジェクト(this)"
-            "がありません。「再試行」をおして、「呼び出し履歴」からどこでempty"
-            "になったのかを確認してください。" );
+    assert( this != nullptr && "実行しているオブジェクト(this)"
+                               "がありません。「再試行」をおして、「呼び出し履歴」からどこでempty"
+                               "になったのかを確認してください。" );
 
     for( auto& component: components_ )
     {
@@ -491,10 +473,9 @@ template<class T> std::shared_ptr<T> Object::GetComponent()
 //! @return 追加されたコンポーネント
 template<class T> std::shared_ptr<T> Object::GetComponent() const
 {
-    assert( this != nullptr &&
-            "実行しているオブジェクト(this)"
-            "がありません。「再試行」をおして、「呼び出し履歴」からどこでempty"
-            "になったのかを確認してください。" );
+    assert( this != nullptr && "実行しているオブジェクト(this)"
+                               "がありません。「再試行」をおして、「呼び出し履歴」からどこでempty"
+                               "になったのかを確認してください。" );
 
     for( auto& component: components_ )
     {
@@ -508,10 +489,9 @@ template<class T> std::shared_ptr<T> Object::GetComponent() const
 
 template<class T> std::vector<std::shared_ptr<T>> Object::GetComponents()
 {
-    assert( this != nullptr &&
-            "実行しているオブジェクト(this)"
-            "がありません。「再試行」をおして、「呼び出し履歴」からどこでempty"
-            "になったのかを確認してください。" );
+    assert( this != nullptr && "実行しているオブジェクト(this)"
+                               "がありません。「再試行」をおして、「呼び出し履歴」からどこでempty"
+                               "になったのかを確認してください。" );
 
     std::vector<std::shared_ptr<T>> cmps;
 
@@ -527,10 +507,9 @@ template<class T> std::vector<std::shared_ptr<T>> Object::GetComponents()
 
 template<class T> std::vector<std::shared_ptr<T>> Object::GetComponents() const
 {
-    assert( this != nullptr &&
-            "実行しているオブジェクト(this)"
-            "がありません。「再試行」をおして、「呼び出し履歴」からどこでempty"
-            "になったのかを確認してください。" );
+    assert( this != nullptr && "実行しているオブジェクト(this)"
+                               "がありません。「再試行」をおして、「呼び出し履歴」からどこでempty"
+                               "になったのかを確認してください。" );
 
     std::vector<std::shared_ptr<T>> cmps;
 
@@ -546,10 +525,9 @@ template<class T> std::vector<std::shared_ptr<T>> Object::GetComponents() const
 
 template<typename _Type> void Object::RemoveComponent()
 {
-    assert( this != nullptr &&
-            "実行しているオブジェクト(this)"
-            "がありません。「再試行」をおして、「呼び出し履歴」からどこでempty"
-            "になったのかを確認してください。" );
+    assert( this != nullptr && "実行しているオブジェクト(this)"
+                               "がありません。「再試行」をおして、「呼び出し履歴」からどこでempty"
+                               "になったのかを確認してください。" );
 
     for( int i = components_.size() - 1; i >= 0; --i )
     {

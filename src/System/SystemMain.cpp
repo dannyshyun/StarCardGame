@@ -18,13 +18,13 @@ namespace
 {
 #ifdef _DEBUG
     bool show_gui     = true;   //!< GUIの表示
-    bool show_grid    = true;   //!< グリッドの表示
+    bool show_grid    = false;  //!< グリッドの表示
     bool show_fps     = true;   //!< FPSの表示
     bool debug_camera = false;  //!< デバッグカメラ
     bool show_debug   = true;
 #else
     bool show_gui     = true;   //!< GUIの表示
-    bool show_grid    = true;   //!< グリッドの表示
+    bool show_grid    = false;  //!< グリッドの表示
     bool show_fps     = true;   //!< FPSの表示
     bool debug_camera = false;  //!< デバッグカメラ
     bool show_debug   = true;

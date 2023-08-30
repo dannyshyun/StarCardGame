@@ -1,22 +1,27 @@
 ﻿#include <WinMain.h>
 #include <Game/GameMain.h>
+#include <System/Component/ComponentModel.h>
 #include "Npc.h"
 
 BP_OBJECT_IMPL( Npc, "Npc" );
-NpcPtr Npc::Create()
+NpcPtr Npc::Create( float3 pos )
 {
-    auto obj  = Scene::CreateObjectPtr<Npc>();
-    obj->deck = makeSptr<Deck>( false );
-    obj->hand = makeSptr<Hand>( false );
+    auto obj = Scene::CreateObjectPtr<Npc>();
+    obj->SetName( "Akane" );
+    obj->pos = pos;
+    obj->SetTranslate( pos );
     return obj;
 }
-//---------------------------------------------------------------------------------
-//	初期化処理
-//---------------------------------------------------------------------------------
+
 bool Npc::Init()
 {
     if( ! Super::Init() )
         return false;
+    auto mdl = AddComponent<ComponentModel>( "data/Model/angGirl.mv1" );
+
+    mdl->SetAnimation( {
+        {"throw", "data/Animation/Akane/Frisbee Throw.mv1", 0, 2.0f}
+    } );
 
     return true;
 }
@@ -25,38 +30,17 @@ bool Npc::Init()
 //---------------------------------------------------------------------------------
 void Npc::Update()
 {
-    switch( Turn )
+    if( auto mdl = GetComponent<ComponentModel>() )
     {
-        case LOAD_TURN : deck->Load(); break;
-
-        case SHUFFLE_TURN : deck->Shuffle(); break;
-
-        case DEAL_TURN :
-
-            if( hand->GetHandNum() < HAND_MAX )
-            {
-                hand->Init();
-                hand->Draw( deck->Deal( HAND_MAX - hand->GetHandNum() ) );
-            }
-            break;
+        if( mdl->GetPlayAnimationName() != "throw" )
+            mdl->PlayAnimation( "throw", true );
     }
-    deck->Update();
 }
-//---------------------------------------------------------------------------------
-//	描画処理
-//---------------------------------------------------------------------------------
-void Npc::RenderImg()
-{
-    deck->RenderImg();
-    hand->RenderImg();
-}
-//---------------------------------------------------------------------------------
-//	終了処理
-//---------------------------------------------------------------------------------
-void Npc::Exit()
+
+void Npc::Draw()
 {
 }
 
-void Npc::SelectCard( CardPtr card )
+void Npc::Exit()
 {
 }

@@ -58,8 +58,8 @@ public:
     Callable() {}
     Callable( const std::string& name ) { SetName( name ); }
     virtual ~Callable() {}
-    virtual void Exec() = 0;
-    virtual void SetName( const std::string& str ) { name_ = str; }
+    virtual void               Exec() = 0;
+    virtual void               SetName( const std::string& str ) { name_ = str; }
     virtual const std::string& GetName() { return name_; }
 
 protected:
@@ -102,8 +102,7 @@ public:
 
     const bool IsUpdate() const
     {
-        if( static_cast<int>( timing_ ) <
-            static_cast<int>( ProcTiming::PreDraw ) )
+        if( static_cast<int>( timing_ ) < static_cast<int>( ProcTiming::PreDraw ) )
         {
             return true;
         }
@@ -112,18 +111,14 @@ public:
 
     const bool IsDraw() const
     {
-        if( static_cast<int>( timing_ ) >=
-            static_cast<int>( ProcTiming::PreDraw ) )
+        if( static_cast<int>( timing_ ) >= static_cast<int>( ProcTiming::PreDraw ) )
         {
             return true;
         }
         return false;
     }
 
-    void SetProc( std::string    name,
-                  ProcTiming     timing,
-                  Priority       prio,
-                  ProcTimingFunc func )
+    void SetProc( std::string name, ProcTiming timing, Priority prio, ProcTimingFunc func )
     {
         name_     = name;
         dirty_    = true;
@@ -134,9 +129,7 @@ public:
 
     ProcTimingFunc& GetProc() { return proc_; }
 
-    void SetAddProc( std::shared_ptr<Callable> func,
-                     ProcTiming                timing,
-                     Priority                  prio )
+    void SetAddProc( std::shared_ptr<Callable> func, ProcTiming timing, Priority prio )
     {
         name_     = func->GetName();
         dirty_    = true;
@@ -163,8 +156,8 @@ private:
     //@{
     CEREAL_SAVELOAD( arc, ver )
     {
-        dirty_ = true;             //セーブするときにdirty_つける
-        arc( CEREAL_NVP( name_ ),  // name
+        dirty_ = true;            //セーブするときにdirty_つける
+        arc( CEREAL_NVP( name_ ), // name
              CEREAL_NVP( timing_ ),
              CEREAL_NVP( priority_ ),
              CEREAL_NVP( dirty_ ),

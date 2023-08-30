@@ -29,10 +29,7 @@ public:
     operator int() const { return 0 < handles_.size() ? handles_[0] : -1; }
 
     //! [DxLib] シェーダーハンドルを取得(バリエーション指定)
-    int variant( u32 index ) const
-    {
-        return index < handles_.size() ? handles_[index] : -1;
-    }
+    int variant( u32 index ) const { return index < handles_.size() ? handles_[index] : -1; }
 
     //! ファイルパスを取得
     const std::wstring& path() const { return path_; }
@@ -41,9 +38,9 @@ public:
     static void updateFileWatcher();
 
 private:
-    std::wstring     path_;     //!< ファイルパス
-    std::vector<int> handles_;  //!< [DxLib] シェーダーハンドル
-    int type_ = -1;  //!< [DxLib] シェーダーの種類(DX_SHADERTYPE_VERTEXなど)
+    std::wstring     path_;      //!< ファイルパス
+    std::vector<int> handles_;   //!< [DxLib] シェーダーハンドル
+    int              type_ = -1; //!< [DxLib] シェーダーの種類(DX_SHADERTYPE_VERTEXなど)
 };
 
 //===========================================================================
@@ -52,8 +49,7 @@ private:
 class ShaderVs final : public ShaderBase
 {
 public:
-    ShaderVs( std::string_view path, u32 variant_count = 0 ) :
-        ShaderBase( path, DX_SHADERTYPE_VERTEX, variant_count )
+    ShaderVs( std::string_view path, u32 variant_count = 0 ) : ShaderBase( path, DX_SHADERTYPE_VERTEX, variant_count )
     {
     }
 
@@ -66,10 +62,7 @@ private:
 class ShaderPs final : public ShaderBase
 {
 public:
-    ShaderPs( std::string_view path, u32 variant_count = 0 ) :
-        ShaderBase( path, DX_SHADERTYPE_PIXEL, variant_count )
-    {
-    }
+    ShaderPs( std::string_view path, u32 variant_count = 0 ) : ShaderBase( path, DX_SHADERTYPE_PIXEL, variant_count ) {}
 };
 
 //===========================================================================
@@ -78,8 +71,7 @@ public:
 class ShaderGs final : public ShaderBase
 {
 public:
-    ShaderGs( std::string_view path, u32 variant_count = 0 ) :
-        ShaderBase( path, DX_SHADERTYPE_GEOMETRY, variant_count )
+    ShaderGs( std::string_view path, u32 variant_count = 0 ) : ShaderBase( path, DX_SHADERTYPE_GEOMETRY, variant_count )
     {
     }
 };

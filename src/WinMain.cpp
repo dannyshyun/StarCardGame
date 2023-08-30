@@ -5,7 +5,7 @@
 
 s32 WINDOW_W = 1280;
 s32 WINDOW_H = 720;
-
+int2 WINDOW_CENTER( WINDOW_W / 2, WINDOW_H / 2);
 //---------------------------------------------------------------------------
 //! アプリケーションエントリーポイント
 //---------------------------------------------------------------------------
@@ -43,7 +43,7 @@ int WINAPI WinMain( _In_ [[maybe_unused]] HINSTANCE     hInstance,
     }
 
     SetBackgroundColor( 0, 0, 0 );
-    SetMainWindowText( (TC)title_name.c_str() );
+    SetMainWindowText( title_name.c_str() );
     SetAlwaysRunFlag( true );  // ウィンドウメッセージを常に実行
 
     // DirectX11を使用するようにする(DxLib_Init関数前) - Effekseer対応

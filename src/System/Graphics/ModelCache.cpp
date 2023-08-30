@@ -18,11 +18,9 @@ ModelCache::ModelCache( std::string_view path )
     //　対応するキャッシュファイルのパスを取得
     {
         std::array<char, 1024> temporary_path;
-        GetTempPath( static_cast<DWORD>( sizeof( temporary_path ) ),
-                     temporary_path.data() );
+        GetTempPath( static_cast<DWORD>( sizeof( temporary_path ) ), temporary_path.data() );
 
-        model_cache_path_ = std::string( temporary_path.data() ) +
-                            "BaseProject/" + std::string( path ) + ".cache";
+        model_cache_path_ = std::string( temporary_path.data() ) + "BaseProject/" + std::string( path ) + ".cache";
     }
 }
 
@@ -49,8 +47,8 @@ ModelCache::~ModelCache()
 //---------------------------------------------------------------------------
 bool ModelCache::save( int mv1_handle ) const
 {
-    std::vector<VECTOR> varray;  // 頂点配列
-    std::vector<u32>    iarray;  // インデックス配列
+    std::vector<VECTOR> varray; // 頂点配列
+    std::vector<u32>    iarray; // インデックス配列
 
     // 指定のパスにモデルを保存する
     //  MV1SaveModelToMV1FileWithStrLen(handle_, path.data(), path.size(), MV1_SAVETYPE_NORMAL);
@@ -60,15 +58,10 @@ bool ModelCache::save( int mv1_handle ) const
     //--------------------------------------------------------------
     {
         bool is_transform = true;
-        MV1SetupReferenceMesh( mv1_handle,
-                               -1,
-                               is_transform,
-                               true );  // 参照用メッシュのセットアップ
-        auto poly_list =
-            MV1GetReferenceMesh( mv1_handle,
-                                 -1,
-                                 is_transform,
-                                 true );  // 参照用メッシュを取得する
+        MV1SetupReferenceMesh( mv1_handle, -1, is_transform,
+                               true ); // 参照用メッシュのセットアップ
+        auto poly_list = MV1GetReferenceMesh( mv1_handle, -1, is_transform,
+                                              true ); // 参照用メッシュを取得する
 
         // 頂点インデックス配列を抽出
         varray.resize( 0 );
@@ -105,10 +98,8 @@ bool ModelCache::save( int mv1_handle ) const
             iarray.push_back( i2 );
         }
 
-        MV1TerminateReferenceMesh( mv1_handle,
-                                   -1,
-                                   false,
-                                   true );  // 参照用メッシュの後始末
+        MV1TerminateReferenceMesh( mv1_handle, -1, false,
+                                   true ); // 参照用メッシュの後始末
     }
 
     //----------------------------------------------------------
@@ -119,26 +110,18 @@ bool ModelCache::save( int mv1_handle ) const
         std::vector<u32> remap( iarray.size() );
 
         // [meshoptimizer] 重複頂点を結合
-        size_t total_vertex_count =
-            meshopt_generateVertexRemap( remap.data(),
-                                         nullptr,
-                                         iarray.size(),
-                                         varray.data(),
-                                         varray.size(),
-                                         sizeof( VECTOR ) );
+        size_t total_vertex_count = meshopt_generateVertexRemap( remap.data(),
+                                                                 nullptr,
+                                                                 iarray.size(),
+                                                                 varray.data(),
+                                                                 varray.size(),
+                                                                 sizeof( VECTOR ) );
 
         // [meshoptimizer] インデックスバッファを結合後の頂点でつけ直す
-        meshopt_remapIndexBuffer( iarray.data(),
-                                  nullptr,
-                                  iarray.size(),
-                                  remap.data() );
+        meshopt_remapIndexBuffer( iarray.data(), nullptr, iarray.size(), remap.data() );
 
         // [meshoptimizer] 使用している頂点のみで詰め直す
-        meshopt_remapVertexBuffer( varray.data(),
-                                   varray.data(),
-                                   varray.size(),
-                                   sizeof( VECTOR ),
-                                   remap.data() );
+        meshopt_remapVertexBuffer( varray.data(), varray.data(), varray.size(), sizeof( VECTOR ), remap.data() );
         varray.resize( total_vertex_count );
     }
 
@@ -154,10 +137,9 @@ bool ModelCache::save( int mv1_handle ) const
     {
         auto& lod = lods[i];
 
-        f64    threshold = pow( 0.7, static_cast<f32>( i ) );
-        size_t target_index_count =
-            static_cast<size_t>( iarray.size() * threshold ) / 3 * 3;
-        f32 target_error = 1e-2f;
+        f64    threshold          = pow( 0.7, static_cast<f32>( i ) );
+        size_t target_index_count = static_cast<size_t>( iarray.size() * threshold ) / 3 * 3;
+        f32    target_error       = 1e-2f;
 
         auto& source = lods[0];
 
@@ -166,15 +148,14 @@ bool ModelCache::save( int mv1_handle ) const
 
         lod.resize( source.size() );
 
-        size_t result_size =
-            meshopt_simplify( lod.data(),
-                              source.data(),
-                              source.size(),
-                              reinterpret_cast<const float*>( varray.data() ),
-                              varray.size(),
-                              sizeof( VECTOR ),
-                              target_index_count,
-                              target_error );
+        size_t result_size = meshopt_simplify( lod.data(),
+                                               source.data(),
+                                               source.size(),
+                                               reinterpret_cast<const float*>( varray.data() ),
+                                               varray.size(),
+                                               sizeof( VECTOR ),
+                                               target_index_count,
+                                               target_error );
 
         lod.resize( result_size );
     }
@@ -184,10 +165,7 @@ bool ModelCache::save( int mv1_handle ) const
     // 頂点の最適化
     //----------------------------------------------------------
     // [meshoptimizer] 頂点キャッシュ最適化
-    meshopt_optimizeVertexCache( iarray.data(),
-                                 iarray.data(),
-                                 iarray.size(),
-                                 varray.size() );
+    meshopt_optimizeVertexCache( iarray.data(), iarray.data(), iarray.size(), varray.size() );
 
     // [meshoptimizer] オーバードロー最適化
     meshopt_optimizeOverdraw( iarray.data(),
@@ -225,8 +203,7 @@ bool ModelCache::save( int mv1_handle ) const
     // ディレクトリを作成
     //----------------------------------------------------------
     {
-        auto directory_name =
-            std::filesystem::path( model_cache_path_ ).remove_filename();
+        auto directory_name = std::filesystem::path( model_cache_path_ ).remove_filename();
 
         // フォルダ階層をまとめて作成
         // エラーコードを受け取ると例外を送出しない
@@ -237,10 +214,8 @@ bool ModelCache::save( int mv1_handle ) const
     //----------------------------------------------------------
     // 保存
     //----------------------------------------------------------
-    std::string file_path( model_cache_path_ );  // null終端文字列に変換
-    std::ofstream stream( file_path.c_str(),
-                          std::ios_base::out | std::ios_base::binary |
-                              std::ios_base::trunc );
+    std::string   file_path( model_cache_path_ ); // null終端文字列に変換
+    std::ofstream stream( file_path.c_str(), std::ios_base::out | std::ios_base::binary | std::ios_base::trunc );
     if( ! stream.is_open() )
     {
         return false;
@@ -248,23 +223,18 @@ bool ModelCache::save( int mv1_handle ) const
 
     // ファイルバージョン
     u32 file_version = ModelCache::VERSION;
-    stream.write( reinterpret_cast<char*>( &file_version ),
-                  sizeof( file_version ) );
+    stream.write( reinterpret_cast<char*>( &file_version ), sizeof( file_version ) );
 
-    u32 vertex_count = static_cast<u32>( varray.size() );  // 頂点数
-    u32 index_count = static_cast<u32>( iarray.size() );  // インデックス数
-    stream.write( reinterpret_cast<char*>( &vertex_count ),
-                  sizeof( vertex_count ) );
-    stream.write( reinterpret_cast<char*>( &index_count ),
-                  sizeof( index_count ) );
+    u32 vertex_count = static_cast<u32>( varray.size() ); // 頂点数
+    u32 index_count  = static_cast<u32>( iarray.size() ); // インデックス数
+    stream.write( reinterpret_cast<char*>( &vertex_count ), sizeof( vertex_count ) );
+    stream.write( reinterpret_cast<char*>( &index_count ), sizeof( index_count ) );
 
     // 頂点配列
-    stream.write( reinterpret_cast<char*>( varray.data() ),
-                  vertex_count * sizeof( VECTOR ) );
+    stream.write( reinterpret_cast<char*>( varray.data() ), vertex_count * sizeof( VECTOR ) );
 
     // インデックス配列
-    stream.write( reinterpret_cast<char*>( iarray.data() ),
-                  index_count * sizeof( u32 ) );
+    stream.write( reinterpret_cast<char*>( iarray.data() ), index_count * sizeof( u32 ) );
 
     return true;
 }
@@ -281,8 +251,7 @@ bool ModelCache::load()
     // キャッシュファイルを読み込み
     //----------------------------------------------------------
     {
-        auto handle = FileRead_fullyLoad_WithStrLen( model_cache_path_.data(),
-                                                     model_cache_path_.size() );
+        auto handle = FileRead_fullyLoad_WithStrLen( model_cache_path_.data(), model_cache_path_.size() );
         if( handle == -1 )
         {
             return false;
@@ -322,16 +291,12 @@ bool ModelCache::load()
 
         // 頂点配列
         vertices_.resize( vertex_count );
-        memcpy( vertices_.data(),
-                reinterpret_cast<void*>( p ),
-                sizeof( VECTOR ) * vertex_count );
+        memcpy( vertices_.data(), reinterpret_cast<void*>( p ), sizeof( VECTOR ) * vertex_count );
         p += sizeof( VECTOR ) * vertex_count;
 
         // インデックス配列
         indices_.resize( index_count );
-        memcpy( indices_.data(),
-                reinterpret_cast<void*>( p ),
-                sizeof( u32 ) * index_count );
+        memcpy( indices_.data(), reinterpret_cast<void*>( p ), sizeof( u32 ) * index_count );
         p += sizeof( u32 ) * index_count;
     }
 
@@ -368,20 +333,12 @@ bool ModelCache::load()
         }
 
         // 頂点バッファとインデックスバッファを作成
-        handle_vb_ = CreateVertexBuffer( static_cast<s32>( varray.size() ),
-                                         DX_VERTEX_TYPE_NORMAL_3D );
-        handle_ib_ = CreateIndexBuffer( static_cast<s32>( iarray.size() ),
-                                        DX_INDEX_TYPE_32BIT );
+        handle_vb_ = CreateVertexBuffer( static_cast<s32>( varray.size() ), DX_VERTEX_TYPE_NORMAL_3D );
+        handle_ib_ = CreateIndexBuffer( static_cast<s32>( iarray.size() ), DX_INDEX_TYPE_32BIT );
 
         // バッファにデーターを転送
-        SetVertexBufferData( 0,
-                             varray.data(),
-                             static_cast<s32>( varray.size() ),
-                             handle_vb_ );
-        SetIndexBufferData( 0,
-                            iarray.data(),
-                            static_cast<s32>( iarray.size() ),
-                            handle_ib_ );
+        SetVertexBufferData( 0, varray.data(), static_cast<s32>( varray.size() ), handle_vb_ );
+        SetIndexBufferData( 0, iarray.data(), static_cast<s32>( iarray.size() ), handle_ib_ );
     }
 
     is_valid_ = true;
@@ -426,7 +383,7 @@ void ModelCache::render( const matrix& mat_world ) const
     // 頂点バッファの利用でCPU負荷を大幅に削減できる
     //----------------------------------------------------------
     if constexpr( false )
-    {  // デバッグ描画を利用した描画
+    { // デバッグ描画を利用した描画
 
         for( size_t i = 0; i < indices_.size(); i += 3 )
         {
@@ -434,22 +391,14 @@ void ModelCache::render( const matrix& mat_world ) const
             auto i1 = indices_[i + 1];
             auto i2 = indices_[i + 2];
 
-            DrawTriangle3D( vertices_[i0],
-                            vertices_[i1],
-                            vertices_[i2],
-                            GetColor( 255, 255, 0 ),
-                            false );
+            DrawTriangle3D( vertices_[i0], vertices_[i1], vertices_[i2], GetColor( 255, 255, 0 ), false );
         }
     }
     else
-    {  // 頂点バッファを利用した描画
+    { // 頂点バッファを利用した描画
 
-        SetUseLighting( false );  // 照明OFF
-        DrawPrimitiveIndexed3D_UseVertexBuffer( handle_vb_,
-                                                handle_ib_,
-                                                DX_PRIMTYPE_LINELIST,
-                                                DX_NONE_GRAPH,
-                                                false );
+        SetUseLighting( false ); // 照明OFF
+        DrawPrimitiveIndexed3D_UseVertexBuffer( handle_vb_, handle_ib_, DX_PRIMTYPE_LINELIST, DX_NONE_GRAPH, false );
         SetUseLighting( true );
     }
 
