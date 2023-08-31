@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include <System/Scene.h>
 
 USING_PTR( Player );
 class Player : public Object
