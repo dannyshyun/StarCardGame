@@ -23,6 +23,7 @@ bool Frisbee::Init()
         mdl->SetScaleAxisXYZ( 0.02f );
         // mdl->SetStatus( Component::StatusBit::NoDraw, true );
     }
+    // collision
 
     return true;
 }

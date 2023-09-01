@@ -88,6 +88,7 @@ BP_COMPONENT_IMPL( PlayerController, u8"移動コンポーネント" );
 void PlayerController::Init()
 {
     Super::Init();
+    this->speed_   = 2.f;
     this->player   = GetOwner();
     this->throwing = false;
     this->dashing  = false;
@@ -121,7 +122,7 @@ void PlayerController::PlayerUpdate()
         if( dashing )
         {
             auto dir = normalize( -mdl->GetMatrix().axisZ() );
-            player->AddTranslate( dir * speed_ * 4.f, true );
+            player->AddTranslate( dir * speed_ * 2.f, true );
         }
 
         // is moving
