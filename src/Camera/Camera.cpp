@@ -18,19 +18,24 @@ bool Camera::Init()
 
     auto cam = AddComponent<ComponentCamera>();
     cam->SetPositionAndTarget( float3( 0, 0, -1 ), float3( 0 ) );
-    cam->SetPerspective( 60.0f * DegToRad );
+    cam->SetPerspective( 60.0f );
 
     auto coll = AddComponent<ComponentCollisionSphere>();
-    coll->SetRadius( 2.f );
+    coll->SetRadius( 0.5f );
     coll->SetMass( 0.f );
 
     auto arm = AddComponent<ComponentSpringArm>();
     arm->SetSpringArmObject( this->target.lock() );
     arm->SetSpringArmVector( float3( 0, 15, 180 ) );
-    arm->SetSpringArmLength( 200 );
-    arm->SetSpringArmOffset( float3( 0, 1.3, 22.6 ) );
+    arm->SetSpringArmLength( 1.5f );
+    arm->SetSpringArmOffset( float3( 0, 2.3f, 3.3f ) );
 
     return true;
+}
+
+void Camera::GUI()
+{
+    Super::GUI();
 }
 
 #ifdef USE_MOUSE_CAMERA

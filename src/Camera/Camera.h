@@ -9,6 +9,7 @@ public:
     static CameraPtr Create( ObjectPtr target );
 
     bool Init() override;
+    void GUI() override;
 
 private:
     ObjectWeakPtr target{};

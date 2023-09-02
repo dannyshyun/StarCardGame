@@ -8,7 +8,7 @@ FrisbeePtr Frisbee::Create( float3 pos, float3 dir )
     auto obj = Scene::CreateObjectPtr<Frisbee>();
     obj->SetName( "Frisbee" );
     obj->pos = pos;
-    obj->dir = dir;
+    obj->SetPositionAndDiraction( pos, dir );
     return obj;
 }
 
@@ -24,12 +24,20 @@ bool Frisbee::Init()
         // mdl->SetStatus( Component::StatusBit::NoDraw, true );
     }
     // collision
+    if( auto coll = AddComponent<ComponentCollisionSphere>() )
+    {
+        coll->SetRadius( 0.3f );
+        coll->SetHitCollisionGroup(
+            (u32)ComponentCollision::CollisionGroup::ITEM |
+            (u32)ComponentCollision::CollisionGroup::GROUND );
+    }
 
     return true;
 }
 
 void Frisbee::Update()
 {
+    AddTranslate( this->dir * this->speed );
 }
 
 void Frisbee::Draw()
@@ -44,5 +52,6 @@ void Frisbee::SetPositionAndDiraction( const float3& pos, const float3& dir )
 {
     auto mat = HelperLib::Math::CreateMatrixByFrontVector( dir );
     SetMatrix( mat );
+    this->dir = normalize( dir );
     SetTranslate( pos );
 }

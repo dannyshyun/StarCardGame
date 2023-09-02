@@ -33,13 +33,13 @@ namespace MainScene
 
         // frisbee
 
-        auto frisbee = Frisbee::Create();
-        if( auto attach = frisbee->AddComponent<ComponentAttachModel>() )
-        {
-            attach->SetAttachObject( player, "mixamorig:RightHand" );
-            attach->SetAttachRotate( { 0, -60, 180 } );
-            // attach->SetAttachOffset({13, 10, 5});
-        }
+        // auto frisbee = Frisbee::Create();
+        // if( auto attach = frisbee->AddComponent<ComponentAttachModel>() )
+        // {
+        //     attach->SetAttachObject( player, "mixamorig:RightHand" );
+        //     attach->SetAttachRotate( { 0, -60, 180 } );
+        //     // attach->SetAttachOffset({13, 10, 5});
+        // }
 
         // camera
         if( auto obj = Scene::CreateObjectPtr<Object>() )

@@ -51,12 +51,13 @@ void ComponentCollisionSphere::Draw()
 
     SetUseLighting( FALSE );
     SetLightEnable( FALSE );
-    DrawSphere3D( cast( trans.translate() ),
-                  radius_ * scale,
-                  10,
-                  GetColor( 0, 255, 0 ),
-                  GetColor( 0, 0, 0 ),
-                  FALSE );
+    if( show_collision_ )
+        DrawSphere3D( cast( trans.translate() ),
+                      radius_ * scale,
+                      10,
+                      GetColor( 0, 255, 0 ),
+                      GetColor( 0, 0, 0 ),
+                      FALSE );
     SetLightEnable( TRUE );
     SetUseLighting( TRUE );
 }
@@ -116,6 +117,7 @@ void ComponentCollisionSphere::GUI()
                               0.01f,
                               1000.0f,
                               "%.2f" );
+            ImGui::Checkbox( u8"コリジョン", &show_collision_ );
 
             ImGui::TreePop();
         }

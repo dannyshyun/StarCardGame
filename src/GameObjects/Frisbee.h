@@ -17,6 +17,6 @@ public:
 private:
     float3 pos{};
     float3 dir{};
-    f32    speed{ 100.f };
+    f32    speed{ 1.f };
     f32    radius{ 1.f };
 };
